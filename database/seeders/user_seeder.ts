@@ -1,16 +1,19 @@
 import LoginCredential from '#models/login_credential'
 import User from '#models/user'
 import env from '#start/env'
+import hash from '@adonisjs/core/services/hash'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 import { DateTime } from 'luxon'
 
 export default class extends BaseSeeder {
   async run() {
+    const dob = DateTime.fromJSDate(new Date(env.get('ROOT_USER_DATE_OF_BIRTH', '')))
+    const password = await hash.make(env.get('ROOT_USER_PASSWORD', ''))
     const creds = await LoginCredential.create({
       email: env.get('ROOT_USER_EMAIL')?.toLowerCase(),
-      password: env.get('ROOT_USER_PASSWORD'),
+      password,
     })
-    const dob = DateTime.fromJSDate(new Date(env.get('ROOT_USER_DATE_OF_BIRTH', '')))
+
     await User.create({
       givenName: env.get('ROOT_USER_GIVEN_NAME'),
       middleName: env.get('ROOT_USER_MIDDLE_NAME'),
