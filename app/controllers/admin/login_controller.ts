@@ -9,9 +9,7 @@ export default class LoginController {
     protected logger: Logger,
     protected userRepo: UserRepository
   ) {}
-  async index({ view, response }: HttpContext) {
-    const user = await this.userRepo.getByEmail('Ryasnali456@gmail.com')
-    this.logger.info(user?.givenName)
+  async index({ view }: HttpContext) {
     return view.render('admin/login/index')
   }
 }
