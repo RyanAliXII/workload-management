@@ -70,7 +70,8 @@
                 <div class="modal-body">
                    
                       <label for="name">Name</label>
-                      <input name="name" v-model="form.name" class="form-control">
+                      <input name="name" v-model="form.name" class="form-control" :class="{'is-invalid':errors?.name?.[0]}">
+                      <div class="invalid-feedback" :class="{'d-block':errors?.name?.[0]}">${errors?.name?.[0]}</div>
                     
                 </div>
                 <div class="modal-footer">

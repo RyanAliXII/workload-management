@@ -41,8 +41,10 @@
     "@japa/plugin-adonisjs": "^3.0.1",
     "@japa/runner": "^3.1.4",
     "@swc/core": "^1.5.3",
+    "@types/lodash": "^4.17.1",
     "@types/luxon": "^3.4.2",
     "@types/node": "^20.12.10",
+    "@types/toastr": "^2.1.43",
     "eslint": "^8.57.0",
     "hot-hook": "^0.2.5",
     "pino-pretty": "^11.0.0",
@@ -61,10 +63,12 @@
     "@vinejs/vine": "^2.0.0",
     "edge.js": "^6.0.2",
     "http-status-codes": "^2.3.0",
+    "lodash": "^4.17.21",
     "luxon": "^3.4.4",
     "mysql2": "^3.9.7",
     "primevue": "^4.0.0-beta.1",
     "reflect-metadata": "^0.2.2",
+    "toastr": "^2.1.4",
     "vue": "^3.4.27"
   },
   "hotHook": {
