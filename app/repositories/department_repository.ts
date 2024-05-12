@@ -14,10 +14,15 @@ export class DepartmentRepository {
     department.name = name
     return department.save()
   }
-  async getDepartments() {
+  async getAll() {
     const departments = await Department.query()
       .select(['id', 'name', 'created_at', 'updated_at'])
-      .orderBy('created_at', 'asc')
+      .orderBy('created_at', 'desc')
     return departments
+  }
+  async delete(id: number) {
+    const department = await Department.findBy('id', id)
+    if (!department) return null
+    await department.delete()
   }
 }

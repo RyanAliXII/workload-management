@@ -15,3 +15,9 @@ export const editDepartmentValidator = vine.compile(
   })
 )
 editDepartmentValidator.errorReporter = () => new JSONAPIErrorReporter()
+export const deleteDepartmentValidator = vine.compile(
+  vine.object({
+    id: vine.number().min(1),
+  })
+)
+deleteDepartmentValidator.errorReporter = () => new JSONAPIErrorReporter()

@@ -6,6 +6,7 @@ import { toStructuredErrors } from '../utils/form.js'
 import toastr from 'toastr'
 import Department from '#models/department'
 import { toReadableDatetime } from '../utils/date.js'
+import Swal from 'sweetalert2'
 createApp({
   compilerOptions: {
     delimiters: ['${', '}'],
@@ -57,6 +58,7 @@ createApp({
         toastr.success('New department created.')
         form.value = { name: '', id: 0 }
         $('#newDepartmentModal').modal('hide')
+        fetchDepartments()
       }
       if (response.status === StatusCodes.BAD_REQUEST) {
         if (responseBody?.errors) {
@@ -64,7 +66,6 @@ createApp({
         }
       }
     }
-
     const onSubmitUpdate = async () => {
       errors.value = {}
       const response = await fetch(`/admin/departments/${form.value.id}`, {
@@ -92,6 +93,31 @@ createApp({
       }
       $('#editDepartmentModal').modal('show')
     }
+    const initDelete = async (department: Department) => {
+      form.value = {
+        id: department.id,
+        name: department.name,
+      }
+      const result = await Swal.fire({
+        title: 'Delete Department',
+        text: 'Are youre sure you want to delete this department?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#cc3939',
+        confirmButtonText: 'Yes, delete it',
+        cancelButtonText: `Don't delete`,
+        cancelButtonColor: '#858181',
+      })
+      if (!result.isConfirmed) return
+      deleteDepartment()
+    }
+    const deleteDepartment = async () => {
+      const response = await fetch(`/admin/departments/${form.value.id}`, { method: 'DELETE' })
+      if (response.status === StatusCodes.OK) {
+        toastr.success('Department deleted.')
+        fetchDepartments()
+      }
+    }
     return {
       products,
       form,
@@ -101,6 +127,7 @@ createApp({
       initEdit,
       onSubmitUpdate,
       departments,
+      initDelete,
     }
   },
 }).mount('#departmentsPage')
