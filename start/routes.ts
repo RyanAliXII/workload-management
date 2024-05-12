@@ -1,5 +1,6 @@
 const AdminLoginController = () => import('#controllers/admin/login_controller')
 const AdminDashboardController = () => import('#controllers/admin/dashboard_controller')
+const DepartmentsController = () => import('#controllers/admin/departments_controller')
 import { HttpContext } from '@adonisjs/core/http'
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
@@ -16,6 +17,7 @@ router
     router
       .group(() => {
         router.get('/dashboard', [AdminDashboardController, 'index'])
+        router.get('/departments', [DepartmentsController, 'index'])
       })
       .use(middleware.auth({ guards: ['admin'], redirectTo: '/admin/login' }))
   })

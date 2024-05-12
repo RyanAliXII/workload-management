@@ -1,11 +1,11 @@
 import { inject } from '@adonisjs/core'
 import { Logger } from '@adonisjs/core/logger'
 import type { HttpContext } from '@adonisjs/core/http'
-import { UserRepository } from '#repositories/user_respository'
 import { StatusCodes } from 'http-status-codes'
-import { loginValidator } from '#validators/login'
 import { errors } from '@vinejs/vine'
 import hash from '@adonisjs/core/services/hash'
+import { loginValidator } from '#validators/login'
+import { UserRepository } from '#repositories/user_respository'
 
 @inject()
 export default class LoginController {
