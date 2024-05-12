@@ -1,3 +1,4 @@
+import { StatusCodes } from 'http-status-codes'
 import { createApp, ref } from 'vue'
 
 createApp({
@@ -5,8 +6,31 @@ createApp({
     delimiters: ['${', '}'],
   },
   setup() {
-    const data = ref('test')
+    const message = ref('')
+    const form = ref({
+      email: '',
+      password: '',
+    })
 
-    return { data }
+    const onSubmit = async () => {
+      message.value = ''
+      const response = await fetch('/admin/login', {
+        method: 'POST',
+        headers: new Headers({
+          'Content-Type': 'application/json',
+        }),
+        body: JSON.stringify(form.value),
+      })
+
+      const responseBody: any = await response.json()
+      if (response.status === StatusCodes.OK) {
+        //i want to use window object here
+        window.location.replace('/admin/dashboard')
+      }
+      if (response.status === StatusCodes.BAD_REQUEST) {
+        message.value = responseBody?.message
+      }
+    }
+    return { form, onSubmit, message }
   },
 }).mount('#loginPage')

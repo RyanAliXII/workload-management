@@ -5,9 +5,10 @@ import { inject } from '@adonisjs/core'
 export class UserRepository {
   async getByEmail(email: string) {
     const user = await User.query()
-      .preload('loginCredential', (builder) => {
+      .whereHas('loginCredential', (builder) => {
         builder.where('email', email.toLowerCase())
       })
+      .preload('loginCredential')
       .first()
     return user
   }

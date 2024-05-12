@@ -11,6 +11,7 @@ router.get('/', async (ctx: HttpContext) => {
 router
   .group(() => {
     router.get('/login', [AdminLoginController, 'index'])
+    router.post('/login', [AdminLoginController, 'login'])
     router.get('/dashboard', [AdminDashboardController, 'index'])
   })
   .prefix('/admin')
