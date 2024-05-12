@@ -8,4 +8,10 @@ export class DepartmentRepository {
     department.name = name
     return department.save()
   }
+  async getDepartments() {
+    const departments = await Department.query()
+      .select(['id', 'name', 'created_at', 'updated_at'])
+      .orderBy('created_at', 'asc')
+    return departments
+  }
 }

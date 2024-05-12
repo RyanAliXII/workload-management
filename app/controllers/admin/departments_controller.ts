@@ -13,7 +13,16 @@ export default class DepartmentsController {
     protected logger: Logger,
     protected departmentRepo: DepartmentRepository
   ) {}
-  async index({ view }: HttpContext) {
+  async index({ view, request, response }: HttpContext) {
+    const contentType = request.headers()['content-type']
+    if (contentType === 'application/json') {
+      const departments = await this.departmentRepo.getDepartments()
+      return response.status(StatusCodes.OK).send({
+        status: StatusCodes.OK,
+        message: 'Departments fetched.',
+        departments,
+      })
+    }
     return view.render('admin/departments/index')
   }
   async create({ response, request }: HttpContext) {

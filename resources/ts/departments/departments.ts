@@ -5,6 +5,7 @@ import { StatusCodes } from 'http-status-codes'
 import { toStructuredErrors } from '../utils/form.js'
 import toastr from 'toastr'
 import Department from '#models/department'
+import { toReadableDatetime } from '../utils/date.js'
 createApp({
   compilerOptions: {
     delimiters: ['${', '}'],
@@ -28,7 +29,21 @@ createApp({
       },
     ])
     const departments = ref<Department[]>([])
-
+    const fetchDepartments = async () => {
+      const response = await fetch('/admin/departments', {
+        headers: new Headers({ 'Content-Type': 'application/json' }),
+      })
+      const responseBody = await response.json()
+      departments.value = responseBody?.departments?.map((d: any) => ({
+        id: d.id,
+        name: d.name,
+        createdAt: new Date(d.createdAt),
+        updatedAt: new Date(d.updatedAt),
+      }))
+    }
+    onMounted(() => {
+      fetchDepartments()
+    })
     const onSubmitCreate = async () => {
       errors.value = {}
       const response = await fetch('/admin/departments', {
@@ -53,6 +68,8 @@ createApp({
       form,
       errors,
       onSubmitCreate,
+      toReadableDatetime,
+      departments,
     }
   },
 }).mount('#departmentsPage')
