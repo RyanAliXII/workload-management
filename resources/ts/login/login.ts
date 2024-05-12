@@ -24,7 +24,6 @@ createApp({
 
       const responseBody: any = await response.json()
       if (response.status === StatusCodes.OK) {
-        //i want to use window object here
         window.location.replace('/admin/dashboard')
       }
       if (response.status === StatusCodes.BAD_REQUEST) {

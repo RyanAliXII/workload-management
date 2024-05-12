@@ -16,7 +16,7 @@ export default class LoginController {
   async index({ view }: HttpContext) {
     return view.render('admin/login/index')
   }
-  async login({ request, response }: HttpContext) {
+  async login({ request, response, auth }: HttpContext) {
     try {
       const body = await loginValidator.validate(request.body())
       const user = await this.userRepo.getByEmail(body.email)
@@ -33,6 +33,7 @@ export default class LoginController {
           status: StatusCodes.BAD_REQUEST,
         })
       }
+      await auth.use('admin').login(user)
       return response.status(StatusCodes.OK).send({
         status: StatusCodes.OK,
         message: 'OK',
