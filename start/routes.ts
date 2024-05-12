@@ -20,6 +20,7 @@ router
         router.get('/dashboard', [AdminDashboardController, 'index'])
         router.get('/departments', [DepartmentsController, 'index'])
         router.post('/departments', [DepartmentsController, 'create'])
+        router.put('/departments/:id', [DepartmentsController, 'edit'])
       })
       .use(middleware.auth({ guards: ['admin'], redirectTo: '/admin/login' }))
   })

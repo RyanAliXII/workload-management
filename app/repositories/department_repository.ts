@@ -8,6 +8,12 @@ export class DepartmentRepository {
     department.name = name
     return department.save()
   }
+  async update({ name, id }: { name: string; id: number }) {
+    const department = await Department.findBy('id', id)
+    if (!department) return null
+    department.name = name
+    return department.save()
+  }
   async getDepartments() {
     const departments = await Department.query()
       .select(['id', 'name', 'created_at', 'updated_at'])

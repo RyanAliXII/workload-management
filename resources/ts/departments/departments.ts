@@ -55,8 +55,29 @@ createApp({
       const responseBody = await response.json()
       if (response.status === StatusCodes.OK) {
         toastr.success('New department created.')
-        form.value = { name: '' }
+        form.value = { name: '', id: 0 }
         $('#newDepartmentModal').modal('hide')
+      }
+      if (response.status === StatusCodes.BAD_REQUEST) {
+        if (responseBody?.errors) {
+          errors.value = toStructuredErrors(responseBody.errors)
+        }
+      }
+    }
+
+    const onSubmitUpdate = async () => {
+      errors.value = {}
+      const response = await fetch(`/admin/departments/${form.value.id}`, {
+        method: 'PUT',
+        body: JSON.stringify(form.value),
+        headers: new Headers({ 'Content-Type': 'application/json' }),
+      })
+      const responseBody = await response.json()
+      if (response.status === StatusCodes.OK) {
+        toastr.success('Department updated.')
+        form.value = { name: '', id: 0 }
+        $('#editDepartmentModal').modal('hide')
+        fetchDepartments()
       }
       if (response.status === StatusCodes.BAD_REQUEST) {
         if (responseBody?.errors) {
@@ -70,7 +91,7 @@ createApp({
         name: department.name,
       }
       $('#editDepartmentModal').modal('show')
-    }
+   
     return {
       products,
       form,
@@ -78,6 +99,7 @@ createApp({
       onSubmitCreate,
       toReadableDatetime,
       initEdit,
+      onSubmitUpdate,
       departments,
     }
   },
