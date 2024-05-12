@@ -91,7 +91,7 @@ createApp({
         name: department.name,
       }
       $('#editDepartmentModal').modal('show')
-   
+    }
     return {
       products,
       form,
