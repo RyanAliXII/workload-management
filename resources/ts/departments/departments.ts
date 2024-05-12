@@ -16,6 +16,7 @@ createApp({
   },
   setup() {
     const form = ref({
+      id: 0,
       name: '',
     })
     const errors = ref({})
@@ -63,12 +64,20 @@ createApp({
         }
       }
     }
+    const initEdit = (department: Department) => {
+      form.value = {
+        id: department.id,
+        name: department.name,
+      }
+      $('#editDepartmentModal').modal('show')
+    }
     return {
       products,
       form,
       errors,
       onSubmitCreate,
       toReadableDatetime,
+      initEdit,
       departments,
     }
   },
