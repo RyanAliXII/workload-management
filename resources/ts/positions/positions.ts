@@ -4,7 +4,6 @@ createApp({
   setup() {
     const form = ref({})
     const error = ref({})
-    console.log('Mounted')
     return {
       form,
       error,
