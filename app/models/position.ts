@@ -10,7 +10,6 @@ export default class Position extends compose(BaseModel, SoftDeletes) {
   declare name: string
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
-
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 }
