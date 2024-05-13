@@ -14,6 +14,7 @@ createApp({
     const form = ref({ ...INITIAL_FORM })
     const errors = ref({})
     onMounted(() => {
+      fetchSubjects()
       $('#addSubjectModal').on('hidden.bs.modal', () => {
         resetForm()
       })
@@ -23,6 +24,12 @@ createApp({
     })
     const resetForm = () => {
       form.value = { ...INITIAL_FORM }
+    }
+    const fetchSubjects = async () => {
+      const response = await fetch('/admin/subjects', {
+        headers: new Headers({ 'Content-Type': 'application/json' }),
+      })
+      const responseBody = await response.json()
     }
     const onSubmitCreate = async () => {
       errors.value = {}

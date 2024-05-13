@@ -14,7 +14,16 @@ export default class SubjectsController {
     protected logger: Logger,
     protected subjectRepo: SubjectRepository
   ) {}
-  async index({ view }: HttpContext) {
+  async index({ view, request, response }: HttpContext) {
+    const contentType = request.header('Content-Type')
+    if (contentType === 'application/json') {
+      const subjects = await this.subjectRepo.getAll()
+      return response.send({
+        status: StatusCodes.OK,
+        message: 'subjects fetched.',
+        subjects,
+      })
+    }
     return view.render('admin/subjects/index')
   }
   async create({ request, response }: HttpContext) {

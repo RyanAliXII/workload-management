@@ -8,4 +8,7 @@ export class SubjectRepository {
     subject.name = name
     return subject.save()
   }
+  async getAll() {
+    return Subject.query().select(['id', 'name', 'created_at', 'updated_at'])
+  }
 }
