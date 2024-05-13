@@ -20,6 +20,6 @@ export class PositionRepository {
   async delete(id: number) {
     const position = await Position.findBy('id', id)
     if (!position) return
-    position.delete()
+    await position.delete()
   }
 }
