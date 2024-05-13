@@ -17,4 +17,9 @@ export class PositionRepository {
     position.name = name
     return position.save()
   }
+  async delete(id: number) {
+    const position = await Position.findBy('id', id)
+    if (!position) return
+    position.delete()
+  }
 }

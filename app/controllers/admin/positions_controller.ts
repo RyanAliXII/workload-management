@@ -1,4 +1,5 @@
 import { PositionRepository } from '#repositories/position_repository'
+import { deleteDepartmentValidator } from '#validators/department'
 import { createPositionValidator, editPositionValidator } from '#validators/position'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
@@ -60,6 +61,27 @@ export default class PositionsController {
         message: 'Position updated.',
         position,
       })
+    } catch (error) {
+      if (error instanceof errors.E_VALIDATION_ERROR) {
+        return response.status(StatusCodes.BAD_REQUEST).send({
+          status: StatusCodes.BAD_REQUEST,
+          message: 'Validation error',
+          errors: error.messages,
+        })
+      }
+      this.logger.error(error)
+      return response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
+        message: 'Unknown error occured',
+      })
+    }
+  }
+  async delete({ request, response }: HttpContext) {
+    try {
+      const body = await deleteDepartmentValidator.validate({
+        id: request.param('id'),
+      })
+      await this.positionRepo.delete(body.id)
     } catch (error) {
       if (error instanceof errors.E_VALIDATION_ERROR) {
         return response.status(StatusCodes.BAD_REQUEST).send({
