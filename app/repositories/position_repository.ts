@@ -9,7 +9,9 @@ export class PositionRepository {
     return position.save()
   }
   async getAll() {
-    return Position.query().select(['id', 'name', 'created_at', 'updated_at'])
+    return Position.query()
+      .select(['id', 'name', 'created_at', 'updated_at'])
+      .orderBy('created_at', 'desc')
   }
   async update({ name, id }: { name: string; id: number }) {
     const position = await Position.findBy('id', id)

@@ -9,7 +9,9 @@ export class SubjectRepository {
     return subject.save()
   }
   async getAll() {
-    return Subject.query().select(['id', 'name', 'created_at', 'updated_at'])
+    return Subject.query()
+      .select(['id', 'name', 'created_at', 'updated_at'])
+      .orderBy('created_at', 'desc')
   }
   async update({ id, name }: { id: number; name: string }) {
     const subject = await Subject.findBy('id', id)
