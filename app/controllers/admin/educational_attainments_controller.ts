@@ -12,7 +12,16 @@ export default class EducationalAttainmentsController {
     protected logger: Logger,
     protected educationalAttainmentRepo: EducationalAttainmentRepository
   ) {}
-  async index({ view }: HttpContext) {
+  async index({ view, request, response }: HttpContext) {
+    const contentType = request.header('Content-Type')
+    if (contentType === 'application/json') {
+      const educationalAttainments = await this.educationalAttainmentRepo.getAll()
+      return response.send({
+        status: StatusCodes.OK,
+        messages: 'Educational attainments fetched.',
+        educationalAttainments,
+      })
+    }
     return view.render('admin/educational_attainments/index')
   }
   async create({ request, response }: HttpContext) {

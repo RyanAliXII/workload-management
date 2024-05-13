@@ -1,6 +1,7 @@
 import { StatusCodes } from 'http-status-codes'
 import { createApp, onMounted, ref } from 'vue'
 import { toStructuredErrors } from '../utils/form.js'
+import { EducationalAttainment } from '#types/educational_attainment'
 
 createApp({
   compilerOptions: {
@@ -14,7 +15,9 @@ createApp({
     const form = ref({
       ...INITIAL_FORM,
     })
+    const educationalAttainments = ref<EducationalAttainment[]>([])
     onMounted(() => {
+      fetchEducationalAttainments()
       $('#addEducationalAttainmentModal').on('hidden.bs.modal', () => {
         resetForm()
       })
@@ -22,6 +25,19 @@ createApp({
         resetForm()
       })
     })
+    const fetchEducationalAttainments = async () => {
+      const response = await fetch('/admin/educational-attainments', {
+        headers: new Headers({ 'Content-Type': 'application/json' }),
+      })
+      const responseBody = await response.json()
+      educationalAttainments.value =
+        responseBody?.educationalAttainments?.map((ea: any) => ({
+          id: ea.id,
+          name: ea.name,
+          createdAt: new Date(ea.createdAt),
+          updatedAt: new Date(ea.updatedAt),
+        })) ?? []
+    }
     const errors = ref({})
     const resetForm = () => {
       form.value = { ...INITIAL_FORM }
