@@ -5,6 +5,7 @@ import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import { Position } from '#types/position'
 import { toReadableDatetime } from '../utils/date.js'
+import Swal from 'sweetalert2'
 
 createApp({
   compilerOptions: {
@@ -94,6 +95,28 @@ createApp({
           updatedAt: new Date(p.updatedAt),
         })) ?? []
     }
+    const initDelete = async (position: Position) => {
+      form.value = position
+      const result = await Swal.fire({
+        title: 'Delete Position',
+        text: 'Are youre sure you want to delete this position?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#cc3939',
+        confirmButtonText: 'Yes, delete it',
+        cancelButtonText: `Don't delete`,
+        cancelButtonColor: '#858181',
+      })
+      if (!result.isConfirmed) return
+      deletePosition()
+    }
+    const deletePosition = async () => {
+      const response = await fetch(`/admin/positions/${form.value.id}`, { method: 'DELETE' })
+      if (response.status === StatusCodes.OK) {
+        toastr.success('Department deleted.')
+        fetchPositions()
+      }
+    }
     return {
       form,
       errors,
@@ -101,6 +124,7 @@ createApp({
       onSubmitUpdate,
       positions,
       initEdit,
+      initDelete,
       toReadableDatetime,
     }
   },
