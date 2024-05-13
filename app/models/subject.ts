@@ -1,7 +1,9 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { compose } from '@adonisjs/core/helpers'
+import { SoftDeletes } from 'adonis-lucid-soft-deletes'
 
-export default class Subject extends BaseModel {
+export default class Subject extends compose(BaseModel, SoftDeletes) {
   static table = 'subject'
   @column({ isPrimary: true })
   declare id: number

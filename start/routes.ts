@@ -30,6 +30,7 @@ router
         router.get('/subjects', [SubjectsController, 'index'])
         router.post('/subjects', [SubjectsController, 'create'])
         router.put('/subjects/:id', [SubjectsController, 'edit'])
+        router.delete('/subjects/:id', [SubjectsController, 'delete'])
       })
       .use(middleware.auth({ guards: ['admin'], redirectTo: '/admin/login' }))
   })

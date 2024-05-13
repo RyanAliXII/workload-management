@@ -17,4 +17,9 @@ export class SubjectRepository {
     subject.name = name
     return subject.save()
   }
+  async delete(id: number) {
+    const subject = await Subject.findBy('id', id)
+    if (!subject) return
+    await subject.delete()
+  }
 }
