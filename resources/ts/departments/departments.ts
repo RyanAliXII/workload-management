@@ -21,7 +21,6 @@ createApp({
       name: '',
     })
     const errors = ref({})
-
     const products = ref([
       {
         name: 'test',
@@ -30,6 +29,9 @@ createApp({
         name: 'test1',
       },
     ])
+    const resetForm = () => {
+      form.value = { name: '', id: 0 }
+    }
     const departments = ref<Department[]>([])
     const fetchDepartments = async () => {
       const response = await fetch('/admin/departments', {
@@ -45,6 +47,12 @@ createApp({
     }
     onMounted(() => {
       fetchDepartments()
+      $('#newDepartmentModal').on('hidden.bs.modal', () => {
+        resetForm()
+      })
+      $('#editDepartmentModal').on('hidden.bs.modal', () => {
+        resetForm()
+      })
     })
     const onSubmitCreate = async () => {
       errors.value = {}
@@ -56,7 +64,7 @@ createApp({
       const responseBody = await response.json()
       if (response.status === StatusCodes.OK) {
         toastr.success('New department created.')
-        form.value = { name: '', id: 0 }
+        resetForm()
         $('#newDepartmentModal').modal('hide')
         fetchDepartments()
       }
@@ -76,7 +84,7 @@ createApp({
       const responseBody = await response.json()
       if (response.status === StatusCodes.OK) {
         toastr.success('Department updated.')
-        form.value = { name: '', id: 0 }
+        resetForm()
         $('#editDepartmentModal').modal('hide')
         fetchDepartments()
       }
