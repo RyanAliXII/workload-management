@@ -54,7 +54,7 @@
                <column  header="Actions">
                <template #body="slotProps">
                 <div class="d-flex gap-2">
-                  <button class="btn btn-outline-primary">Edit</button>
+                  <button class="btn btn-outline-primary" v-on:click="initEdit(slotProps.data)">Edit</button>
                   <button class="btn btn-outline-danger">Delete</button>
                 </div>
               </template>

@@ -16,12 +16,25 @@ createApp({
   },
   setup() {
     const form = ref({
+      id: 0,
       name: '',
     })
     const errors = ref({})
     const positions = ref<Position[]>([])
+    const resetForm = () => {
+      form.value = {
+        id: 0,
+        name: '',
+      }
+    }
     onMounted(() => {
       fetchPositions()
+      $('#addPositionModal').on('hidden.bs.modal', function () {
+        resetForm()
+      })
+      $('#editPositionModal').on('hidden.bs.modal', function () {
+        resetForm()
+      })
     })
     const onSubmitCreate = async () => {
       errors.value = {}
@@ -33,14 +46,40 @@ createApp({
       const responseBody = await response.json()
       if (response.status === StatusCodes.OK) {
         toastr.success('Position has been added.')
-        form.value.name = ''
+        resetForm()
         $('#addPositionModal').modal('hide')
+        fetchPositions()
       }
       if (response.status === StatusCodes.BAD_REQUEST) {
         if (responseBody?.errors) {
           errors.value = toStructuredErrors(responseBody.errors)
         }
       }
+    }
+
+    const onSubmitUpdate = async () => {
+      errors.value = {}
+      const response = await fetch(`/admin/positions/${form.value.id}`, {
+        method: 'PUT',
+        body: JSON.stringify(form.value),
+        headers: new Headers({ 'Content-Type': 'application/json' }),
+      })
+      const responseBody = await response.json()
+      if (response.status === StatusCodes.OK) {
+        toastr.success('Position has been updated.')
+        resetForm()
+        $('#editPositionModal').modal('hide')
+        fetchPositions()
+      }
+      if (response.status === StatusCodes.BAD_REQUEST) {
+        if (responseBody?.errors) {
+          errors.value = toStructuredErrors(responseBody.errors)
+        }
+      }
+    }
+    const initEdit = (position: Position) => {
+      form.value = position
+      $('#editPositionModal').modal('show')
     }
     const fetchPositions = async () => {
       const response = await fetch('/admin/positions', {
@@ -59,7 +98,9 @@ createApp({
       form,
       errors,
       onSubmitCreate,
+      onSubmitUpdate,
       positions,
+      initEdit,
       toReadableDatetime,
     }
   },

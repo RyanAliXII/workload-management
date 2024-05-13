@@ -54,7 +54,7 @@ export default class PositionsController {
       const body = request.body()
       body.id = id
       const parsedBody = await editPositionValidator.validate(body)
-      const position = this.positionRepo.create(parsedBody)
+      const position = await this.positionRepo.update(parsedBody)
       return response.send({
         status: StatusCodes.OK,
         message: 'Position updated.',
