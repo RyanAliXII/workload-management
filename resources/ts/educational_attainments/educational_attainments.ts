@@ -27,9 +27,11 @@ createApp({
       fetchEducationalAttainments()
       $('#addEducationalAttainmentModal').on('hidden.bs.modal', () => {
         resetForm()
+        removeErrors()
       })
       $('#editEducationalAttainmentModal').on('hidden.bs.modal', () => {
         resetForm()
+        removeErrors()
       })
     })
     const fetchEducationalAttainments = async () => {
@@ -49,9 +51,11 @@ createApp({
     const resetForm = () => {
       form.value = { ...INITIAL_FORM }
     }
-
-    const onSubmitCreate = async () => {
+    const removeErrors = () => {
       errors.value = {}
+    }
+    const onSubmitCreate = async () => {
+      removeErrors()
       const response = await fetch('/admin/educational-attainments', {
         method: 'POST',
         body: JSON.stringify(form.value),
@@ -72,7 +76,7 @@ createApp({
     }
 
     const onSubmitUpdate = async () => {
-      errors.value = {}
+      removeErrors()
       const response = await fetch(`/admin/educational-attainments/${form.value.id}`, {
         method: 'PUT',
         body: JSON.stringify(form.value),

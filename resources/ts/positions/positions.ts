@@ -6,7 +6,6 @@ import Column from 'primevue/column'
 import { Position } from '#types/position'
 import { toReadableDatetime } from '../utils/date.js'
 import Swal from 'sweetalert2'
-
 createApp({
   compilerOptions: {
     delimiters: ['${', '}'],
@@ -28,17 +27,22 @@ createApp({
         name: '',
       }
     }
+    const removeErrors = () => {
+      errors.value = {}
+    }
     onMounted(() => {
       fetchPositions()
       $('#addPositionModal').on('hidden.bs.modal', function () {
         resetForm()
+        removeErrors()
       })
       $('#editPositionModal').on('hidden.bs.modal', function () {
         resetForm()
+        removeErrors()
       })
     })
     const onSubmitCreate = async () => {
-      errors.value = {}
+      removeErrors()
       const response = await fetch('/admin/positions', {
         method: 'POST',
         body: JSON.stringify(form.value),
@@ -59,7 +63,7 @@ createApp({
     }
 
     const onSubmitUpdate = async () => {
-      errors.value = {}
+      removeErrors()
       const response = await fetch(`/admin/positions/${form.value.id}`, {
         method: 'PUT',
         body: JSON.stringify(form.value),
@@ -79,9 +83,11 @@ createApp({
       }
     }
     const initEdit = (position: Position) => {
-      form.value = position
+      form.value.id = position.id
+      form.value.name = position.name
       $('#editPositionModal').modal('show')
     }
+
     const fetchPositions = async () => {
       const response = await fetch('/admin/positions', {
         headers: { 'Content-Type': 'application/json' },

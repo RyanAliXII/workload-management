@@ -26,13 +26,18 @@ createApp({
       fetchSubjects()
       $('#addSubjectModal').on('hidden.bs.modal', () => {
         resetForm()
+        removeErrors()
       })
       $('#editSubjectModal').on('hidden.bs.modal', () => {
         resetForm()
+        removeErrors()
       })
     })
     const resetForm = () => {
       form.value = { ...INITIAL_FORM }
+    }
+    const removeErrors = () => {
+      errors.value = {}
     }
     const fetchSubjects = async () => {
       const response = await fetch('/admin/subjects', {
@@ -48,7 +53,7 @@ createApp({
         })) ?? []
     }
     const onSubmitCreate = async () => {
-      errors.value = {}
+      removeErrors()
       const response = await fetch('/admin/subjects', {
         method: 'POST',
         headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -73,7 +78,7 @@ createApp({
       $('#editSubjectModal').modal('show')
     }
     const onSubmitUpdate = async () => {
-      errors.value = {}
+      removeErrors()
       const response = await fetch(`/admin/subjects/${form.value.id}`, {
         method: 'PUT',
         headers: new Headers({ 'Content-Type': 'application/json' }),

@@ -32,6 +32,9 @@ createApp({
     const resetForm = () => {
       form.value = { name: '', id: 0 }
     }
+    const removeErrors = () => {
+      errors.value = {}
+    }
     const departments = ref<Department[]>([])
     const fetchDepartments = async () => {
       const response = await fetch('/admin/departments', {
@@ -49,13 +52,15 @@ createApp({
       fetchDepartments()
       $('#newDepartmentModal').on('hidden.bs.modal', () => {
         resetForm()
+        removeErrors()
       })
       $('#editDepartmentModal').on('hidden.bs.modal', () => {
         resetForm()
+        removeErrors()
       })
     })
     const onSubmitCreate = async () => {
-      errors.value = {}
+      removeErrors()
       const response = await fetch('/admin/departments', {
         method: 'POST',
         body: JSON.stringify(form.value),
@@ -75,7 +80,7 @@ createApp({
       }
     }
     const onSubmitUpdate = async () => {
-      errors.value = {}
+      removeErrors()
       const response = await fetch(`/admin/departments/${form.value.id}`, {
         method: 'PUT',
         body: JSON.stringify(form.value),
