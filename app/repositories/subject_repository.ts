@@ -11,4 +11,10 @@ export class SubjectRepository {
   async getAll() {
     return Subject.query().select(['id', 'name', 'created_at', 'updated_at'])
   }
+  async update({ id, name }: { id: number; name: string }) {
+    const subject = await Subject.findBy('id', id)
+    if (!subject) return null
+    subject.name = name
+    return subject.save()
+  }
 }

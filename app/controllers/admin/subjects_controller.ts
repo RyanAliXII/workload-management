@@ -1,5 +1,5 @@
 import { SubjectRepository } from '#repositories/subject_repository'
-import { createSubjectValidator } from '#validators/subject'
+import { createSubjectValidator, editSubjectValidator } from '#validators/subject'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 import { Logger } from '@adonisjs/core/logger'
@@ -31,6 +31,33 @@ export default class SubjectsController {
       return response.send({
         status: StatusCodes.OK,
         message: 'Subject created.',
+        subject: subject,
+      })
+    } catch (error) {
+      if (error instanceof errors.E_VALIDATION_ERROR) {
+        return response.status(StatusCodes.BAD_REQUEST).send({
+          status: StatusCodes.BAD_REQUEST,
+          message: 'Validation error',
+          errors: error.messages,
+        })
+      }
+      this.logger.info(error)
+      return response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
+        message: 'Unknown error occured.',
+      })
+    }
+  }
+  async edit({ request, response }: HttpContext) {
+    try {
+      const id = request.param('id')
+      const body = request.body()
+      body.id = id
+      const parsedBody = await editSubjectValidator.validate(body)
+      const subject = await this.subjectRepo.update(parsedBody)
+      return response.send({
+        status: StatusCodes.OK,
+        message: 'Subject updated.',
         subject: subject,
       })
     } catch (error) {
