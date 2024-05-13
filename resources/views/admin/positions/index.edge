@@ -2,7 +2,7 @@
 <html lang="en">
   @include('partials/head')
   <body>
-    <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar">
+    <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar" id="positionPage">
       @include('partials/admin/header')
       <div class="app-main">
         @include('partials/admin/sidebar')
@@ -50,11 +50,13 @@
          
           @include('partials/admin/footer')
         </div>
+       
       </div>
       @!component('components/positions/add-position-modal')
       @!component('components/positions/edit-position-modal')
     </div>
     @include('partials/admin/app_drawer') 
     @include('partials/scripts')
+    @vite('resources/ts/positions/positions.ts')
   </body>
 </html>
