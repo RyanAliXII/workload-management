@@ -2,8 +2,14 @@ import { StatusCodes } from 'http-status-codes'
 import { createApp, onMounted, ref } from 'vue'
 import { toStructuredErrors } from '../utils/form.js'
 import { EducationalAttainment } from '#types/educational_attainment'
-
+import DataTable from 'primevue/datatable'
+import Column from 'primevue/column'
+import { toReadableDatetime } from '../utils/date.js'
 createApp({
+  components: {
+    'data-table': DataTable,
+    'column': Column,
+  },
   compilerOptions: {
     delimiters: ['${', '}'],
   },
@@ -84,6 +90,13 @@ createApp({
         }
       }
     }
-    return { form, errors, onSubmitCreate, onSubmitUpdate }
+    return {
+      form,
+      errors,
+      onSubmitCreate,
+      onSubmitUpdate,
+      toReadableDatetime,
+      educationalAttainments,
+    }
   },
 }).mount('#educationalAttainmentPage')
