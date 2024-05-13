@@ -1,11 +1,11 @@
 const AdminLoginController = () => import('#controllers/admin/login_controller')
 const AdminDashboardController = () => import('#controllers/admin/dashboard_controller')
 const PositionsController = () => import('#controllers/admin/positions_controller')
+const SubjectsController = () => import('#controllers/admin/subjects_controller')
+const DepartmentsController = () => import('#controllers/admin/departments_controller')
 import { HttpContext } from '@adonisjs/core/http'
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
-
-const DepartmentsController = () => import('#controllers/admin/departments_controller')
 
 router.get('/', async (ctx: HttpContext) => {
   return ctx.view.render('welcome')
@@ -27,6 +27,10 @@ router
         router.post('/positions', [PositionsController, 'create'])
         router.put('/positions/:id', [PositionsController, 'edit'])
         router.delete('/positions/:id', [PositionsController, 'delete'])
+        router.get('/subjects', [SubjectsController, 'index'])
+        router.post('/subjects', [SubjectsController, 'create'])
+        router.put('/subjects/:id', [SubjectsController, 'edit'])
+        router.delete('/subjects/:id', [SubjectsController, 'delete'])
       })
       .use(middleware.auth({ guards: ['admin'], redirectTo: '/admin/login' }))
   })

@@ -18,6 +18,7 @@ export default defineConfig({
         'resources/ts/login/login.ts',
         'resources/ts/departments/departments.ts',
         'resources/ts/positions/positions.ts',
+        'resources/ts/subjects/subjects.ts',
       ],
 
       /**
