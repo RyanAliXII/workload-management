@@ -4,6 +4,7 @@ import { compose } from '@adonisjs/core/helpers'
 import { SoftDeletes } from 'adonis-lucid-soft-deletes'
 
 export default class Position extends compose(BaseModel, SoftDeletes) {
+  static table = 'position'
   @column({ isPrimary: true })
   declare id: number
   @column()

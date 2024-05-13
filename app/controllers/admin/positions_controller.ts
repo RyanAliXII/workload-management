@@ -1,11 +1,12 @@
 import { PositionRepository } from '#repositories/position_repository'
 import { createPositionValidator } from '#validators/position'
+import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 import { Logger } from '@adonisjs/core/logger'
 import { errors } from '@vinejs/vine'
-import { messages } from '@vinejs/vine/defaults'
 import { StatusCodes } from 'http-status-codes'
 
+@inject()
 export default class PositionsController {
   constructor(
     protected logger: Logger,

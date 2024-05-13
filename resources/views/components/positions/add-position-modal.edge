@@ -7,11 +7,11 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
             </button>
         </div>
-        <form>
+        <form v-on:submit.prevent="onSubmitCreate">
         <div class="modal-body">
            
               <label for="name">Name</label>
-              <input name="name"  class="form-control" :class="{'is-invalid':errors?.name?.[0]}">
+              <input name="name" v-model="form.name"  class="form-control" :class="{'is-invalid':errors?.name?.[0]}">
               <div class="invalid-feedback" :class="{'d-block':errors?.name?.[0]}">${errors?.name?.[0]}</div>
             
         </div>
