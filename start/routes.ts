@@ -28,6 +28,7 @@ router
         router.put('/positions/:id', [PositionsController, 'edit'])
         router.delete('/positions/:id', [PositionsController, 'delete'])
         router.get('/subjects', [SubjectsController, 'index'])
+        router.post('/subjects', [SubjectsController, 'create'])
       })
       .use(middleware.auth({ guards: ['admin'], redirectTo: '/admin/login' }))
   })
