@@ -11,4 +11,10 @@ export class PositionRepository {
   async getAll() {
     return Position.query().select(['id', 'name', 'created_at', 'updated_at'])
   }
+  async update({ name, id }: { name: string; id: number }) {
+    const position = await Position.findBy('id', id)
+    if (!position) return null
+    position.name = name
+    return position.save()
+  }
 }

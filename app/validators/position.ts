@@ -7,3 +7,11 @@ export const createPositionValidator = vine.compile(
   })
 )
 createPositionValidator.errorReporter = () => new JSONAPIErrorReporter()
+
+export const editPositionValidator = vine.compile(
+  vine.object({
+    id: vine.number().min(1),
+    name: vine.string().maxLength(75),
+  })
+)
+editPositionValidator.errorReporter = () => new JSONAPIErrorReporter()

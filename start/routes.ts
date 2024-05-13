@@ -25,6 +25,7 @@ router
         router.delete('/departments/:id', [DepartmentsController, 'delete'])
         router.get('/positions', [PositionsController, 'index'])
         router.post('/positions', [PositionsController, 'create'])
+        router.put('/positions/:id', [PositionsController, 'edit'])
       })
       .use(middleware.auth({ guards: ['admin'], redirectTo: '/admin/login' }))
   })
