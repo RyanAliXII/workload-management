@@ -3,7 +3,7 @@ import { JSONAPIErrorReporter } from './json_api_error_reporter.js'
 
 export const createSubjectValidator = vine.compile(
   vine.object({
-    name: vine.string().maxLength(75),
+    name: vine.string().maxLength(75).trim(),
   })
 )
 createSubjectValidator.errorReporter = () => new JSONAPIErrorReporter()
