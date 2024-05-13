@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  @include('partials/head')
+  <body>
+    <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar" id="departmentsPage" v-cloak>
+        @include('partials/admin/header')
+        <div class="app-main" >
+          @include('partials/admin/sidebar')
+          <div class="app-main__outer">
+            <div class="app-main__inner">
+              <div class="app-page-title app-page-title-simple">
+                <div class="page-title-wrapper">
+                  <div class="page-title-heading">
+                    <div>
+                      <div class="page-title-head center-elem">
+                        <span class="d-inline-block pe-2">
+                          <i class="lnr-apartment opacity-6"></i>
+                        </span>
+                        <span class="d-inline-block">Departments</span>
+                      </div>
+                      <div class="page-title-subheading opacity-10">
+                        <nav class="" aria-label="breadcrumb">
+                          <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                              <a>
+                                <i aria-hidden="true" class="fa fa-home"></i>
+                              </a>
+                            </li>
+                            <li class="breadcrumb-item">
+                              <a>Dashboard</a>
+                            </li>
+                            <li class="active breadcrumb-item" aria-current="page">
+                              Departments
+                            </li>
+                          </ol>
+                        </nav>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+              <button type="button" class="btn btn-primary mb-3  " data-bs-toggle="modal" data-bs-target="#newDepartmentModal">
+                <i class="fas fa-add"></i> <span>New Department</span>
+                
+              </button>
+              <div class="main-card mb-3 card p-5">
+                <data-table :value="departments" table-class="table table-striped">
+                  <column field="name" header="Name"></column>
+                  <column field="createdAt" header="Created At">
+                    <template #body="slotProps">
+                      ${ toReadableDatetime(slotProps.data.createdAt) }
+                  </template>
+                 </column>
+                 <column header="Actions">
+                  <template #body="slotProps">
+                    <div class="d-flex gap-2">
+                    <button class="btn btn-outline-primary" v-on:click="initEdit(slotProps.data)">Edit</button>
+                    <button class="btn btn-outline-danger" v-on:click="initDelete(slotProps.data)">Delete</button>
+                  </div>
+                 </template>
+                </column>
+                </data-table>
+                
+               
+              </div>
+            </div>
+
+            
+            @include('partials/admin/footer')
+          </div>
+        </div>
+        <div class="modal fade" id="newDepartmentModal"  tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Department</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <form v-on:submit.prevent="onSubmitCreate">
+                <div class="modal-body">
+                   
+                      <label for="name">Name</label>
+                      <input name="name" v-model="form.name" class="form-control" :class="{'is-invalid':errors?.name?.[0]}">
+                      <div class="invalid-feedback" :class="{'d-block':errors?.name?.[0]}">${errors?.name?.[0]}</div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+              </form>
+            </div>
+        </div>
+     </div>
+
+     <div class="modal fade" id="editDepartmentModal"  tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Edit Department</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <form v-on:submit.prevent="onSubmitUpdate">
+                <div class="modal-body">
+                   
+                      <label for="name">Name</label>
+                      <input name="name" v-model="form.name" class="form-control" :class="{'is-invalid':errors?.name?.[0]}">
+                      <div class="invalid-feedback" :class="{'d-block':errors?.name?.[0]}">${errors?.name?.[0]}</div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+              </form>
+            </div>
+        </div>
+     </div>
+        
+    </div>
+   
+    @include('partials/admin/app_drawer')
+    @include('partials/scripts')
+    @vite('resources/ts/departments/departments.ts')
+  </body>
+</html>

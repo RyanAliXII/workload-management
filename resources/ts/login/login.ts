@@ -11,7 +11,6 @@ createApp({
       email: '',
       password: '',
     })
-
     const onSubmit = async () => {
       message.value = ''
       const response = await fetch('/admin/login', {
