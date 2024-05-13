@@ -19,7 +19,7 @@ export default class SubjectsController {
   }
   async create({ request, response }: HttpContext) {
     try {
-      const body = await createSubjectValidator.validate(request.body)
+      const body = await createSubjectValidator.validate(request.body())
       const subject = await this.subjectRepo.create(body)
       return response.send({
         status: StatusCodes.OK,
