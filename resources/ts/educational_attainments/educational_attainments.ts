@@ -5,6 +5,7 @@ import { EducationalAttainment } from '#types/educational_attainment'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import { toReadableDatetime } from '../utils/date.js'
+import Swal from 'sweetalert2'
 createApp({
   components: {
     'data-table': DataTable,
@@ -79,7 +80,7 @@ createApp({
       })
       const responseBody = await response.json()
       if (response.status === StatusCodes.OK) {
-        toastr.success('Position has been updated.')
+        toastr.success('Educational attainment has been updated.')
         resetForm()
         $('#editEducationalAttainmentModal').modal('hide')
         fetchEducationalAttainments()
@@ -95,6 +96,31 @@ createApp({
       form.value.name = ea.name
       $('#editEducationalAttainmentModal').modal('show')
     }
+    const initDelete = async (ea: EducationalAttainment) => {
+      form.value.id = ea.id
+      form.value.name = ea.name
+      const result = await Swal.fire({
+        title: 'Delete Educational Attainment',
+        text: 'Are youre sure you want to delete this educational attainment?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#cc3939',
+        confirmButtonText: 'Yes, delete it',
+        cancelButtonText: `Don't delete`,
+        cancelButtonColor: '#858181',
+      })
+      if (!result.isConfirmed) return
+      deleteEducationalAttainment()
+    }
+    const deleteEducationalAttainment = async () => {
+      const response = await fetch(`/admin/educational-attainments/${form.value.id}`, {
+        method: 'DELETE',
+      })
+      if (response.status === StatusCodes.OK) {
+        toastr.success('Educational attainment deleted.')
+        fetchEducationalAttainments()
+      }
+    }
     return {
       form,
       errors,
@@ -103,6 +129,7 @@ createApp({
       toReadableDatetime,
       educationalAttainments,
       initEdit,
+      initDelete,
     }
   },
 }).mount('#educationalAttainmentPage')

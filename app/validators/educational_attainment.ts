@@ -15,3 +15,10 @@ export const editEducationalAttainmentValidator = vine.compile(
   })
 )
 editEducationalAttainmentValidator.errorReporter = () => new JSONAPIErrorReporter()
+
+export const deleteEducationalAttainmentValidator = vine.compile(
+  vine.object({
+    id: vine.number().min(1),
+  })
+)
+deleteEducationalAttainmentValidator.errorReporter = () => new JSONAPIErrorReporter()

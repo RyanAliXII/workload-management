@@ -36,6 +36,7 @@ router
         router.get('/educational-attainments', [EducationalAttainmentsController, 'index'])
         router.post('/educational-attainments', [EducationalAttainmentsController, 'create'])
         router.put('/educational-attainments/:id', [EducationalAttainmentsController, 'edit'])
+        router.delete('/educational-attainments/:id', [EducationalAttainmentsController, 'delete'])
       })
       .use(middleware.auth({ guards: ['admin'], redirectTo: '/admin/login' }))
   })

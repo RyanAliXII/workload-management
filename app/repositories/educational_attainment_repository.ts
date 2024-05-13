@@ -18,4 +18,9 @@ export class EducationalAttainmentRepository {
     ea.name = name
     return ea.save()
   }
+  async delete(id: number) {
+    const ea = await EducationalAttainment.findBy('id', id)
+    if (!ea) return
+    await ea.delete()
+  }
 }
