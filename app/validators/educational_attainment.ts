@@ -7,3 +7,11 @@ export const createEducationalAttainmentValidator = vine.compile(
   })
 )
 createEducationalAttainmentValidator.errorReporter = () => new JSONAPIErrorReporter()
+
+export const editEducationalAttainmentValidator = vine.compile(
+  vine.object({
+    id: vine.number().min(1),
+    name: vine.string().maxLength(75).trim(),
+  })
+)
+editEducationalAttainmentValidator.errorReporter = () => new JSONAPIErrorReporter()

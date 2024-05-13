@@ -12,4 +12,10 @@ export class EducationalAttainmentRepository {
     attainment.name = name
     return attainment.save()
   }
+  async update({ id, name }: { id: number; name: string }) {
+    const ea = await EducationalAttainment.findBy('id', id)
+    if (!ea) return null
+    ea.name = name
+    return ea.save()
+  }
 }

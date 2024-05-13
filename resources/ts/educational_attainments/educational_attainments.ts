@@ -61,7 +61,7 @@ createApp({
         toastr.success('Educational attainment has been added.')
         resetForm()
         $('#addEducationalAttainmentModal').modal('hide')
-        //fetchPositions()
+        fetchEducationalAttainments()
       }
       if (response.status === StatusCodes.BAD_REQUEST) {
         if (responseBody?.errors) {
@@ -72,7 +72,7 @@ createApp({
 
     const onSubmitUpdate = async () => {
       errors.value = {}
-      const response = await fetch(`/admin/positions/${form.value.id}`, {
+      const response = await fetch(`/admin/educational-attainments/${form.value.id}`, {
         method: 'PUT',
         body: JSON.stringify(form.value),
         headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -81,14 +81,19 @@ createApp({
       if (response.status === StatusCodes.OK) {
         toastr.success('Position has been updated.')
         resetForm()
-        $('#editPositionModal').modal('hide')
-        // fetchPositions()
+        $('#editEducationalAttainmentModal').modal('hide')
+        fetchEducationalAttainments()
       }
       if (response.status === StatusCodes.BAD_REQUEST) {
         if (responseBody?.errors) {
           errors.value = toStructuredErrors(responseBody.errors)
         }
       }
+    }
+    const initEdit = (ea: EducationalAttainment) => {
+      form.value.id = ea.id
+      form.value.name = ea.name
+      $('#editEducationalAttainmentModal').modal('show')
     }
     return {
       form,
@@ -97,6 +102,7 @@ createApp({
       onSubmitUpdate,
       toReadableDatetime,
       educationalAttainments,
+      initEdit,
     }
   },
 }).mount('#educationalAttainmentPage')
