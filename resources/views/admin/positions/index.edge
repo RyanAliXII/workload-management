@@ -44,7 +44,22 @@
               
             </button>
             <div class="main-card mb-3 card p-5">
-              
+              <data-table :value="positions"  table-class="table table-striped">
+                <column field="name" header="Name"></column>
+                <column field="createdAt" header="Created At">
+                  <template #body="slotProps">
+                    ${ toReadableDatetime(slotProps.data.createdAt) }
+                </template>
+               </column>
+               <column  header="Actions">
+               <template #body="slotProps">
+                <div class="d-flex gap-2">
+                  <button class="btn btn-outline-primary"> Edit</button>
+                  <button class="btn btn-outline-danger"> Delete</button>
+                </div>
+              </template>
+             </column>
+              </data-table>
             </div>
           </div>
          

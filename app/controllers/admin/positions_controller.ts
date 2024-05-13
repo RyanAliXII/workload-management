@@ -12,7 +12,16 @@ export default class PositionsController {
     protected logger: Logger,
     protected positionRepo: PositionRepository
   ) {}
-  async index({ view }: HttpContext) {
+  async index({ view, request, response }: HttpContext) {
+    const contentType = await request.headers()['content-type']
+    if (contentType === 'application/json') {
+      const positions = await this.positionRepo.getAll()
+      return response.status(StatusCodes.OK).send({
+        status: StatusCodes.OK,
+        message: 'Positions fetched.',
+        positions,
+      })
+    }
     return view.render('admin/positions/index')
   }
   async create({ request, response }: HttpContext) {

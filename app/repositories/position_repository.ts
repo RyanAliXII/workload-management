@@ -8,4 +8,7 @@ export class PositionRepository {
     position.name = name
     return position.save()
   }
+  async getAll() {
+    return Position.query().select(['id', 'name', 'created_at', 'updated_at'])
+  }
 }
