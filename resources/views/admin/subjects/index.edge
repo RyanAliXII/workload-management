@@ -2,7 +2,7 @@
 <html lang="en">
   @include('partials/head')
   <body>
-    <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar">
+    <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar" id="subjectPage">
         @include('partials/admin/header')
         <div class="app-main">
           @include('partials/admin/sidebar')
@@ -57,6 +57,7 @@
       @!component('components/subjects/edit-subject-modal')
     </div>
     @include('partials/admin/app_drawer')
+    @vite('resources/ts/subjects/subjects.ts')
     @include('partials/scripts')
   </body>
 </html>
