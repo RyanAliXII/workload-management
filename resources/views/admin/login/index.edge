@@ -30,12 +30,16 @@
         )
       }}"
     />
-
+    <style>
+      [v-cloak]{
+        display:none;
+      }
+    </style>
     <!-- <link href="./styles/css/base.css" rel="stylesheet" /> -->
   </head>
   <body>
     <div class="app-container app-theme-white body-tabs-shadow">
-      <div class="app-container" id="loginPage">
+      <div class="app-container" id="loginPage" v-cloak>
         <div class="h-100">
           <div class="h-100 g-0 row">
             <div class="d-none d-lg-block col-lg-4">
@@ -101,6 +105,7 @@
             </div>
             <div
               class="h-100 d-flex bg-white justify-content-center align-items-center col-md-12 col-lg-8"
+             
             >
               <div class="mx-auto app-login-box col-sm-12 col-md-10 col-lg-9">
                 <div class="app-logo"></div>

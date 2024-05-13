@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  @include('partials/head')
+  <body>
+    <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar" id="positionPage" v-cloak>
+      @include('partials/admin/header')
+      <div class="app-main">
+        @include('partials/admin/sidebar')
+        <div class="app-main__outer">
+          <div class="app-main__inner">
+            <div class="app-page-title app-page-title-simple">
+              <div class="page-title-wrapper">
+                <div class="page-title-heading">
+                  <div>
+                    <div class="page-title-head center-elem">
+                      <span class="d-inline-block pe-2">
+                        <i class="lnr-apartment opacity-6"></i>
+                      </span>
+                      <span class="d-inline-block">Faculty Positions</span>
+                    </div>
+                    <div class="page-title-subheading opacity-10">
+                      <nav class="" aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                          <li class="breadcrumb-item">
+                            <a>
+                              <i aria-hidden="true" class="fa fa-home"></i>
+                            </a>
+                          </li>
+                          <li class="breadcrumb-item">
+                            <a>Dashboard</a>
+                          </li>
+                          <li class="active breadcrumb-item" aria-current="page">
+                            Faculty Positions
+                          </li>
+                        </ol>
+                      </nav>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="btn btn-primary mb-3  " data-bs-toggle="modal" data-bs-target="#addPositionModal">
+              <i class="fas fa-add"></i> <span>New Position</span>
+              
+            </button>
+            <div class="main-card mb-3 card p-5">
+              <data-table :value="positions"  table-class="table table-striped">
+                <column field="name" header="Name"></column>
+                <column field="createdAt" header="Created At">
+                  <template #body="slotProps">
+                    ${ toReadableDatetime(slotProps.data.createdAt) }
+                </template>
+               </column>
+               <column  header="Actions">
+               <template #body="slotProps">
+                <div class="d-flex gap-2">
+                  <button class="btn btn-outline-primary" v-on:click="initEdit(slotProps.data)">Edit</button>
+                  <button class="btn btn-outline-danger" v-on:click="initDelete(slotProps.data)">Delete</button>
+                </div>
+              </template>
+             </column>
+              </data-table>
+            </div>
+          </div>
+         
+          @include('partials/admin/footer')
+        </div>
+       
+      </div>
+      @!component('components/positions/add-position-modal')
+      @!component('components/positions/edit-position-modal')
+    </div>
+    @include('partials/admin/app_drawer') 
+    @include('partials/scripts')
+    @vite('resources/ts/positions/positions.ts')
+  </body>
+</html>

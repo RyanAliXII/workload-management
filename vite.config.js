@@ -14,7 +14,11 @@ export default defineConfig({
        * Entrypoints of your application. Each entrypoint will
        * result in a separate bundle.
        */
-      entrypoints: ['resources/ts/login/login.ts', 'resources/ts/departments/departments.ts'],
+      entrypoints: [
+        'resources/ts/login/login.ts',
+        'resources/ts/departments/departments.ts',
+        'resources/ts/positions/positions.ts',
+      ],
 
       /**
        * Paths to watch and reload the browser on file change
