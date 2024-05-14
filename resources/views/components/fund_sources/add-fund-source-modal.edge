@@ -1,13 +1,13 @@
-<div class="modal fade" id="editPositionModal"  tabindex="-1" role="dialog"
+<div class="modal fade" id="addFundSourceModal"  tabindex="-1" role="dialog"
 aria-labelledby="exampleModalLabel" aria-hidden="true">
 <div class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title">Edit Source</h5>
+            <h5 class="modal-title">New Source</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
             </button>
         </div>
-        <form v-on:submit.prevent="onSubmitUpdate">
+        <form v-on:submit.prevent="onSubmitCreate">
         <div class="modal-body">
            
               <label for="name">Name</label>
