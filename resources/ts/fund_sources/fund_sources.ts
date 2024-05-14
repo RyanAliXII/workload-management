@@ -5,6 +5,7 @@ import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import FundSource from '#models/fund_source'
 import { toReadableDatetime } from '../utils/date.js'
+import Swal from 'sweetalert2'
 createApp({
   components: {
     'data-table': DataTable,
@@ -96,6 +97,32 @@ createApp({
       form.value.name = source.name
       $('#editFundSourceModal').modal('show')
     }
+    const initDelete = async (fundSource: FundSource) => {
+      form.value.id = fundSource.id
+      form.value.name = fundSource.name
+      const result = await Swal.fire({
+        title: 'Delete Fund Source',
+        text: 'Are youre sure you want to delete this fund source?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#cc3939',
+        confirmButtonText: 'Yes, delete it',
+        cancelButtonText: `Don't delete`,
+        cancelButtonColor: '#858181',
+      })
+      if (!result.isConfirmed) {
+        resetForm()
+        return
+      }
+      deleteFundSource()
+    }
+    const deleteFundSource = async () => {
+      const response = await fetch(`/admin/fund-sources/${form.value.id}`, { method: 'DELETE' })
+      if (response.status === StatusCodes.OK) {
+        toastr.success('Fund source deleted.')
+        fetchFundSources()
+      }
+    }
 
     return {
       form,
@@ -105,6 +132,7 @@ createApp({
       initEdit,
       fundSources,
       toReadableDatetime,
+      initDelete,
     }
   },
 }).mount('#fundSourcePage')

@@ -15,3 +15,10 @@ export const editFundSourceValidator = vine.compile(
   })
 )
 editFundSourceValidator.errorReporter = () => new JSONAPIErrorReporter()
+
+export const deleteFundSourceValidator = vine.compile(
+  vine.object({
+    id: vine.number().min(1),
+  })
+)
+deleteFundSourceValidator.errorReporter = () => new JSONAPIErrorReporter()

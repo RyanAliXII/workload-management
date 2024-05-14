@@ -18,4 +18,9 @@ export class FundSourceRepository {
     fundSource.name = name
     return fundSource.save()
   }
+  async delete(id: number) {
+    const fundSource = await FundSource.findBy('id', id)
+    if (!fundSource) return
+    await fundSource.delete()
+  }
 }

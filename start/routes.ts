@@ -41,6 +41,7 @@ router
         router.get('/fund-sources', [FundSourcesController, 'index'])
         router.post('/fund-sources', [FundSourcesController, 'create'])
         router.put('/fund-sources/:id', [FundSourcesController, 'edit'])
+        router.delete('/fund-sources/:id', [FundSourcesController, 'delete'])
       })
       .use(middleware.auth({ guards: ['admin'], redirectTo: '/admin/login' }))
   })
