@@ -7,4 +7,9 @@ export class FundSourceRepository {
     fundSource.name = name
     return fundSource.save()
   }
+  async getAll() {
+    return FundSource.query()
+      .select(['id', 'name', 'created_at', 'updated_at'])
+      .orderBy('created_at', 'desc')
+  }
 }

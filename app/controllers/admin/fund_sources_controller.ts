@@ -12,7 +12,16 @@ export default class FundSourcesController {
     protected logger: Logger,
     protected fundSourceRepo: FundSourceRepository
   ) {}
-  async index({ view }: HttpContext) {
+  async index({ view, request, response }: HttpContext) {
+    const contentType = request.header('content-type')
+    if (contentType === 'application/json') {
+      const fundSources = await this.fundSourceRepo.getAll()
+      return response.send({
+        status: StatusCodes.OK,
+        message: 'Fund sources fetched.',
+        fundSources,
+      })
+    }
     return view.render('admin/fund_sources/index')
   }
   async create({ request, response }: HttpContext) {
