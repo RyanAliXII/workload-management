@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 
 export default class FundSource extends BaseModel {
+  static table = 'fund_source'
   @column({ isPrimary: true })
   declare id: number
   @column()
