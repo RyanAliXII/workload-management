@@ -1,5 +1,5 @@
 import { FundSourceRepository } from '#repositories/fund_source_respository'
-import { createFundSourceValidator } from '#validators/fund_source'
+import { createFundSourceValidator, editFundSourceValidator } from '#validators/fund_source'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import { Logger } from '@adonisjs/core/logger'
@@ -32,6 +32,33 @@ export default class FundSourcesController {
         status: StatusCodes.OK,
         message: 'Fund source added.',
         position,
+      })
+    } catch (error) {
+      if (error instanceof errors.E_VALIDATION_ERROR) {
+        return response.status(StatusCodes.BAD_REQUEST).send({
+          status: StatusCodes.BAD_REQUEST,
+          message: 'Validation error',
+          errors: error.messages,
+        })
+      }
+      this.logger.error(error)
+      return response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
+        message: 'Unknown error occured',
+      })
+    }
+  }
+  async edit({ request, response }: HttpContext) {
+    try {
+      const id = request.param('id')
+      const body = request.body()
+      body.id = id
+      const parsedBody = await editFundSourceValidator.validate(body)
+      const fundSource = await this.fundSourceRepo.update(parsedBody)
+      return response.send({
+        status: StatusCodes.OK,
+        message: 'Fund source updated.',
+        fundSource,
       })
     } catch (error) {
       if (error instanceof errors.E_VALIDATION_ERROR) {

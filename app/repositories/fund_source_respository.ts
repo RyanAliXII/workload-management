@@ -12,4 +12,10 @@ export class FundSourceRepository {
       .select(['id', 'name', 'created_at', 'updated_at'])
       .orderBy('created_at', 'desc')
   }
+  async update({ name, id }: { id: number; name: string }) {
+    const fundSource = await FundSource.findBy('id', id)
+    if (!fundSource) return null
+    fundSource.name = name
+    return fundSource.save()
+  }
 }

@@ -40,6 +40,7 @@ router
         router.delete('/educational-attainments/:id', [EducationalAttainmentsController, 'delete'])
         router.get('/fund-sources', [FundSourcesController, 'index'])
         router.post('/fund-sources', [FundSourcesController, 'create'])
+        router.put('/fund-sources/:id', [FundSourcesController, 'edit'])
       })
       .use(middleware.auth({ guards: ['admin'], redirectTo: '/admin/login' }))
   })

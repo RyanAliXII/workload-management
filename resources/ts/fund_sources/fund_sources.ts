@@ -91,12 +91,18 @@ createApp({
         }
       }
     }
+    const initEdit = (source: FundSource) => {
+      form.value.id = source.id
+      form.value.name = source.name
+      $('#editFundSourceModal').modal('show')
+    }
 
     return {
       form,
       errors,
       onSubmitCreate,
       onSubmitUpdate,
+      initEdit,
       fundSources,
       toReadableDatetime,
     }
