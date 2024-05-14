@@ -1,4 +1,4 @@
-import { FundSourceRepository } from '#repositories/fund_source_respitory'
+import { FundSourceRepository } from '#repositories/fund_source_respository'
 import { createFundSourceValidator } from '#validators/fund_source'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
