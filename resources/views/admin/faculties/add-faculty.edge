@@ -79,16 +79,28 @@
                 </div>
                <div class="col-lg-4 mb-2">
                 <label>Position</label>
-                <input class="form-control ">
+                <select class="form-control">
+                    <option value="" disabled selected>Select position</option>
+                    @each(position in positions)
+                        <option value="{{position.id}}"> {{position.name }} </option>
+                    @end
+                </select>
                </div>
                
                <div class="col-lg-4 mb-2">
                 <label>Employment Status</label>
-                <input class="form-control ">
+                <select class="form-control">
+                  
+                </select>
                </div>
                <div class="col-lg-6 mb-2">
                 <label>Fund Source</label>
-                <select class="form-control"></select>
+                <select class="form-control">
+                    <option value="" disabled selected>Select fund source</option>
+                    @each(fundSource in fundSources)
+                        <option value="{{fundSource.id}}"> {{fundSource.name }} </option>
+                    @end
+                </select>
                </div>
                </div>
                <div>
@@ -106,6 +118,22 @@
                     <th>Educational Attainment</th>
                   </tr>
                 </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                           
+                            <input type="text" class="form-control">
+                        </td>
+                        <td>
+                           <select class="form-control">
+                            <option value="" disabled selected>Select education attainment</option>
+                            @each(ea in educationalAttainments)
+                             <option value="{{ea.id}}"> {{ea.name }} </option>
+                             @end
+                           </select>
+                        </td>
+                    </tr>
+                </tbody>
               </table>
               <div class="alert alert-secondary mt-3" role="alert">
                 <i class="fa-solid fa-address-book"></i> Account and Contact Information
