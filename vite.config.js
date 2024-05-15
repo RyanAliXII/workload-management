@@ -21,6 +21,7 @@ export default defineConfig({
         'resources/ts/subjects/subjects.ts',
         'resources/ts/educational_attainments/educational_attainments.ts',
         'resources/ts/fund_sources/fund_sources.ts',
+        'resources/ts/faculties/add_faculty.ts',
       ],
 
       /**

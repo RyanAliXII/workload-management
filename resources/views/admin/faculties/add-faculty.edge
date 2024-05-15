@@ -2,7 +2,7 @@
 <html lang="en">
   @include('partials/head')
   <body>
-    <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar">
+    <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar" id="addFacultyPage">
         @include('partials/admin/header')
         <div class="app-main">
           @include('partials/admin/sidebar')
@@ -62,7 +62,12 @@
                </div>
                <div class="col-lg-6 mb-2">
                 <label>Gender</label>
-                <select class="form-control"></select>
+                <select class="form-control">
+                  <option value="" selected>Select gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="female">Other</option>
+                </select>
                </div>
                <div class="col-lg-6 mb-2">
                 <label>Date of birth</label>
@@ -166,5 +171,6 @@
     </div>
     @include('partials/admin/app_drawer')
     @include('partials/scripts')
+    @vite(['resources/ts/faculties/add_faculty.ts'])
   </body>
 </html>
