@@ -85,7 +85,7 @@
                <div class="col-lg-4 mb-2">
                 <label>Position</label>
                 <select class="form-control">
-                    <option value="" disabled selected>Select position</option>
+                    <option value="0" disabled selected>Select position</option>
                     @each(position in positions)
                         <option value="{{position.id}}"> {{position.name }} </option>
                     @end
@@ -95,13 +95,17 @@
                <div class="col-lg-4 mb-2">
                 <label>Employment Status</label>
                 <select class="form-control">
-                  
+                  <option value="" selected>Select employment status</option>
+                  <option value="regular" >Regular</option>
+                  <option value="part-time" >Part-time</option>
+                  <option value="resigned">Part-time</option>
+                  <option value="terminated">Terminated</option>
                 </select>
                </div>
                <div class="col-lg-6 mb-2">
                 <label>Fund Source</label>
                 <select class="form-control">
-                    <option value="" disabled selected>Select fund source</option>
+                    <option value="0" disabled selected>Select fund source</option>
                     @each(fundSource in fundSources)
                         <option value="{{fundSource.id}}"> {{fundSource.name }} </option>
                     @end
@@ -131,7 +135,7 @@
                         </td>
                         <td>
                            <select class="form-control">
-                            <option value="" disabled selected>Select education attainment</option>
+                            <option value="0" disabled selected>Select education attainment</option>
                             @each(ea in educationalAttainments)
                              <option value="{{ea.id}}"> {{ea.name }} </option>
                              @end
