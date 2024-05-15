@@ -6,6 +6,7 @@ const DepartmentsController = () => import('#controllers/admin/departments_contr
 const EducationalAttainmentsController = () =>
   import('#controllers/admin/educational_attainments_controller')
 const FundSourcesController = () => import('#controllers/admin/fund_sources_controller')
+const FacultiesController = () => import('#controllers/faculties_controller')
 import { HttpContext } from '@adonisjs/core/http'
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
@@ -42,6 +43,8 @@ router
         router.post('/fund-sources', [FundSourcesController, 'create'])
         router.put('/fund-sources/:id', [FundSourcesController, 'edit'])
         router.delete('/fund-sources/:id', [FundSourcesController, 'delete'])
+        router.get('/faculties', [FacultiesController, 'index'])
+        router.get('/faculties/add', [FacultiesController, 'add'])
       })
       .use(middleware.auth({ guards: ['admin'], redirectTo: '/admin/login' }))
   })
