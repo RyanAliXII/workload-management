@@ -42,36 +42,41 @@
               </div>
              
               <div class="main-card mb-3 card p-5">
-              <form>
+              <form v-cloak>
                 <div class="alert alert-secondary" role="alert">
                   <i class="fa fa-user" aria-hidden="true"></i> General Information
                 </div>
                <div class="row">
                 <div class="col-lg-4 mb-2">
-                  <label>Given name</label>
-                  <input class="form-control ">
+                  <label for="givenName">Given name*</label> <span class="badge badge-light">4</span>
+                  <input name="givenName" v-model="form.givenName" class="form-control" :class="{'is-invalid':errors?.givenName?.[0]}">
+                  <div class="invalid-feedback" :class="{'d-block':errors?.givenName?.[0]}">${errors?.givenName?.[0]}</div>
                 </div>
                <div class="col-lg-4 mb-2">
-                <label>Middle name</label>
-                <input class="form-control ">
+                <label for="middleName">Middle name*</label>
+                <input name="middleName" v-model="form.middleName" class="form-control" :class="{'is-invalid':errors?.middleName?.[0]}">
+                <div class="invalid-feedback" :class="{'d-block':errors?.middleName?.[0]}">${errors?.middleName?.[0]}</div>
                </div>
                
                <div class="col-lg-4 mb-2">
-                <label>Surname</label>
-                <input class="form-control ">
+                <label for="surname">Surname*</label>
+                <input name="surname" v-model="form.surname" class="form-control" :class="{'is-invalid':errors?.surname?.[0]}">
+                <div class="invalid-feedback" :class="{'d-block':errors?.surname?.[0]}">${errors?.surname?.[0]}</div>
                </div>
                <div class="col-lg-6 mb-2">
-                <label>Gender</label>
-                <select class="form-control">
+                <label for="gender">Gender*</label>
+                <select name="gender" v-model="form.gender" class="form-control" :class="{'is-invalid':errors?.gender?.[0]}">
                   <option value="" selected>Select gender</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
                   <option value="female">Other</option>
                 </select>
+                <div class="invalid-feedback" :class="{'d-block':errors?.gender?.[0]}">${errors?.gender?.[0]}</div>
                </div>
                <div class="col-lg-6 mb-2">
-                <label>Date of birth</label>
-                <input type="date" class="form-control ">
+                <label name="dateOfBirth">Date of birth*</label>
+                <input name="dateOfBirth" v-on:change="handleDateOfBirth" :value="toISO8601DateString(form.dateOfBirth)" type="date" class="form-control" :class="{'is-invalid':errors?.dateOfBirth?.[0]}">
+                <div class="invalid-feedback" :class="{'d-block':errors?.dateOfBirth?.[0]}">${errors?.dateOfBirth?.[0]}</div>
                </div>
                </div>
                <div class="alert alert-secondary mt-3" role="alert">
@@ -79,44 +84,48 @@
               </div>
                <div class="row">
                 <div class="col-lg-4 mb-2">
-                  <label>TIN</label>
-                  <input class="form-control ">
+                  <label for="TIN">TIN</label>
+                  <input name="TIN" v-model="form.TIN" class="form-control" :class="{'is-invalid':errors?.TIN?.[0]}">
+                  <div class="invalid-feedback" :class="{'d-block':errors?.TIN?.[0]}">${errors?.TIN?.[0]}</div>
                 </div>
                <div class="col-lg-4 mb-2">
-                <label>Position</label>
-                <select class="form-control">
+                <label for="positionId">Position*</label>
+                <select name="positionId" v-model="form.positionId" class="form-control" :class="{'is-invalid':errors?.positionId?.[0]}">
                     <option value="0" disabled selected>Select position</option>
                     @each(position in positions)
                         <option value="{{position.id}}"> {{position.name }} </option>
                     @end
                 </select>
+                <div class="invalid-feedback" :class="{'d-block':errors?.positionId?.[0]}">${errors?.positionId?.[0]}</div>
                </div>
                
                <div class="col-lg-4 mb-2">
-                <label>Employment Status</label>
-                <select class="form-control">
+                <label for="employmentStatus">Employment Status*</label>
+                <select name="employmentStatus" v-model="form.employmentStatus" class="form-control" :class="{'is-invalid':errors?.employmentStatus?.[0]}">
                   <option value="" selected>Select employment status</option>
                   <option value="regular" >Regular</option>
                   <option value="part-time" >Part-time</option>
-                  <option value="resigned">Part-time</option>
+                  <option value="resigned">Resigned</option>
                   <option value="terminated">Terminated</option>
                 </select>
+                <div class="invalid-feedback" :class="{'d-block':errors?.employmentStatus?.[0]}">${errors?.employmentStatus?.[0]}</div>
                </div>
                <div class="col-lg-6 mb-2">
-                <label>Fund Source</label>
-                <select class="form-control">
+                <label for="fundSourceId">Fund Source*</label>
+                <select name="fundSourceId" v-model="form.fundSourceId" class="form-control" :class="{'is-invalid':errors?.fundSourceId?.[0]}">
                     <option value="0" disabled selected>Select fund source</option>
                     @each(fundSource in fundSources)
                         <option value="{{fundSource.id}}"> {{fundSource.name }} </option>
                     @end
                 </select>
+                <div class="invalid-feedback" :class="{'d-block':errors?.fundSourceId?.[0]}">${errors?.fundSourceId?.[0]}</div>
                </div>
                </div>
                <div>
                 <div class="alert alert-secondary mt-3" role="alert">
                   <i class="fa-solid fa-book"></i> Educational Background
                  </div>
-               <button type="button" class="btn btn-outline-primary mb-3">
+               <button type="button" class="btn btn-outline-primary mb-3" v-on:click="addEducation">
                 <i class="fas fa-add"></i> <span>Add Education</span>
               </button>
               </div>
@@ -125,21 +134,26 @@
                   <tr>
                     <th>Alma Mater</th>
                     <th>Educational Attainment</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <tr v-for="(item, index) in form.educations">
                         <td>
-                           
-                            <input type="text" class="form-control">
+                            <input type="text" v-model="form.educations[index].almaMater" class="form-control">
                         </td>
                         <td>
-                           <select class="form-control">
+                           <select v-model="form.educations[index].educationalAttainmentId"  class="form-control">
                             <option value="0" disabled selected>Select education attainment</option>
                             @each(ea in educationalAttainments)
                              <option value="{{ea.id}}"> {{ea.name }} </option>
                              @end
                            </select>
+                        </td>
+                        <td>
+                          <button type="button" v-on:click="removeEducationByIndex(index)" class="btn btn-danger">
+                              <i class="fas fa-times"></i>
+                          </button>
                         </td>
                     </tr>
                 </tbody>
@@ -149,16 +163,19 @@
                </div>
               <div class="row">
                 <div class="col-lg-4 mb-2">
-                  <label>Email</label>
-                  <input type="email" class="form-control ">
+                  <label for="email">Email*</label>
+                  <input name="email" v-model="form.email" type="email" class="form-control" :class="{'is-invalid':errors?.email?.[0]}">
+                  <div class="invalid-feedback" :class="{'d-block':errors?.email?.[0]}">${errors?.email?.[0]}</div>
                 </div>
                 <div class="col-lg-4 mb-2">
-                  <label>Mobile number</label>
-                  <input type="email" class="form-control ">
+                  <label for="mobileNumber">Mobile number*</label>
+                  <input name="mobileNumber" v-model="form.mobileNumber" class="form-control" :class="{'is-invalid':errors?.mobileNumber?.[0]}">
+                  <div class="invalid-feedback" :class="{'d-block':errors?.mobileNumber?.[0]}">${errors?.mobileNumber?.[0]}</div>
                 </div>
                <div class="col-lg-4 mb-2">
-                <label>Password</label>
-                <input class="form-control" type="password">
+                <label for="password">Password*</label>
+                <input name="password" v-model="form.password" class="form-control" type="password" :class="{'is-invalid':errors?.password?.[0]}">
+                <div class="invalid-feedback" :class="{'d-block':errors?.password?.[0]}">${errors?.password?.[0]}</div>
                </div>
                </div>
                <button type="submit" class="btn btn-primary mb-3">
