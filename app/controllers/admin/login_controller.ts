@@ -3,9 +3,11 @@ import { Logger } from '@adonisjs/core/logger'
 import type { HttpContext } from '@adonisjs/core/http'
 import { StatusCodes } from 'http-status-codes'
 import { errors } from '@vinejs/vine'
-import hash from '@adonisjs/core/services/hash'
+import { errors as authErrors } from '@adonisjs/auth'
 import { loginValidator } from '#validators/login'
 import { UserRepository } from '#repositories/user_respository'
+
+import AuthUser from '#models/auth_user'
 
 @inject()
 export default class LoginController {
@@ -19,26 +21,19 @@ export default class LoginController {
   async login({ request, response, auth }: HttpContext) {
     try {
       const body = await loginValidator.validate(request.body())
-      const user = await this.userRepo.getByEmail(body.email)
-      if (!user) {
-        return response.status(StatusCodes.BAD_REQUEST).send({
-          message: 'Invalid username or password',
-          status: StatusCodes.BAD_REQUEST,
-        })
-      }
-      const isPasswordCorrect = await hash.verify(user.loginCredential.password, body?.password)
-      if (!isPasswordCorrect) {
-        return response.status(StatusCodes.BAD_REQUEST).send({
-          message: 'Invalid username or password',
-          status: StatusCodes.BAD_REQUEST,
-        })
-      }
+      const user = await AuthUser.verifyCredentials(body.email, body.password)
       await auth.use('admin').login(user)
-      return response.status(StatusCodes.OK).send({
+      return response.json({
         status: StatusCodes.OK,
         message: 'OK',
       })
     } catch (err) {
+      if (err instanceof authErrors.E_INVALID_CREDENTIALS) {
+        return response.status(StatusCodes.BAD_REQUEST).json({
+          message: 'Invalid username or password',
+          status: StatusCodes.BAD_REQUEST,
+        })
+      }
       if (err instanceof errors.E_VALIDATION_ERROR) {
         return response.status(StatusCodes.BAD_REQUEST).json({
           message: 'Validation error',
