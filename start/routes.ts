@@ -1,12 +1,13 @@
 const AdminLoginController = () => import('#controllers/admin/login_controller')
 const AdminDashboardController = () => import('#controllers/admin/dashboard_controller')
+const FacultyLoginController = () => import('#controllers/faculty/login_controller')
 const PositionsController = () => import('#controllers/admin/positions_controller')
 const SubjectsController = () => import('#controllers/admin/subjects_controller')
 const DepartmentsController = () => import('#controllers/admin/departments_controller')
 const EducationalAttainmentsController = () =>
   import('#controllers/admin/educational_attainments_controller')
 const FundSourcesController = () => import('#controllers/admin/fund_sources_controller')
-const FacultiesController = () => import('#controllers/faculties_controller')
+const FacultiesController = () => import('#controllers/admin/faculties_controller')
 import { HttpContext } from '@adonisjs/core/http'
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
@@ -20,6 +21,7 @@ router
   .group(() => {
     router.get('/login', [AdminLoginController, 'index'])
     router.post('/login', [AdminLoginController, 'login'])
+
     router
       .group(() => {
         router.get('/dashboard', [AdminDashboardController, 'index'])
@@ -51,5 +53,10 @@ router
       .use(middleware.auth({ guards: ['admin'], redirectTo: '/admin/login' }))
   })
   .prefix('/admin')
+router
+  .group(() => {
+    router.get('/login', [FacultyLoginController, 'index'])
+  })
+  .prefix('/faculties')
 
 /*End of admin routes*/
