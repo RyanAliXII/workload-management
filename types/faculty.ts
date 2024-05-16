@@ -5,13 +5,13 @@ export type Faculty = {
   surname: string
   gender: string
   dateOfBirth: Date
-  TIN: string
+  TIN?: string
   positionId: number
   employmentStatus: string
   fundSourceId: number
   educations: Education[]
   email: string
-  image: string
+  image?: string
   mobileNumber: string
   password: string
 }

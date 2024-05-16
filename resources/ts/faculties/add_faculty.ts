@@ -2,13 +2,14 @@ import { AddFacultyType } from '#types/faculty'
 import { createApp, ref } from 'vue'
 import { toISO8601DateString } from '../utils/date.js'
 import { StatusCodes } from 'http-status-codes'
+import { toStructuredErrors } from '../utils/form.js'
 
 createApp({
   compilerOptions: {
     delimiters: ['${', '}'],
   },
   setup() {
-    const form = ref<AddFacultyType>({
+    const INITIAL_FORM = {
       givenName: '',
       middleName: '',
       surname: '',
@@ -23,9 +24,9 @@ createApp({
       image: '',
       mobileNumber: '',
       password: '',
-    })
+    }
+    const form = ref<AddFacultyType>({ ...INITIAL_FORM })
     const isSubmitting = ref(false)
-
     const facultyImage = ref<File | null>(null)
 
     const errors = ref({})
@@ -64,9 +65,39 @@ createApp({
         form.value.image = responseBody?.publicId ?? ''
       }
     }
+    const clearErrors = () => {
+      errors.value = {}
+    }
+    const resetForm = () => {
+      form.value = { ...INITIAL_FORM }
+      facultyImage.value = null
+    }
     const submit = async () => {
+      clearErrors()
       isSubmitting.value = true
       await uploadImage()
+      const response = await fetch('/admin/faculties', {
+        method: 'POST',
+        body: JSON.stringify({
+          ...form.value,
+          dateOfBirth: toISO8601DateString(form.value.dateOfBirth),
+        }),
+        headers: new Headers({ 'Content-Type': 'application/json' }),
+      })
+      const responseBody = await response.json()
+      if (response.status === StatusCodes.OK) {
+        resetForm()
+        toastr.success('Faculty created')
+      }
+      if (response.status === StatusCodes.BAD_REQUEST) {
+        if (responseBody?.errors) {
+          errors.value = toStructuredErrors(responseBody.errors)
+          console.log(errors.value)
+        }
+      }
+      if (response.status > StatusCodes.BAD_REQUEST) {
+        toastr.error('Unknown error occured.')
+      }
       isSubmitting.value = false
     }
     return {

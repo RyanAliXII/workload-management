@@ -140,6 +140,11 @@
                 <i class="fas fa-add"></i> <span>Add Education</span>
               </button>
               </div>
+              <div class="alert alert-danger" role="alert" v-show="errors?.educations?.[0] || errors?.educations?.['*']?.almaMater?.[0]  || errors?.educations?.['*']?.educationalAttainment?.[0] ">
+                 <div v-show="errors?.educations?.[0]">- ${errors?.educations?.[0]} </div>
+                 <div v-show="errors?.educations?.['*']?.almaMater?.[0]">- ${errors?.educations?.['*']?.almaMater?.[0]}</div>
+                 <div v-show="errors?.educations?.['*']?.educationalAttainmentId?.[0]"> - ${errors?.educations?.['*']?.educationalAttainmentId?.[0]}</div>
+              </div>
               <table class="table table-bordered">
                 <thead>
                   <tr>

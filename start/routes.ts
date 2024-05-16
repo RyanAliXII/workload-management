@@ -46,6 +46,7 @@ router
         router.get('/faculties', [FacultiesController, 'index'])
         router.get('/faculties/add', [FacultiesController, 'add'])
         router.post('/faculties/images', [FacultiesController, 'uploadFacultyImage'])
+        router.post('/faculties', [FacultiesController, 'create'])
       })
       .use(middleware.auth({ guards: ['admin'], redirectTo: '/admin/login' }))
   })

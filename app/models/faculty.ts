@@ -5,9 +5,9 @@ import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 import Position from './position.js'
 import FundSource from './fund_source.js'
 import Education from './education.js'
-import { AddFacultyType } from '#types/faculty'
 
 export default class Faculty extends BaseModel {
+  static table = 'faculty'
   @column({ isPrimary: true })
   declare id: number
   @column({ columnName: 'given_name' })
@@ -19,7 +19,9 @@ export default class Faculty extends BaseModel {
   @column({ columnName: 'gender' })
   declare gender: string
   @column({ columnName: 'date_of_birth' })
-  declare dateOfBirth: DateTime
+  declare dateOOfBirth: DateTime
+  @column({ columnName: 'image' })
+  declare image: string
   @column({ columnName: 'TIN' })
   declare TIN: string
   @column({ columnName: 'position_id' })
@@ -42,7 +44,7 @@ export default class Faculty extends BaseModel {
   @hasOne(() => LoginCredential, { foreignKey: 'id' })
   declare loginCredential: HasOne<typeof LoginCredential>
 
-  @hasMany(() => Education, { foreignKey: 'faculty_id' })
+  @hasMany(() => Education, { foreignKey: 'facultyId' })
   declare educations: HasMany<typeof Education>
 
   @column.dateTime({ autoCreate: true })

@@ -5,8 +5,11 @@ import { CloudinaryUploader } from '#services/cloudinary_service'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import { Logger } from '@adonisjs/core/logger'
-
+import { errors } from '@vinejs/vine'
 import { StatusCodes } from 'http-status-codes'
+import { createFacultyValidator } from '#validators/faculty'
+import { FacultyRepository } from '#repositories/faculty_repository'
+import hash from '@adonisjs/core/services/hash'
 @inject()
 export default class FacultiesController {
   constructor(
@@ -14,7 +17,8 @@ export default class FacultiesController {
     protected fundSourceRepo: FundSourceRepository,
     protected educationalAttainmentRepo: EducationalAttainmentRepository,
     protected cloudinaryUploader: CloudinaryUploader,
-    protected logger: Logger
+    protected logger: Logger,
+    protected facultyRepo: FacultyRepository
   ) {}
   async index({ view }: HttpContext) {
     return view.render('admin/faculties/index')
@@ -66,6 +70,30 @@ export default class FacultiesController {
         publicId,
       })
     } catch (error) {
+      this.logger.error(error)
+      return response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
+        message: 'Unknown error occurred.',
+      })
+    }
+  }
+  async create({ request, response }: HttpContext) {
+    try {
+      const body = await createFacultyValidator.validate(request.body())
+      body.password = await hash.make(body.password)
+      await this.facultyRepo.create(body)
+      return response.json({
+        status: StatusCodes.OK,
+        message: 'faculty added.',
+      })
+    } catch (error) {
+      if (error instanceof errors.E_VALIDATION_ERROR) {
+        return response.status(StatusCodes.BAD_REQUEST).json({
+          status: StatusCodes.BAD_REQUEST,
+          message: 'Validation erro',
+          errors: error.messages,
+        })
+      }
       this.logger.error(error)
       return response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
         status: StatusCodes.INTERNAL_SERVER_ERROR,
