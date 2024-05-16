@@ -1,6 +1,7 @@
 const AdminLoginController = () => import('#controllers/admin/login_controller')
 const AdminDashboardController = () => import('#controllers/admin/dashboard_controller')
 const FacultyLoginController = () => import('#controllers/faculty/login_controller')
+const FacultyDashboardController = () => import('#controllers/faculty/dashboard_controller')
 const PositionsController = () => import('#controllers/admin/positions_controller')
 const SubjectsController = () => import('#controllers/admin/subjects_controller')
 const DepartmentsController = () => import('#controllers/admin/departments_controller')
@@ -56,6 +57,11 @@ router
 router
   .group(() => {
     router.get('/login', [FacultyLoginController, 'index'])
+    router
+      .group(() => {
+        router.get('/dashboard', [FacultyDashboardController, 'index'])
+      })
+      .use(middleware.auth({ guards: ['faculty'], redirectTo: '/faculties/login' }))
   })
   .prefix('/faculties')
 
