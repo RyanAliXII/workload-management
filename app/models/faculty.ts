@@ -5,6 +5,7 @@ import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 import Position from './position.js'
 import FundSource from './fund_source.js'
 import Education from './education.js'
+import { AddFacultyType } from '#types/faculty'
 
 export default class Faculty extends BaseModel {
   @column({ isPrimary: true })
