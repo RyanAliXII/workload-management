@@ -1,14 +1,20 @@
 import { EducationalAttainmentRepository } from '#repositories/educational_attainment_repository'
 import { FundSourceRepository } from '#repositories/fund_source_respository'
 import { PositionRepository } from '#repositories/position_repository'
+import { CloudinaryUploader } from '#services/cloudinary_service'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
+import { Logger } from '@adonisjs/core/logger'
+
+import { StatusCodes } from 'http-status-codes'
 @inject()
 export default class FacultiesController {
   constructor(
     protected positionRepo: PositionRepository,
     protected fundSourceRepo: FundSourceRepository,
-    protected educationalAttainmentRepo: EducationalAttainmentRepository
+    protected educationalAttainmentRepo: EducationalAttainmentRepository,
+    protected cloudinaryUploader: CloudinaryUploader,
+    protected logger: Logger
   ) {}
   async index({ view }: HttpContext) {
     return view.render('admin/faculties/index')
@@ -22,5 +28,49 @@ export default class FacultiesController {
       fundSources,
       educationalAttainments,
     })
+  }
+  async uploadFacultyImage({ request, response }: HttpContext) {
+    try {
+      const file = request.file('image', {
+        size: '3mb',
+        extnames: ['jpg', 'png', 'jpeg', 'webp'],
+      })
+      if (!file) {
+        return response.status(StatusCodes.BAD_REQUEST).json({
+          status: StatusCodes.BAD_REQUEST,
+          message: 'No file uploaded.',
+        })
+      }
+      if (!file.isValid) {
+        return response.status(StatusCodes.BAD_REQUEST).json({
+          status: StatusCodes.BAD_REQUEST,
+          message: 'Validation error',
+          errors: file?.errors,
+        })
+      }
+
+      if (!file?.tmpPath) {
+        this.logger.error('file no temp path')
+        return response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+          status: StatusCodes.INTERNAL_SERVER_ERROR,
+          message: 'Unknown error occurred.',
+        })
+      }
+      const publicId = await this.cloudinaryUploader.upload({
+        filePath: file.tmpPath,
+        folder: 'faculty-images',
+      })
+      return response.json({
+        status: StatusCodes.OK,
+        message: 'File uploaded.',
+        publicId,
+      })
+    } catch (error) {
+      this.logger.error(error)
+      return response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
+        message: 'Unknown error occurred.',
+      })
+    }
   }
 }

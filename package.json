@@ -63,6 +63,7 @@
     "@adonisjs/vite": "^2.0.2",
     "@vinejs/vine": "^2.0.0",
     "adonis-lucid-soft-deletes": "^2.0.0",
+    "cloudinary": "^2.2.0",
     "date-fns": "^3.6.0",
     "edge.js": "^6.0.2",
     "http-status-codes": "^2.3.0",

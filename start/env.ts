@@ -35,11 +35,14 @@ export default await Env.create(new URL('../', import.meta.url), {
   ROOT_USER_SURNAME: Env.schema.string(),
   ROOT_USER_ADDRESS: Env.schema.string(),
   ROOT_USER_DATE_OF_BIRTH: Env.schema.string(),
+  CLOUDINARY_CLOUD_NAME: Env.schema.string(),
+  CLOUDINARY_API_KEY: Env.schema.string(),
+  CLOUDINARY_API_SECRET: Env.schema.string(),
 
   /*
   |----------------------------------------------------------
   | Variables for configuring session package
   |----------------------------------------------------------
   */
-  SESSION_DRIVER: Env.schema.enum(['cookie', 'memory'] as const)
+  SESSION_DRIVER: Env.schema.enum(['cookie', 'memory'] as const),
 })

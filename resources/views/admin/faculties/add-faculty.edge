@@ -42,7 +42,7 @@
               </div>
              
               <div class="main-card mb-3 card p-5">
-              <form v-cloak>
+              <form v-on:submit.prevent="submit" v-cloak>
                 <div class="row mb-3">
                   
                   <div>
@@ -189,7 +189,7 @@
                 <div class="invalid-feedback" :class="{'d-block':errors?.password?.[0]}">${errors?.password?.[0]}</div>
                </div>
                </div>
-               <button type="submit" class="btn btn-primary mb-3">
+               <button type="submit" class="btn btn-primary mb-3" :disabled="isSubmitting">
                 <i class="fas fa-save"></i> <span>Save</span>
               </button>
               </form>

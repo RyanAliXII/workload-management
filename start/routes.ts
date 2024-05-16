@@ -45,6 +45,7 @@ router
         router.delete('/fund-sources/:id', [FundSourcesController, 'delete'])
         router.get('/faculties', [FacultiesController, 'index'])
         router.get('/faculties/add', [FacultiesController, 'add'])
+        router.post('/faculties/images', [FacultiesController, 'uploadFacultyImage'])
       })
       .use(middleware.auth({ guards: ['admin'], redirectTo: '/admin/login' }))
   })

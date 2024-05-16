@@ -1,6 +1,7 @@
 import { AddFacultyType } from '#types/faculty'
 import { createApp, ref } from 'vue'
 import { toISO8601DateString } from '../utils/date.js'
+import { StatusCodes } from 'http-status-codes'
 
 createApp({
   compilerOptions: {
@@ -23,6 +24,7 @@ createApp({
       mobileNumber: '',
       password: '',
     })
+    const isSubmitting = ref(false)
 
     const facultyImage = ref<File | null>(null)
 
@@ -47,6 +49,26 @@ createApp({
         form.value.image = URL.createObjectURL(input.files?.[0])
       }
     }
+    const uploadImage = async () => {
+      if (!facultyImage.value) {
+        return
+      }
+      const formData = new FormData()
+      formData.append('image', facultyImage.value)
+      const response = await fetch('/admin/faculties/images', {
+        method: 'POST',
+        body: formData,
+      })
+      const responseBody = await response.json()
+      if (response.status === StatusCodes.OK) {
+        form.value.image = responseBody?.publicId ?? ''
+      }
+    }
+    const submit = async () => {
+      isSubmitting.value = true
+      await uploadImage()
+      isSubmitting.value = false
+    }
     return {
       form,
       errors,
@@ -55,6 +77,8 @@ createApp({
       handleDateOfBirth,
       toISO8601DateString,
       handleImageSelection,
+      submit,
+      isSubmitting,
     }
   },
 }).mount('#addFacultyPage')
