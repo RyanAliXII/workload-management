@@ -11,6 +11,7 @@ export type Faculty = {
   fundSourceId: number
   educations: Education[]
   email: string
+  image: string
   mobileNumber: string
   password: string
 }
