@@ -13,7 +13,7 @@ createApp({
     })
     const onSubmit = async () => {
       message.value = ''
-      const response = await fetch('/admin/login', {
+      const response = await fetch('/faculties/login', {
         method: 'POST',
         headers: new Headers({
           'Content-Type': 'application/json',
@@ -23,7 +23,7 @@ createApp({
 
       const responseBody: any = await response.json()
       if (response.status === StatusCodes.OK) {
-        window.location.replace('/admin/dashboard')
+        window.location.replace('/faculties/dashboard')
       }
       if (response.status === StatusCodes.BAD_REQUEST) {
         message.value = responseBody?.message

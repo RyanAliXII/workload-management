@@ -1,6 +1,13 @@
+import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
+import { compose } from '@adonisjs/core/helpers'
+import hash from '@adonisjs/core/services/hash'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 
-export default class AuthFaculty extends BaseModel {
+const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
+  uids: ['email'],
+  passwordColumnName: 'password',
+})
+export default class AuthFaculty extends compose(BaseModel, AuthFinder) {
   static table = 'auth_faculty_view'
   @column({ isPrimary: true })
   declare id: number

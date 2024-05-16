@@ -57,6 +57,7 @@ router
 router
   .group(() => {
     router.get('/login', [FacultyLoginController, 'index'])
+    router.post('/login', [FacultyLoginController, 'login'])
     router
       .group(() => {
         router.get('/dashboard', [FacultyDashboardController, 'index'])
