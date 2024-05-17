@@ -1,4 +1,4 @@
-import vine, { SimpleMessagesProvider } from '@vinejs/vine'
+import vine from '@vinejs/vine'
 import { JSONAPIErrorReporter } from './json_api_error_reporter.js'
 
 export const createFacultyValidator = vine.compile(
@@ -14,6 +14,7 @@ export const createFacultyValidator = vine.compile(
     employmentStatus: vine.enum(['regular', 'part-time', 'resigned', 'terminated']),
     fundSourceId: vine.number().min(1),
     email: vine.string().email(),
+
     mobileNumber: vine.string().mobile({ locale: ['en-PH'] }),
     password: vine.string().minLength(10),
     educations: vine
@@ -27,3 +28,9 @@ export const createFacultyValidator = vine.compile(
   })
 )
 createFacultyValidator.errorReporter = () => new JSONAPIErrorReporter()
+
+export const editFacultyValidator = vine.compile(
+  vine.object({
+    id: vine.number().min(1),
+  })
+)

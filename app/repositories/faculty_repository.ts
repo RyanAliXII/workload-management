@@ -3,6 +3,7 @@ import LoginCredential from '#models/login_credential'
 import { AddFacultyType } from '#types/faculty'
 import { inject } from '@adonisjs/core'
 import db from '@adonisjs/lucid/services/db'
+import { DateTime } from 'luxon'
 @inject()
 export class FacultyRepository {
   async create(f: AddFacultyType) {
@@ -20,6 +21,7 @@ export class FacultyRepository {
       faculty.middleName = f.middleName
       faculty.surname = f.surname
       faculty.gender = f.gender
+      faculty.dateOfBirth = DateTime.fromJSDate(f.dateOfBirth)
       faculty.TIN = f.TIN ?? ''
       faculty.image = f.image ?? ''
       faculty.positionId = f.positionId
@@ -37,5 +39,17 @@ export class FacultyRepository {
       trx.rollback()
       throw err
     }
+  }
+  async findById(id: number) {
+    const faculty = Faculty.query()
+      .preload('educations')
+      .preload('fundSource')
+      .preload('position')
+      .preload('loginCredential')
+      .select('*')
+      .where('id', id)
+      .limit(1)
+      .first()
+    return faculty
   }
 }

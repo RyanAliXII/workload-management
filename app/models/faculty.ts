@@ -19,7 +19,7 @@ export default class Faculty extends BaseModel {
   @column({ columnName: 'gender' })
   declare gender: string
   @column({ columnName: 'date_of_birth' })
-  declare dateOOfBirth: DateTime
+  declare dateOfBirth: DateTime
   @column({ columnName: 'image' })
   declare image: string
   @column({ columnName: 'TIN' })

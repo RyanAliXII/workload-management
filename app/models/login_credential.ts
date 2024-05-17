@@ -7,7 +7,7 @@ export default class LoginCredential extends BaseModel {
   declare id: number
   @column()
   declare email: string
-  @column()
+  @column({ serializeAs: null })
   declare password: string
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

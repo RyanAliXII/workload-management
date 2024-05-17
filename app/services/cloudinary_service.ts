@@ -9,12 +9,15 @@ cloudinaryV2.config({
 })
 type UploadOptions = { filePath: string; folder?: string }
 @inject()
-export class CloudinaryUploader {
+export class CloudinaryService {
   async upload({ filePath, folder = '' }: UploadOptions) {
     const result = await cloudinaryV2.uploader.upload(filePath, {
       unique_filename: true,
       folder: folder,
     })
     return result.public_id
+  }
+  generatePublicUrl(publicId: string) {
+    return cloudinaryV2.url(publicId)
   }
 }
