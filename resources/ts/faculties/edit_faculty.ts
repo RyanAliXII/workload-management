@@ -30,7 +30,8 @@ createApp({
     const isSubmitting = ref(false)
     const facultyImage = ref<File | null>(null)
     onMounted(() => {
-      const data = window.viewData as FacultyJSON
+      const data = window.viewData.faculty as FacultyJSON
+      const assetBaseUrl = window.viewData.assetBaseUrl
       form.value = {
         id: data.id,
         givenName: data.givenName,
@@ -44,7 +45,7 @@ createApp({
         gender: data.gender,
         mobileNumber: data.mobileNumber,
         positionId: data.positionId,
-        image: data.image,
+        image: `${assetBaseUrl}${data.image}`,
         tin: data.tin,
         password: '',
       }
@@ -70,19 +71,20 @@ createApp({
         form.value.image = URL.createObjectURL(input.files?.[0])
       }
     }
-    const uploadImage = async () => {
-      if (!facultyImage.value) {
-        return
-      }
-      const formData = new FormData()
-      formData.append('image', facultyImage.value)
-      const response = await fetch('/admin/faculties/images', {
-        method: 'POST',
-        body: formData,
-      })
-      const responseBody = await response.json()
-      if (response.status === StatusCodes.OK) {
-        form.value.image = responseBody?.publicId ?? ''
+    const uploadImage = async (facultyId: number) => {
+      try {
+        if (!facultyImage.value || !facultyId) {
+          return
+        }
+        const formData = new FormData()
+        formData.append('facultyId', facultyId.toString())
+        formData.append('image', facultyImage.value)
+        await fetch('/admin/faculties/images', {
+          method: 'POST',
+          body: formData,
+        })
+      } catch (error) {
+        console.error(error)
       }
     }
     const clearErrors = () => {
@@ -91,7 +93,6 @@ createApp({
     const submit = async () => {
       clearErrors()
       isSubmitting.value = true
-      await uploadImage()
       const response = await fetch(`/admin/faculties/${form.value.id}`, {
         method: 'PUT',
         body: JSON.stringify({
@@ -102,6 +103,7 @@ createApp({
       })
       const responseBody = await response.json()
       if (response.status === StatusCodes.OK) {
+        await uploadImage(form.value.id)
         toastr.success('Faculty updated.')
       }
       if (response.status === StatusCodes.BAD_REQUEST) {

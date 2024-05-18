@@ -1,6 +1,8 @@
 import vine, { SimpleMessagesProvider } from '@vinejs/vine'
 import { JSONAPIErrorReporter } from './json_api_error_reporter.js'
 import { uniqueFacultyEmailRule } from './rules/unique_faculty_email.js'
+import { uniqueFieldRule } from './rules/unique_field.js'
+import { image } from '../../resources/vendors/ionicons/icons/index.js'
 
 const facultyMessageProvider = new SimpleMessagesProvider({
   'givenName.required': 'Given name is required',
@@ -22,6 +24,7 @@ const facultyMessageProvider = new SimpleMessagesProvider({
   'email.required': 'Email is required',
   'mobileNumber.required': 'Mobile numer is required.',
   'password.required': 'Password is required',
+  'mobileNumber.uniqueField': 'Mobile number is already used',
 })
 export const createFacultyValidator = vine.compile(
   vine.object({
@@ -40,6 +43,12 @@ export const createFacultyValidator = vine.compile(
     mobileNumber: vine
       .string()
       .mobile({ locale: ['en-PH'] })
+      .use(
+        uniqueFieldRule({
+          column: 'mobile_number',
+          table: 'faculty',
+        })
+      )
       .trim(),
     password: vine.string().minLength(10),
     educations: vine
@@ -89,7 +98,19 @@ export const editFacultyValidator = vine.compile(
         })
       ),
 
-    mobileNumber: vine.string().mobile({ locale: ['en-PH'] }),
+    mobileNumber: vine
+      .string()
+      .mobile({ locale: ['en-PH'] })
+      .use(
+        uniqueFieldRule({
+          column: 'mobile_number',
+          table: 'faculty',
+          ignore: {
+            column: 'id',
+            field: 'id',
+          },
+        })
+      ),
     password: vine.string().maxLength(10).optional().requiredIfExists('password'),
     educations: vine
       .array(
@@ -105,3 +126,10 @@ export const editFacultyValidator = vine.compile(
 )
 editFacultyValidator.errorReporter = () => new JSONAPIErrorReporter()
 editFacultyValidator.messagesProvider = facultyMessageProvider
+
+export const imageUploadValidator = vine.compile(
+  vine.object({
+    facultyId: vine.number().min(1),
+  })
+)
+imageUploadValidator.errorReporter = () => new JSONAPIErrorReporter()

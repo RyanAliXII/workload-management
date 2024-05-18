@@ -52,6 +52,12 @@ export class FacultyRepository {
       .first()
     return faculty
   }
+  async updateFacultyImage(id: number, image: string) {
+    const faculty = await Faculty.findBy('id', id)
+    if (!faculty) return null
+    faculty.image = image
+    return faculty.save()
+  }
   async update(f: EditFaculty) {
     const trx = await db.transaction()
     try {

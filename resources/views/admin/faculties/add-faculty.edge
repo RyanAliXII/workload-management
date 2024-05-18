@@ -46,11 +46,13 @@
                 <div class="row mb-3">
                   
                   <div>
-                    <label for="files" class="link" style="cursor:pointer">
+                  
                     <img style="min-width: 100px; min-height: 100px; width: 150px; height:150px;" alt="faculty-image" :src="form.image ? form.image : 'https://static.vecteezy.com/system/resources/thumbnails/005/544/718/small_2x/profile-icon-design-free-vector.jpg'"  class="img-thumbnail">
-                  </label></div>
-                    <div class="col-lg-4">
-                    <input type="file" v-on:change="handleImageSelection" id="files" class="d-none"/>
+                </div>
+                    <div >
+                    <input type="file" v-on:change="handleImageSelection" id="files" class="d-none"  accept="image/png, image/jpg, image/jpeg, image/webp"/>
+                    <label  for="files" style="cursor:pointer; margin-left: 30px;">
+                      <u>Upload image </u></label>
                   </div>
                 </div>
                 <div class="alert alert-secondary" role="alert">

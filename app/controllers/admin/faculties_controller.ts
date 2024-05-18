@@ -1,7 +1,7 @@
 import { EducationalAttainmentRepository } from '#repositories/educational_attainment_repository'
 import { FundSourceRepository } from '#repositories/fund_source_respository'
 import { PositionRepository } from '#repositories/position_repository'
-import { CloudinaryService } from '#services/cloudinary_service'
+import { BASE_URL, CloudinaryService } from '#services/cloudinary_service'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import { Logger } from '@adonisjs/core/logger'
@@ -11,6 +11,7 @@ import {
   createFacultyValidator,
   editFacultyPageValidator,
   editFacultyValidator,
+  imageUploadValidator,
 } from '#validators/faculty'
 import { FacultyRepository } from '#repositories/faculty_repository'
 import hash from '@adonisjs/core/services/hash'
@@ -65,14 +66,16 @@ export default class FacultiesController {
           message: 'Unknown error occurred.',
         })
       }
+      const data = await imageUploadValidator.validate({ facultyId: request.input('facultyId') })
       const publicId = await this.cloudinaryService.upload({
         filePath: file.tmpPath,
         folder: 'faculty-images',
       })
+      const faculty = await this.facultyRepo.updateFacultyImage(data.facultyId, publicId)
       return response.json({
         status: StatusCodes.OK,
         message: 'File uploaded.',
-        publicId,
+        faculty,
       })
     } catch (error) {
       this.logger.error(error)
@@ -86,10 +89,11 @@ export default class FacultiesController {
     try {
       const body = await createFacultyValidator.validate(request.body())
       body.password = await hash.make(body.password)
-      await this.facultyRepo.create(body)
+      const faculty = await this.facultyRepo.create(body)
       return response.json({
         status: StatusCodes.OK,
         message: 'faculty added.',
+        faculty,
       })
     } catch (error) {
       if (error instanceof errors.E_VALIDATION_ERROR) {
@@ -114,10 +118,7 @@ export default class FacultiesController {
       if (!faculty) {
         return response.status(StatusCodes.NOT_FOUND).send('Not found.')
       }
-      if (faculty.image) {
-        faculty.image = this.cloudinaryService.generatePublicUrl(faculty.image)
-      }
-      console.log(faculty)
+
       const positions = await this.positionRepo.getAll()
       const fundSources = await this.fundSourceRepo.getAll()
       const educationalAttainments = await this.educationalAttainmentRepo.getAll()
@@ -126,6 +127,7 @@ export default class FacultiesController {
         positions,
         fundSources,
         educationalAttainments,
+        assetBaseUrl: BASE_URL,
       })
     } catch (error) {
       if (error instanceof errors.E_VALIDATION_ERROR) {
@@ -135,7 +137,7 @@ export default class FacultiesController {
       return response.abort('Unknown errror occured.', StatusCodes.INTERNAL_SERVER_ERROR)
     }
   }
-  async edit({ request, response, view }: HttpContext) {
+  async edit({ request, response }: HttpContext) {
     try {
       const id = request.param('id')
       const body = await request.body()

@@ -50,19 +50,20 @@ createApp({
         form.value.image = URL.createObjectURL(input.files?.[0])
       }
     }
-    const uploadImage = async () => {
-      if (!facultyImage.value) {
-        return
-      }
-      const formData = new FormData()
-      formData.append('image', facultyImage.value)
-      const response = await fetch('/admin/faculties/images', {
-        method: 'POST',
-        body: formData,
-      })
-      const responseBody = await response.json()
-      if (response.status === StatusCodes.OK) {
-        form.value.image = responseBody?.publicId ?? ''
+    const uploadImage = async (facultyId: number) => {
+      try {
+        if (!facultyImage.value || !facultyId) {
+          return
+        }
+        const formData = new FormData()
+        formData.append('facultyId', facultyId.toString())
+        formData.append('image', facultyImage.value)
+        await fetch('/admin/faculties/images', {
+          method: 'POST',
+          body: formData,
+        })
+      } catch (error) {
+        console.error(error)
       }
     }
     const clearErrors = () => {
@@ -75,7 +76,7 @@ createApp({
     const submit = async () => {
       clearErrors()
       isSubmitting.value = true
-      await uploadImage()
+
       const response = await fetch('/admin/faculties', {
         method: 'POST',
         body: JSON.stringify({
@@ -86,13 +87,13 @@ createApp({
       })
       const responseBody = await response.json()
       if (response.status === StatusCodes.OK) {
-        resetForm()
+        await uploadImage(responseBody?.faculty?.id)
         toastr.success('Faculty created')
+        resetForm()
       }
       if (response.status === StatusCodes.BAD_REQUEST) {
         if (responseBody?.errors) {
           errors.value = toStructuredErrors(responseBody.errors)
-          console.log(errors.value)
         }
       }
       if (response.status > StatusCodes.BAD_REQUEST) {
