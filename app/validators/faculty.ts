@@ -1,6 +1,27 @@
-import vine from '@vinejs/vine'
+import vine, { SimpleMessagesProvider } from '@vinejs/vine'
 import { JSONAPIErrorReporter } from './json_api_error_reporter.js'
 
+const facultyMessageProvider = new SimpleMessagesProvider({
+  'givenName.required': 'Given name is required',
+  'givenName.maxLength': 'Given name cannot exceed 100 characters',
+  'middleName.required': 'Middle name is required',
+  'middleName.maxLength': 'Middle name name cannot exceed 100 characters',
+  'surname.required': 'Surname is required',
+  'surname.maxLength': 'Surname cannot exceed 100 characters',
+  'dateOfBirth.required': 'Date of birth is required',
+  'gender.required': 'Gender is required',
+  'gender.enum': 'Please select a gender',
+  'positionId.required': 'Position is required',
+  'positionId.min': 'Position is required',
+  'employmentStatus.required': 'Employment status is required',
+  'fundSourceId.required': 'Fund source is required',
+  'fundSourceId.min': 'Fund source is required',
+  'educations.*.almaMater.required': 'Alma mater is required',
+  'educations.*.educationalAttainmentId.min': 'Educational attainment is required',
+  'email.required': 'Email is required',
+  'mobileNumber.required': 'Mobile numer is required.',
+  'password.required': 'Password is required',
+})
 export const createFacultyValidator = vine.compile(
   vine.object({
     givenName: vine.string().maxLength(100),
@@ -28,9 +49,12 @@ export const createFacultyValidator = vine.compile(
   })
 )
 createFacultyValidator.errorReporter = () => new JSONAPIErrorReporter()
+createFacultyValidator.messagesProvider = facultyMessageProvider
 
 export const editFacultyValidator = vine.compile(
   vine.object({
     id: vine.number().min(1),
   })
 )
+editFacultyValidator.errorReporter = () => new JSONAPIErrorReporter()
+editFacultyValidator.messagesProvider = facultyMessageProvider
