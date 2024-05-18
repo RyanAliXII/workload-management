@@ -1,5 +1,6 @@
 import vine, { SimpleMessagesProvider } from '@vinejs/vine'
 import { JSONAPIErrorReporter } from './json_api_error_reporter.js'
+import { uniqueFacultyEmailRule } from './rules/unique_faculty_email.js'
 
 const facultyMessageProvider = new SimpleMessagesProvider({
   'givenName.required': 'Given name is required',
@@ -24,9 +25,9 @@ const facultyMessageProvider = new SimpleMessagesProvider({
 })
 export const createFacultyValidator = vine.compile(
   vine.object({
-    givenName: vine.string().maxLength(100),
-    middleName: vine.string().maxLength(100),
-    surname: vine.string().maxLength(100),
+    givenName: vine.string().maxLength(100).trim(),
+    middleName: vine.string().maxLength(100).trim(),
+    surname: vine.string().maxLength(100).trim(),
     dateOfBirth: vine.date(),
     gender: vine.enum(['male', 'female', 'other']),
     image: vine.string().optional(),
@@ -34,14 +35,17 @@ export const createFacultyValidator = vine.compile(
     positionId: vine.number().min(1),
     employmentStatus: vine.enum(['regular', 'part-time', 'resigned', 'terminated']),
     fundSourceId: vine.number().min(1),
-    email: vine.string().email(),
+    email: vine.string().email().use(uniqueFacultyEmailRule()).trim(),
 
-    mobileNumber: vine.string().mobile({ locale: ['en-PH'] }),
+    mobileNumber: vine
+      .string()
+      .mobile({ locale: ['en-PH'] })
+      .trim(),
     password: vine.string().minLength(10),
     educations: vine
       .array(
         vine.object({
-          almaMater: vine.string(),
+          almaMater: vine.string().trim(),
           educationalAttainmentId: vine.number().min(1),
         })
       )
@@ -62,9 +66,9 @@ editFacultyPageValidator.messagesProvider = facultyMessageProvider
 export const editFacultyValidator = vine.compile(
   vine.object({
     id: vine.number().min(1),
-    givenName: vine.string().maxLength(100),
-    middleName: vine.string().maxLength(100),
-    surname: vine.string().maxLength(100),
+    givenName: vine.string().maxLength(100).trim(),
+    middleName: vine.string().maxLength(100).trim(),
+    surname: vine.string().maxLength(100).trim(),
     dateOfBirth: vine.date(),
     gender: vine.enum(['male', 'female', 'other']),
     image: vine.string().optional(),
@@ -72,7 +76,18 @@ export const editFacultyValidator = vine.compile(
     positionId: vine.number().min(1),
     employmentStatus: vine.enum(['regular', 'part-time', 'resigned', 'terminated']),
     fundSourceId: vine.number().min(1),
-    email: vine.string().email(),
+    email: vine
+      .string()
+      .email()
+      .trim()
+      .use(
+        uniqueFacultyEmailRule({
+          ignore: {
+            column: 'faculty.id',
+            field: 'id',
+          },
+        })
+      ),
 
     mobileNumber: vine.string().mobile({ locale: ['en-PH'] }),
     password: vine.string().maxLength(10).optional().requiredIfExists('password'),
@@ -81,7 +96,7 @@ export const editFacultyValidator = vine.compile(
         vine.object({
           id: vine.number().optional(),
           facultyId: vine.number().optional(),
-          almaMater: vine.string(),
+          almaMater: vine.string().trim(),
           educationalAttainmentId: vine.number().min(1),
         })
       )

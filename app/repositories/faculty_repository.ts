@@ -11,7 +11,7 @@ export class FacultyRepository {
     try {
       const loginCredential = new LoginCredential()
       loginCredential.useTransaction(trx)
-      loginCredential.email = f.email
+      loginCredential.email = f.email.toLowerCase()
       loginCredential.password = f.password
       await loginCredential.save()
       const faculty = new Faculty()
@@ -50,7 +50,6 @@ export class FacultyRepository {
       .where('id', id)
       .limit(1)
       .first()
-
     return faculty
   }
   async update(f: EditFaculty) {
@@ -84,9 +83,14 @@ export class FacultyRepository {
       if (!f.password) {
         await faculty
           .related('loginCredential')
-          .updateOrCreate({ id: faculty.loginCredentialId }, { email: f.email })
+          .updateOrCreate({ id: faculty.loginCredentialId }, { email: f.email.toLowerCase() })
       } else {
-        await faculty.related('loginCredential').query()
+        await faculty
+          .related('loginCredential')
+          .updateOrCreate(
+            { id: faculty.loginCredentialId },
+            { email: f.email.toLowerCase(), password: f.password }
+          )
       }
       await faculty.related('educations').query().delete()
       await faculty.related('educations').createMany(f.educations)

@@ -31,7 +31,6 @@ createApp({
     const facultyImage = ref<File | null>(null)
     onMounted(() => {
       const data = window.viewData as FacultyJSON
-      console.log(data)
       form.value = {
         id: data.id,
         givenName: data.givenName,

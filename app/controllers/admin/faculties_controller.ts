@@ -117,6 +117,7 @@ export default class FacultiesController {
       if (faculty.image) {
         faculty.image = this.cloudinaryService.generatePublicUrl(faculty.image)
       }
+      console.log(faculty)
       const positions = await this.positionRepo.getAll()
       const fundSources = await this.fundSourceRepo.getAll()
       const educationalAttainments = await this.educationalAttainmentRepo.getAll()

@@ -35,16 +35,16 @@ export default class Faculty extends BaseModel {
   @column({ columnName: 'mobile_number' })
   declare mobileNumber: string
 
-  @hasOne(() => Position, { foreignKey: 'id' })
+  @hasOne(() => Position, { foreignKey: 'id', localKey: 'positionId' })
   declare position: HasOne<typeof Position>
 
-  @hasOne(() => FundSource, { foreignKey: 'id' })
+  @hasOne(() => FundSource, { foreignKey: 'id', localKey: 'fundSourceId' })
   declare fundSource: HasOne<typeof FundSource>
 
-  @hasOne(() => LoginCredential, { foreignKey: 'id' })
+  @hasOne(() => LoginCredential, { foreignKey: 'id', localKey: 'loginCredentialId' })
   declare loginCredential: HasOne<typeof LoginCredential>
 
-  @hasMany(() => Education, { foreignKey: 'facultyId' })
+  @hasMany(() => Education, { foreignKey: 'facultyId', localKey: 'id' })
   declare educations: HasMany<typeof Education>
 
   @column.dateTime({ autoCreate: true })
