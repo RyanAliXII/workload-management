@@ -7,7 +7,11 @@ import type { HttpContext } from '@adonisjs/core/http'
 import { Logger } from '@adonisjs/core/logger'
 import { errors } from '@vinejs/vine'
 import { StatusCodes } from 'http-status-codes'
-import { createFacultyValidator, editFacultyValidator } from '#validators/faculty'
+import {
+  createFacultyValidator,
+  editFacultyPageValidator,
+  editFacultyValidator,
+} from '#validators/faculty'
 import { FacultyRepository } from '#repositories/faculty_repository'
 import hash from '@adonisjs/core/services/hash'
 
@@ -91,7 +95,7 @@ export default class FacultiesController {
       if (error instanceof errors.E_VALIDATION_ERROR) {
         return response.status(StatusCodes.BAD_REQUEST).json({
           status: StatusCodes.BAD_REQUEST,
-          message: 'Validation erro',
+          message: 'Validation errors.',
           errors: error.messages,
         })
       }
@@ -102,10 +106,10 @@ export default class FacultiesController {
       })
     }
   }
-  async edit({ request, response, view }: HttpContext) {
+  async editPage({ request, response, view }: HttpContext) {
     try {
       const id = request.param('id')
-      const data = await editFacultyValidator.validate({ id })
+      const data = await editFacultyPageValidator.validate({ id })
       const faculty = await this.facultyRepo.findById(data.id)
       if (!faculty) {
         return response.status(StatusCodes.NOT_FOUND).send('Not found.')
@@ -125,6 +129,33 @@ export default class FacultiesController {
     } catch (error) {
       if (error instanceof errors.E_VALIDATION_ERROR) {
         return response.status(StatusCodes.NOT_FOUND).send('Not found.')
+      }
+      this.logger.error(error)
+      return response.abort('Unknown errror occured.', StatusCodes.INTERNAL_SERVER_ERROR)
+    }
+  }
+  async edit({ request, response, view }: HttpContext) {
+    try {
+      const id = request.param('id')
+      const body = await request.body()
+      body.id = id
+      const data = await editFacultyValidator.validate(body)
+      if (data.password) {
+        data.password = await hash.make(data.password)
+      }
+      const faculty = await this.facultyRepo.update(data)
+      return response.json({
+        status: StatusCodes.OK,
+        message: 'Faculty updated.',
+        faculty: faculty,
+      })
+    } catch (error) {
+      if (error instanceof errors.E_VALIDATION_ERROR) {
+        return response.status(StatusCodes.BAD_REQUEST).json({
+          status: StatusCodes.BAD_REQUEST,
+          message: 'Validation errors.',
+          errors: error.messages,
+        })
       }
       this.logger.error(error)
       return response.abort('Unknown errror occured.', StatusCodes.INTERNAL_SERVER_ERROR)

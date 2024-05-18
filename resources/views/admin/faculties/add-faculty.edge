@@ -95,8 +95,8 @@
               </div>
                <div class="row">
                 <div class="col-lg-4 mb-2">
-                  <label for="TIN">TIN</label>
-                  <input name="TIN" v-model="form.TIN" class="form-control" :class="{'is-invalid':errors?.TIN?.[0]}">
+                  <label for="tin">TIN</label>
+                  <input name="tin" v-model="form.tin" class="form-control" :class="{'is-invalid':errors?.TIN?.[0]}">
                   <div class="invalid-feedback" :class="{'d-block':errors?.TIN?.[0]}">${errors?.TIN?.[0]}</div>
                 </div>
                <div class="col-lg-4 mb-2">
@@ -140,7 +140,7 @@
                 <i class="fas fa-add"></i> <span>Add Education</span>
               </button>
               </div>
-              <div class="alert alert-danger" role="alert" v-show="errors?.educations?.[0] || errors?.educations?.['*']?.almaMater?.[0]  || errors?.educations?.['*']?.educationalAttainment?.[0] ">
+              <div class="alert alert-danger" role="alert" v-show="errors?.educations?.[0] || errors?.educations?.['*']?.almaMater?.[0]  || errors?.educations?.['*']?.educationalAttainmentId?.[0] ">
                  <div v-show="errors?.educations?.[0]">- ${errors?.educations?.[0]} </div>
                  <div v-show="errors?.educations?.['*']?.almaMater?.[0]">- ${errors?.educations?.['*']?.almaMater?.[0]}</div>
                  <div v-show="errors?.educations?.['*']?.educationalAttainmentId?.[0]"> - ${errors?.educations?.['*']?.educationalAttainmentId?.[0]}</div>
@@ -160,7 +160,7 @@
                         </td>
                         <td>
                            <select v-model="form.educations[index].educationalAttainmentId"  class="form-control">
-                            <option value="0" disabled selected>Select education attainment</option>
+                            <option value="0" disabled selected>Select educational attainment</option>
                             @each(ea in educationalAttainments)
                              <option value="{{ea.id}}"> {{ea.name }} </option>
                              @end

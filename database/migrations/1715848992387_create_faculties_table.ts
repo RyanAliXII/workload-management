@@ -11,7 +11,7 @@ export default class extends BaseSchema {
       table.string('surname', 75)
       table.enum('gender', ['male', 'female', 'other'])
       table.date('date_of_birth')
-      table.string('TIN', 100)
+      table.string('tin', 100)
       table.string('image')
       table.integer('position_id').unsigned().index().references('id').inTable('position')
       table.enum('employment_status', ['regular', 'part-time', 'resigned', 'terminated'])

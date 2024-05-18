@@ -15,7 +15,7 @@ createApp({
       surname: '',
       gender: '',
       dateOfBirth: new Date(),
-      TIN: '',
+      tin: '',
       positionId: 0,
       employmentStatus: '',
       fundSourceId: 0,

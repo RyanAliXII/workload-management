@@ -18,12 +18,12 @@ export default class Faculty extends BaseModel {
   declare surname: string
   @column({ columnName: 'gender' })
   declare gender: string
-  @column({ columnName: 'date_of_birth' })
+  @column.date({ columnName: 'date_of_birth' })
   declare dateOfBirth: DateTime
   @column({ columnName: 'image' })
   declare image: string
-  @column({ columnName: 'TIN' })
-  declare TIN: string
+  @column({ columnName: 'tin' })
+  declare tin: string
   @column({ columnName: 'position_id' })
   declare positionId: number
   @column({ columnName: 'employment_status' })

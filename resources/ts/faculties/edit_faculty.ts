@@ -31,6 +31,7 @@ createApp({
     const facultyImage = ref<File | null>(null)
     onMounted(() => {
       const data = window.viewData as FacultyJSON
+      console.log(data)
       form.value = {
         id: data.id,
         givenName: data.givenName,
@@ -45,7 +46,7 @@ createApp({
         mobileNumber: data.mobileNumber,
         positionId: data.positionId,
         image: data.image,
-        TIN: data.TIN,
+        tin: data.tin,
         password: '',
       }
     })
@@ -88,16 +89,12 @@ createApp({
     const clearErrors = () => {
       errors.value = {}
     }
-    const resetForm = () => {
-      form.value = { ...INITIAL_FORM }
-      facultyImage.value = null
-    }
     const submit = async () => {
       clearErrors()
       isSubmitting.value = true
       await uploadImage()
-      const response = await fetch('/admin/faculties', {
-        method: 'POST',
+      const response = await fetch(`/admin/faculties/${form.value.id}`, {
+        method: 'PUT',
         body: JSON.stringify({
           ...form.value,
           dateOfBirth: toISO8601DateString(form.value.dateOfBirth),
@@ -106,13 +103,11 @@ createApp({
       })
       const responseBody = await response.json()
       if (response.status === StatusCodes.OK) {
-        resetForm()
-        toastr.success('Faculty created')
+        toastr.success('Faculty updated.')
       }
       if (response.status === StatusCodes.BAD_REQUEST) {
         if (responseBody?.errors) {
           errors.value = toStructuredErrors(responseBody.errors)
-          console.log(errors.value)
         }
       }
       if (response.status > StatusCodes.BAD_REQUEST) {

@@ -5,7 +5,7 @@ export type FacultyJSON = {
   surname: string
   gender: string
   dateOfBirth: string
-  TIN?: string
+  tin?: string
   positionId: number
   employmentStatus: string
   fundSourceId: number
@@ -24,7 +24,7 @@ export type FacultyMutation = {
   surname: string
   gender: string
   dateOfBirth: Date
-  TIN?: string
+  tin?: string
   positionId: number
   employmentStatus: string
   fundSourceId: number
@@ -35,11 +35,14 @@ export type FacultyMutation = {
   password: string
 }
 export type Education = { id: number; almaMater: string; educationalAttainmentId: number }
-
+export interface EducationEdit extends Omit<Education, 'id'> {
+  id?: number
+  facultyId?: number
+}
 export interface AddFacultyType extends Omit<FacultyMutation, 'id' | 'educations'> {
   educations: Omit<Education, 'id'>[]
 }
 export interface EditFaculty extends Omit<FacultyMutation, 'educations' | 'password'> {
-  educations: Omit<Education, 'id'>[]
+  educations: EducationEdit[]
   password?: string
 }
