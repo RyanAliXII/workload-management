@@ -1,11 +1,14 @@
 const AdminLoginController = () => import('#controllers/admin/login_controller')
 const AdminDashboardController = () => import('#controllers/admin/dashboard_controller')
+const FacultyLoginController = () => import('#controllers/faculty/login_controller')
+const FacultyDashboardController = () => import('#controllers/faculty/dashboard_controller')
 const PositionsController = () => import('#controllers/admin/positions_controller')
 const SubjectsController = () => import('#controllers/admin/subjects_controller')
 const DepartmentsController = () => import('#controllers/admin/departments_controller')
 const EducationalAttainmentsController = () =>
   import('#controllers/admin/educational_attainments_controller')
 const FundSourcesController = () => import('#controllers/admin/fund_sources_controller')
+const FacultiesController = () => import('#controllers/admin/faculties_controller')
 import { HttpContext } from '@adonisjs/core/http'
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
@@ -19,6 +22,7 @@ router
   .group(() => {
     router.get('/login', [AdminLoginController, 'index'])
     router.post('/login', [AdminLoginController, 'login'])
+
     router
       .group(() => {
         router.get('/dashboard', [AdminDashboardController, 'index'])
@@ -42,9 +46,27 @@ router
         router.post('/fund-sources', [FundSourcesController, 'create'])
         router.put('/fund-sources/:id', [FundSourcesController, 'edit'])
         router.delete('/fund-sources/:id', [FundSourcesController, 'delete'])
+        router.get('/faculties', [FacultiesController, 'index'])
+        router.get('/faculties/add', [FacultiesController, 'add'])
+        router.post('/faculties/images', [FacultiesController, 'uploadFacultyImage'])
+        router.post('/faculties', [FacultiesController, 'create'])
+        router.get('/faculties/edit/:id', [FacultiesController, 'editPage'])
+        router.put('/faculties/:id', [FacultiesController, 'edit'])
+        router.delete('/faculties/:id', [FacultiesController, 'delete'])
       })
       .use(middleware.auth({ guards: ['admin'], redirectTo: '/admin/login' }))
   })
   .prefix('/admin')
+router
+  .group(() => {
+    router.get('/login', [FacultyLoginController, 'index'])
+    router.post('/login', [FacultyLoginController, 'login'])
+    router
+      .group(() => {
+        router.get('/dashboard', [FacultyDashboardController, 'index'])
+      })
+      .use(middleware.auth({ guards: ['faculty'], redirectTo: '/faculties/login' }))
+  })
+  .prefix('/faculties')
 
 /*End of admin routes*/

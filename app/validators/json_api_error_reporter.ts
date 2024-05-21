@@ -19,6 +19,7 @@ export class JSONAPIErrorReporter implements ErrorReporterContract {
    */
   report(message: string, rule: string, field: FieldContext) {
     this.hasErrors = true
+
     const key = field.wildCardPath
     if (key in errors) {
       this.errors[key].push(message)

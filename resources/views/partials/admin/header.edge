@@ -873,12 +873,14 @@
                                 alt=""
                               />
                             </div>
+                            @if(auth.isAuthenticated)
                             <div class="widget-content-left">
-                              <div class="widget-heading">Alina Mcloughlin</div>
+                              <div class="widget-heading">{{auth.user.givenName}} {{auth.user.surname}}</div>
                               <div class="widget-subheading opacity-8">
                                 A short profile description
                               </div>
                             </div>
+                            @end
                             <div class="widget-content-right me-2">
                               <button class="btn-pill btn-shadow btn-shine btn btn-focus">
                                 Logout
@@ -957,10 +959,12 @@
                 </div>
               </div>
             </div>
+            @if(auth.isAuthenticated)
             <div class="widget-content-left ms-3 header-user-info">
-              <div class="widget-heading">Alina Mclourd</div>
-              <div class="widget-subheading">VP People Manager</div>
+              <div class="widget-heading">{{auth.user.givenName}} {{auth.user.surname}}</div>
+              <div class="widget-subheading">Administrator</div>
             </div>
+            @end
             <div class="widget-content-right header-user-info ms-3">
               <button
                 type="button"
