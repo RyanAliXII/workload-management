@@ -42,7 +42,7 @@
               </div>
          
               <div class="main-card mb-3 card p-5" v-cloak>
-              <data-table v-model:filters="filters" :value="faculties" table-class="table table-striped" :paginator="true" :rows="10" filter-display="row"   :global-filter-fields="['givenName', 'middleName', 'loginCredential.email', 'surname', 'position.name','employmentStatus']">
+              <data-table v-model:filters="filters" :value="faculties" table-class="table table-striped" :paginator="true" :rows="10"    :global-filter-fields="['givenName', 'middleName', 'loginCredential.email', 'surname', 'position.name','employmentStatus']">
                 <template #header>
                   <div class="d-flex flex-column flex-lg-row justify-content-end gap-2">
                     <div>
@@ -83,7 +83,7 @@
                  <template #body="slotProps">
                   <div class="d-flex gap-2">
                     <a class="btn btn-outline-primary" :href="`/admin/faculties/edit/${slotProps.data.id}`">Edit</a>
-                    <button class="btn btn-outline-danger" v-on:click="initDelete(slotProps.data)" >Delete</button>
+                    <button class="btn btn-outline-danger" v-on:click="initDelete(slotProps.data)">Delete</button>
                   </div>
                 </template>
                </column>

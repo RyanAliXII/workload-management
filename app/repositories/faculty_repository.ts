@@ -114,4 +114,9 @@ export class FacultyRepository {
       throw err
     }
   }
+  async delete(id: number) {
+    const faculty = await Faculty.findBy('id', id)
+    if (!faculty) return
+    faculty.delete()
+  }
 }

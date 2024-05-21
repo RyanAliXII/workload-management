@@ -9,6 +9,7 @@ import { errors } from '@vinejs/vine'
 import { StatusCodes } from 'http-status-codes'
 import {
   createFacultyValidator,
+  deleteValidator,
   editFacultyPageValidator,
   editFacultyValidator,
   imageUploadValidator,
@@ -26,8 +27,16 @@ export default class FacultiesController {
     protected logger: Logger,
     protected facultyRepo: FacultyRepository
   ) {}
-  async index({ view, request }: HttpContext) {
+  async index({ view, request, response }: HttpContext) {
     const faculties = await this.facultyRepo.getAll()
+    const contentType = request.header('content-type')
+    if (contentType === 'application/json') {
+      return response.json({
+        status: StatusCodes.OK,
+        message: 'Faculties fetched.',
+        faculties,
+      })
+    }
     return view.render('admin/faculties/index', {
       faculties: faculties ?? [],
     })
@@ -161,6 +170,22 @@ export default class FacultiesController {
           status: StatusCodes.BAD_REQUEST,
           message: 'Validation errors.',
           errors: error.messages,
+        })
+      }
+      this.logger.error(error)
+      return response.abort('Unknown errror occured.', StatusCodes.INTERNAL_SERVER_ERROR)
+    }
+  }
+  async delete({ request, response }: HttpContext) {
+    try {
+      const id = request.param('id')
+      const data = await deleteValidator.validate({ id })
+      this.facultyRepo.delete(data.id)
+    } catch (error) {
+      if (error instanceof errors.E_VALIDATION_ERROR) {
+        return response.status(StatusCodes.BAD_REQUEST).json({
+          status: StatusCodes.BAD_REQUEST,
+          message: 'Validation errors.',
         })
       }
       this.logger.error(error)

@@ -52,6 +52,7 @@ router
         router.post('/faculties', [FacultiesController, 'create'])
         router.get('/faculties/edit/:id', [FacultiesController, 'editPage'])
         router.put('/faculties/:id', [FacultiesController, 'edit'])
+        router.delete('/faculties/:id', [FacultiesController, 'delete'])
       })
       .use(middleware.auth({ guards: ['admin'], redirectTo: '/admin/login' }))
   })

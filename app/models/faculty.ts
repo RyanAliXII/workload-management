@@ -5,8 +5,10 @@ import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 import Position from './position.js'
 import FundSource from './fund_source.js'
 import Education from './education.js'
+import { compose } from '@adonisjs/core/helpers'
+import { SoftDeletes } from 'adonis-lucid-soft-deletes'
 
-export default class Faculty extends BaseModel {
+export default class Faculty extends compose(BaseModel, SoftDeletes) {
   static table = 'faculty'
   @column({ isPrimary: true })
   declare id: number

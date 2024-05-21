@@ -133,3 +133,9 @@ export const imageUploadValidator = vine.compile(
   })
 )
 imageUploadValidator.errorReporter = () => new JSONAPIErrorReporter()
+export const deleteValidator = vine.compile(
+  vine.object({
+    id: vine.number().min(1),
+  })
+)
+deleteValidator.errorReporter = () => new JSONAPIErrorReporter()

@@ -6,8 +6,6 @@ import Column from 'primevue/column'
 import { Position } from '#types/position'
 import { toReadableDatetime } from '../utils/date.js'
 import Swal from 'sweetalert2'
-import DataTable from 'primevue/datatable'
-import Column from 'primevue/column'
 createApp({
   compilerOptions: {
     delimiters: ['${', '}'],
