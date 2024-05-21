@@ -42,7 +42,7 @@
               </div>
          
               <div class="main-card mb-3 card p-5" v-cloak>
-              <data-table v-model:filters="filters" :value="faculties" table-class="table table-striped" :paginator="true" :rows="10"    :global-filter-fields="['givenName', 'middleName', 'loginCredential.email', 'surname', 'position.name','employmentStatus']">
+              <data-table v-model:filters="filters" :value="faculties" table-class="table table-striped" :paginator="true" :rows="10"  :global-filter-fields="['givenName', 'middleName', 'loginCredential.email', 'surname', 'position.name','employmentStatus']">
                 <template #header>
                   <div class="d-flex flex-column flex-lg-row justify-content-end gap-2">
                     <div>
@@ -99,8 +99,9 @@
     @include('partials/admin/app_drawer')
     @include('partials/scripts')
     <script>
+      console.log(JSON.parse(`{{{JSON.stringify(activeFaculty)}}}`))
       window.viewData = {
-        faculties: JSON.parse(`{{{JSON.stringify(faculties)}}}`)
+        activeFaculty: JSON.parse(`{{{JSON.stringify(activeFaculty)}}}`)
       }
     </script>
     @vite('resources/ts/faculties/faculties.ts')

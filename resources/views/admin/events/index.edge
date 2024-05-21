@@ -55,5 +55,12 @@
     </div>
     @include('partials/admin/app_drawer') 
     @include('partials/scripts')
+    <script>
+      window.viewData = {
+        activeFaculty: JSON.parse(`{{{JSON.stringify(activeFaculty)}}}`)
+
+      }
+    </script>
+    @vite('resources/ts/events/add_event_modal.ts')
   </body>
 </html>
