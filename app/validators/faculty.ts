@@ -2,7 +2,6 @@ import vine, { SimpleMessagesProvider } from '@vinejs/vine'
 import { JSONAPIErrorReporter } from './json_api_error_reporter.js'
 import { uniqueFacultyEmailRule } from './rules/unique_faculty_email.js'
 import { uniqueFieldRule } from './rules/unique_field.js'
-import { image } from '../../resources/vendors/ionicons/icons/index.js'
 
 const facultyMessageProvider = new SimpleMessagesProvider({
   'givenName.required': 'Given name is required',
