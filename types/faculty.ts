@@ -1,3 +1,6 @@
+import { FundSource } from './fund_source.js'
+import { Position } from './position.js'
+
 export type FacultyJSON = {
   id: number
   givenName: string
@@ -10,6 +13,28 @@ export type FacultyJSON = {
   employmentStatus: string
   fundSourceId: number
   educations: Education[]
+  loginCredential: {
+    id: number
+    email: string
+  }
+  image?: string
+  mobileNumber: string
+}
+
+export type Faculty = {
+  id: number
+  givenName: string
+  middleName: string
+  surname: string
+  gender: string
+  dateOfBirth: string
+  tin?: string
+  positionId: number
+  employmentStatus: string
+  fundSourceId: number
+  educations: Education[]
+  position: Position
+  fundSource: FundSource
   loginCredential: {
     id: number
     email: string

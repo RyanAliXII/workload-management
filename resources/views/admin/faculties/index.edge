@@ -42,11 +42,52 @@
               </div>
          
               <div class="main-card mb-3 card p-5" v-cloak>
-              <data-table>
-                <column></column>
+              <data-table v-model:filters="filters" :value="faculties" table-class="table table-striped" :paginator="true" :rows="10" filter-display="row"   :global-filter-fields="['givenName', 'middleName', 'loginCredential.email', 'surname', 'position.name','employmentStatus']">
+                <template #header>
+                  <div class="d-flex flex-column flex-lg-row justify-content-end gap-2">
+                    <div>
+                    <input type="text" class="form-control" v-model="filters.global.value" placeholder="Search">
+                  </div>
+                  <div>
+                   
+                    
+                  </div>
+                  
+                  </div>
+              </template>
+              <template #empty> No faculties found. </template>
+                <column header="Name" :sortable="true" field="givenName" >
+                <template #body="slotProps">
+                ${slotProps.data.givenName} ${slotProps.data.middleName} ${slotProps.data.surname}  
+                </template>
+                </column>
+                <column header="Email" :sortable="true" field="email">
+                  <template #body="slotProps">
+                  ${slotProps.data.loginCredential.email} 
+                  </template>
+                </column>
+                <column header="Position" :sortable="true" field="position.name">
+                   
+                  <template #body="slotProps">
+                  ${slotProps.data.position.name} 
+                  </template>
+                </column>
+                <column header="Status" class style="text-transform: capitalize;" field="employmentStatus" :sortable="true" >
+                  <template #body="{data}">
+                    ${data.employmentStatus}
+                  </template>
+                 
+                </column>
+            
+                 <column  header="Actions">
+                 <template #body="slotProps">
+                  <div class="d-flex gap-2">
+                    <a class="btn btn-outline-primary" :href="`/admin/faculties/edit/${slotProps.data.id}`">Edit</a>
+                    <button class="btn btn-outline-danger" v-on:click="initDelete(slotProps.data)" >Delete</button>
+                  </div>
+                </template>
+               </column>
               </data-table>
-                
-               
               </div>
             </div>
             @include('partials/admin/footer')
@@ -57,6 +98,11 @@
     </div>
     @include('partials/admin/app_drawer')
     @include('partials/scripts')
+    <script>
+      window.viewData = {
+        faculties: JSON.parse(`{{{JSON.stringify(faculties)}}}`)
+      }
+    </script>
     @vite('resources/ts/faculties/faculties.ts')
   </body>
 </html>

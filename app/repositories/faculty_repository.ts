@@ -6,6 +6,13 @@ import db from '@adonisjs/lucid/services/db'
 import { DateTime } from 'luxon'
 @inject()
 export class FacultyRepository {
+  async getAll() {
+    return Faculty.query()
+      .preload('educations')
+      .preload('position')
+      .preload('loginCredential')
+      .preload('fundSource')
+  }
   async create(f: AddFacultyType) {
     const trx = await db.transaction()
     try {

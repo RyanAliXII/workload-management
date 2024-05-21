@@ -26,8 +26,11 @@ export default class FacultiesController {
     protected logger: Logger,
     protected facultyRepo: FacultyRepository
   ) {}
-  async index({ view }: HttpContext) {
-    return view.render('admin/faculties/index')
+  async index({ view, request }: HttpContext) {
+    const faculties = await this.facultyRepo.getAll()
+    return view.render('admin/faculties/index', {
+      faculties: faculties ?? [],
+    })
   }
   async add({ view }: HttpContext) {
     const positions = await this.positionRepo.getAll()

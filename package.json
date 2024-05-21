@@ -70,7 +70,7 @@
     "lodash": "^4.17.21",
     "luxon": "^3.4.4",
     "mysql2": "^3.9.7",
-    "primevue": "^4.0.0-beta.1",
+    "primevue": "^3.52.0",
     "reflect-metadata": "^0.2.2",
     "sweetalert2": "^11.11.0",
     "toastr": "^2.1.4",
