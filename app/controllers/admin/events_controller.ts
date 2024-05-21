@@ -1,5 +1,6 @@
 // import type { HttpContext } from '@adonisjs/core/http'
 
+import EventRepository from '#repositories/event_repository'
 import { FacultyRepository } from '#repositories/faculty_repository'
 import { createEventValidator } from '#validators/event'
 import { inject } from '@adonisjs/core'
@@ -11,7 +12,8 @@ import { StatusCodes } from 'http-status-codes'
 export default class EventsController {
   constructor(
     protected logger: Logger,
-    protected facultyRepo: FacultyRepository
+    protected facultyRepo: FacultyRepository,
+    protected eventRepo: EventRepository
   ) {}
   async index({ view }: HttpContext) {
     const activeFaculty = await this.facultyRepo.getActive()
@@ -22,6 +24,7 @@ export default class EventsController {
   async create({ request, response }: HttpContext) {
     try {
       const data = await createEventValidator.validate(request.body())
+      await this.eventRepo.create(data)
       return response.json({
         status: StatusCodes.OK,
         message: 'Event created.',

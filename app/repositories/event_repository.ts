@@ -14,19 +14,18 @@ export default class EventRepository {
       eventModel.name = event.name
       eventModel.from = DateTime.fromJSDate(event.from)
       eventModel.to = DateTime.fromJSDate(event.to)
-      eventModel.description = event.description
+      eventModel.description = event.description ?? ''
       eventModel.location = event.location
       eventModel.description = event.status
-      eventModel.save()
-
+      await eventModel.save()
       const facilitator = new EventFacilitator()
       facilitator.useTransaction(trx)
       for (const id of event.facilitatorIds) {
         facilitator.eventId = eventModel.id
         facilitator.facultyId = id
-        facilitator.save()
+        await facilitator.save()
       }
-      trx.commit()
+      await trx.commit()
     } catch (error) {
       await trx.rollback()
       throw error
