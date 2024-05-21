@@ -19,9 +19,13 @@ export default class EventsController {
       activeFaculty,
     })
   }
-  async create({ view, request, response }: HttpContext) {
+  async create({ request, response }: HttpContext) {
     try {
       const data = await createEventValidator.validate(request.body())
+      return response.json({
+        status: StatusCodes.OK,
+        message: 'Event created.',
+      })
     } catch (error) {
       if (error instanceof errors.E_VALIDATION_ERROR) {
         return response.status(StatusCodes.BAD_REQUEST).send({

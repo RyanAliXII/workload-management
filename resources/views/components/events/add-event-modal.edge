@@ -25,7 +25,7 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="invalid-feedback" :class="{'d-block':errors?.to?.[0]}">${errors?.to?.[0]}</div>
             </div>
             <div class="form-group mb-2">
-                <label for="facilitators">Facilitators</label>
+                <label for="facilitator">Facilitators</label>
                 <multi-select filter v-model="form.facilitators" option-label="label" display="chip" option-value="value" :options="facilitators"  placeholder="Select Facilitators" class="w-100 p-2" append-to="#addEventModal">
                     <template #option="slotProps">
                             <div class="d-flex flex-column w-100" >
@@ -35,6 +35,7 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
                            
                     </template>
                 </multi-select>
+                <div class="invalid-feedback" :class="{'d-block':errors?.facilitatorIds?.[0]}">${errors?.facilitatorIds?.[0]}</div>
             </div>
             <div class="form-group mb-2">
               <label for="location">Location</label>
@@ -43,7 +44,7 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
             </div>
            <div class="form-group mb-2">
               <label for="description">Description</label>
-              <textarea name="description" v-model="form.name"  class="form-control" :class="{'is-invalid':errors?.description?.[0]}"></textarea>
+              <textarea name="description" v-model="form.description"  class="form-control" :class="{'is-invalid':errors?.description?.[0]}"></textarea>
               <div class="invalid-feedback" :class="{'d-block':errors?.description?.[0]}">${errors?.description?.[0]}</div>
            </div>  
            <div class="form-group mb-2">

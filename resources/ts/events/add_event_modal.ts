@@ -5,6 +5,27 @@ import 'primevue/resources/themes/md-light-indigo/theme.css'
 import { OptionWithMeta } from '#types/option'
 import { Faculty } from '#types/faculty'
 import { toISO8601DateString } from '../utils/date.js'
+import { describe } from 'node:test'
+import { StatusCodes } from 'http-status-codes'
+import { clear } from 'node:console'
+type AddEventFormType = {
+  name: string
+  from: Date
+  to: Date
+  location: string
+  description: string
+  status: 'approved' | 'unapproved'
+  facilitators: OptionWithMeta<number, Faculty>[]
+}
+const INITIAL_FORM = {
+  name: '',
+  from: new Date(),
+  to: new Date(),
+  facilitators: [],
+  description: '',
+  location: '',
+  status: 'approved',
+}
 createApp({
   components: {
     'multi-select': MultiSelect,
@@ -12,13 +33,10 @@ createApp({
   compilerOptions: {
     delimiters: ['${', '}'],
   },
+
   setup() {
-    const form = ref({
-      name: '',
-      from: new Date(),
-      to: new Date(),
-      facilitators: [],
-      description: '',
+    const form = ref<AddEventFormType>({
+      ...INITIAL_FORM,
       status: 'approved',
     })
 
@@ -33,6 +51,10 @@ createApp({
 
     onMounted(() => {
       activeFaculty.value = window.viewData?.activeFaculty ?? []
+      $('#addEventModal').on('hidden.bs.modal', () => {
+        clearErrors()
+        resetForm()
+      })
     })
     const handleDateInput = (event: Event) => {
       const target = event.target as HTMLInputElement
@@ -41,7 +63,44 @@ createApp({
       form.value[name] = new Date(value)
     }
     const errors = ref({})
-    const onSubmitCreate = () => {}
+    const clearErrors = () => {
+      errors.value = {}
+    }
+    const resetForm = () => {
+      form.value = { ...INITIAL_FORM, status: 'approved' }
+    }
+
+    const onSubmitCreate = async () => {
+      clearErrors()
+
+      const body = {
+        name: form.value.name,
+        from: toISO8601DateString(form.value.from),
+        to: toISO8601DateString(form.value.to),
+        facilitatorIds: form.value.facilitators,
+        description: form.value.description,
+        location: form.value.location,
+        status: form.value.status,
+      }
+      const response = await fetch('/admin/events', {
+        method: 'POST',
+        headers: new Headers({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify(body),
+      })
+      const responseBody = await response.json()
+      if (response.status === StatusCodes.OK) {
+        $('#addEventModal').modal('hide')
+        toastr.success('Event created.')
+      }
+      if (response.status === StatusCodes.BAD_REQUEST) {
+        if (responseBody?.errors) {
+          errors.value = responseBody?.errors
+        }
+      }
+      if (response.status === StatusCodes.INTERNAL_SERVER_ERROR) {
+        toastr.error('Unknown error occured.')
+      }
+    }
     return { form, onSubmitCreate, errors, facilitators, toISO8601DateString, handleDateInput }
   },
 })
