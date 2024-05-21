@@ -4,6 +4,7 @@ import Faculty from './faculty.js'
 import type { ManyToMany } from '@adonisjs/lucid/types/relations'
 
 export default class Event extends BaseModel {
+  static table = 'event'
   @column({ isPrimary: true })
   declare id: number
   @column({ columnName: 'name' })
@@ -19,10 +20,10 @@ export default class Event extends BaseModel {
   @column({ columnName: 'status' })
   declare status: 'approved' | 'unapproved'
   @manyToMany(() => Faculty, {
-    localKey: 'id',
     pivotTable: 'event_facilitator',
-    pivotForeignKey: 'event_id',
+    localKey: 'id',
     relatedKey: 'id',
+    pivotForeignKey: 'event_id',
     pivotRelatedForeignKey: 'faculty_id',
   })
   declare facilitators: ManyToMany<typeof Faculty>

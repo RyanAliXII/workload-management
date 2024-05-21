@@ -4,5 +4,6 @@ export type AddEvent = {
   to: Date
   facilitatorIds: number[]
   location: string
+  description: string
   status: 'approved' | 'unapproved'
 }
