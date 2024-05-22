@@ -28,7 +28,9 @@ createApp({
         events.push({
           start: event.from,
           title: `${event.name} - ${event.status}`,
-          end: event.to + ' 23:59:00',
+          end: event.to + ' 24:00:00',
+          className:
+            event.status === 'approved' ? 'calendar-event' : 'event-bg-unapproved calendar-event',
           extendedProps: {
             event: { ...event, from: new Date(event.from), to: new Date(event.to) } as Event,
           },
@@ -40,6 +42,10 @@ createApp({
       plugins: [dayGridPlugin, interactionPlugin],
       initialView: 'dayGridMonth',
       events: fetchEvents,
+      eventClick: (e) => {
+        const customEvent = new CustomEvent('event:edit', e.event.extendedProps?.event)
+        window.dispatchEvent(customEvent)
+      },
     }
     const reloadCalendar = () => {
       fullCalendar.value?.getApi().refetchEvents()
