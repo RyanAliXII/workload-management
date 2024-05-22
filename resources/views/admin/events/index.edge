@@ -52,6 +52,7 @@
         </div>
       </div>
       @!component('components/events/add-event-modal')
+      @!component('components/events/edit-event-modal')
     </div>
     @include('partials/admin/app_drawer') 
     @include('partials/scripts')
@@ -62,6 +63,7 @@
       }
     </script>
     @vite('resources/ts/events/add_event_modal.ts')
+    @vite('resources/ts/events/edit_event_modal.ts')
     @vite('resources/ts/events/event_calendar.ts')
   </body>
 </html>

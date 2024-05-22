@@ -32,7 +32,7 @@ createApp({
           className:
             event.status === 'approved' ? 'calendar-event' : 'event-bg-unapproved calendar-event',
           extendedProps: {
-            event: { ...event, from: new Date(event.from), to: new Date(event.to) } as Event,
+            event: { ...event, from: new Date(event.from), to: new Date(event.to) },
           },
         })
       })
@@ -43,7 +43,7 @@ createApp({
       initialView: 'dayGridMonth',
       events: fetchEvents,
       eventClick: (e) => {
-        const customEvent = new CustomEvent('event:edit', e.event.extendedProps?.event)
+        const customEvent = new CustomEvent('event:edit', { detail: e.event.extendedProps?.event })
         window.dispatchEvent(customEvent)
       },
     }

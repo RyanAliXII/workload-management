@@ -1,11 +1,12 @@
-import { Faculty } from '#types/faculty'
-import { OptionWithMeta } from '#types/option'
-import { StatusCodes } from 'http-status-codes'
-import PrimeVue from 'primevue/config'
+import { computed, createApp, onMounted, ref, watch } from 'vue'
 import MultiSelect from 'primevue/multiselect'
+import PrimeVue from 'primevue/config'
 import 'primevue/resources/themes/md-light-indigo/theme.css'
-import { computed, createApp, onMounted, ref } from 'vue'
+import { OptionWithMeta } from '#types/option'
+import { Faculty } from '#types/faculty'
 import { toISO8601DateString } from '../utils/date.js'
+import { StatusCodes } from 'http-status-codes'
+import { Event as EventType } from '#types/event'
 type AddEventFormType = {
   name: string
   from: Date
@@ -49,11 +50,26 @@ createApp({
 
     onMounted(() => {
       activeFaculty.value = window.viewData?.activeFaculty ?? []
-      $('#addEventModal').on('hidden.bs.modal', () => {
+
+      $('#editEventModal').on('hidden.bs.modal', () => {
         clearErrors()
         resetForm()
       })
+      window.addEventListener('event:edit', (event: Event) => {
+        const customEvent = event as CustomEvent<EventType>
+        const e = customEvent.detail
+        form.value.name = e.name
+        form.value.description = e.description ?? ''
+        form.value.from = e.from
+        form.value.to = e.to
+        form.value.location = e.location
+        form.value.status = e.status
+        form.value.facilitators = e.facilitators?.map((f) => f.id)
+
+        $('#editEventModal').modal('show')
+      })
     })
+
     const handleDateInput = (event: Event) => {
       const target = event.target as HTMLInputElement
       const value = target.value
@@ -101,8 +117,9 @@ createApp({
         toastr.error('Unknown error occured.')
       }
     }
+
     return { form, onSubmitCreate, errors, facilitators, toISO8601DateString, handleDateInput }
   },
 })
   .use(PrimeVue as any)
-  .mount('#addEventModal')
+  .mount('#editEventModal')
