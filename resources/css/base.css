@@ -32604,3 +32604,10 @@ span.multiselect-native-select select {
 .calendar-event {
   cursor: pointer;
 }
+.p-multiselect-panel {
+  z-index: 2000 !important;
+}
+.fc-h-event {
+  border: 0px;
+  padding: 5px;
+}

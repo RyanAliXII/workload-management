@@ -44,13 +44,15 @@
             </button>
             <div class="main-card mb-3 card p-5">
               <full-calendar :options="calendarOptions" ref="fullCalendar"></full-calendar>
+              
             </div>
            
           </div>
-          
+   
           @include('partials/admin/footer')
         </div>
       </div>
+      @!component('components/events/view-event-modal')
       @!component('components/events/add-event-modal')
       @!component('components/events/edit-event-modal')
     </div>
@@ -64,6 +66,7 @@
     </script>
     @vite('resources/ts/events/add_event_modal.ts')
     @vite('resources/ts/events/edit_event_modal.ts')
+    @vite('resources/ts/events/view_event_modal.ts')
     @vite('resources/ts/events/event_calendar.ts')
   </body>
 </html>

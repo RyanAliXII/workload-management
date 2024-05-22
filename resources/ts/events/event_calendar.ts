@@ -1,10 +1,10 @@
-import { createApp, onMounted, ref } from 'vue'
-import FullCalendar from '@fullcalendar/vue3'
+import { EventJSON } from '#types/event'
+import { CalendarOptions, EventInput, EventSourceFunc } from '@fullcalendar/core'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import { CalendarOptions, EventInput, EventSourceFunc } from '@fullcalendar/core'
+import FullCalendar from '@fullcalendar/vue3'
+import { createApp, onMounted, ref } from 'vue'
 import { toISO8601DateString } from '../utils/date.js'
-import { Event, EventJSON } from '#types/event'
 
 createApp({
   components: {
@@ -28,7 +28,7 @@ createApp({
         events.push({
           start: event.from,
           title: `${event.name} - ${event.status}`,
-          end: event.to + ' 24:00:00',
+          end: event.to + ' 23:59:00',
           className:
             event.status === 'approved' ? 'calendar-event' : 'event-bg-unapproved calendar-event',
           extendedProps: {
@@ -43,7 +43,7 @@ createApp({
       initialView: 'dayGridMonth',
       events: fetchEvents,
       eventClick: (e) => {
-        const customEvent = new CustomEvent('event:edit', { detail: e.event.extendedProps?.event })
+        const customEvent = new CustomEvent('event:view', { detail: e.event.extendedProps?.event })
         window.dispatchEvent(customEvent)
       },
     }

@@ -1,4 +1,4 @@
-import { AddEvent } from '#types/event'
+import { AddEvent, EditEvent } from '#types/event'
 import { inject } from '@adonisjs/core'
 import Event from '#models/event'
 import db from '@adonisjs/lucid/services/db'
@@ -33,6 +33,35 @@ export default class EventRepository {
     }
   }
   async getWithinRange(from: Date, to: Date) {
-    return Event.query().preload('facilitators').whereBetween('from', [from, to])
+    return Event.query()
+      .preload('facilitators', (builder) => {
+        builder.preload('loginCredential')
+      })
+      .whereBetween('from', [from, to])
+  }
+  async update(event: EditEvent) {
+    const trx = await db.transaction()
+    try {
+      const dbEvent = await Event.findBy('id', event.id)
+      if (!dbEvent) return
+      dbEvent.useTransaction(trx)
+      dbEvent.name = event.name
+      dbEvent.from = DateTime.fromJSDate(event.from)
+      dbEvent.to = DateTime.fromJSDate(event.to)
+      dbEvent.description = event.description ?? ''
+      dbEvent.location = event.location
+      dbEvent.description = event.description ?? ''
+      dbEvent.status = event.status
+      dbEvent.save()
+      await EventFacilitator.query({ client: trx }).where('event_id', dbEvent.id).delete()
+      await EventFacilitator.createMany(
+        event.facilitatorIds.map((id) => ({ facultyId: id, eventId: dbEvent.id })),
+        { client: trx }
+      )
+      await trx.commit()
+    } catch (error) {
+      await trx.rollback()
+      throw error
+    }
   }
 }
