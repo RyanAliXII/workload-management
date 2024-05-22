@@ -1,0 +1,68 @@
+<div class="modal fade" id="addEventModal"  tabindex="-1" role="dialog"
+aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">New Event</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            </button>
+        </div>
+        <form v-on:submit.prevent="onSubmitCreate">
+        <div class="modal-body">
+            <div class="form-group mb-2">
+              <label for="name">Name</label>
+              <input name="name" v-model="form.name"  class="form-control"   :class="{'is-invalid':errors?.name?.[0]}">
+              <div class="invalid-feedback" :class="{'d-block':errors?.name?.[0]}">${errors?.name?.[0]}</div>
+            </div>
+            <div class="form-group mb-2">
+              <label for="from">From</label>
+              <input type="date" :value="toISO8601DateString(form.from)" name="from" @change="handleDateInput"  class="form-control" :class="{'is-invalid':errors?.from?.[0]}">
+              <div class="invalid-feedback" :class="{'d-block':errors?.from?.[0]}">${errors?.from?.[0]}</div>
+            </div>
+            <div class="form-group mb-2">
+              <label for="to">To</label>
+              <input type="date" :value="toISO8601DateString(form.to)" name="to" @change="handleDateInput"   class="form-control" :class="{'is-invalid':errors?.to?.[0]}">
+              <div class="invalid-feedback" :class="{'d-block':errors?.to?.[0]}">${errors?.to?.[0]}</div>
+            </div>
+            <div class="form-group mb-2">
+                <label for="facilitator">Facilitators</label>
+                <multi-select filter v-model="form.facilitators" option-label="label" display="chip" option-value="value" :options="facilitators"  placeholder="Select Facilitators" class="w-100 p-2" append-to="body">
+                    <template #option="slotProps">
+                            <div class="d-flex flex-column w-100" >
+                                <span>${ slotProps.option.label}</span>
+                                <small class="text-muted">${slotProps.option.meta.loginCredential.email}</small>
+                            </div>
+                           
+                    </template>
+                </multi-select>
+                <div class="invalid-feedback" :class="{'d-block':errors?.facilitatorIds?.[0]}">${errors?.facilitatorIds?.[0]}</div>
+            </div>
+            <div class="form-group mb-2">
+              <label for="location">Location</label>
+              <textarea name="location" v-model="form.location"  class="form-control " :class="{'is-invalid':errors?.location?.[0]}" style="resize: none;" ></textarea>
+              <div class="invalid-feedback" :class="{'d-block':errors?.location?.[0]}">${errors?.location?.[0]}</div>
+            </div>
+           <div class="form-group mb-2">
+              <label for="description">Description</label>
+              <textarea name="description" v-model="form.description"  class="form-control" :class="{'is-invalid':errors?.description?.[0]}"></textarea>
+              <div class="invalid-feedback" :class="{'d-block':errors?.description?.[0]}">${errors?.description?.[0]}</div>
+           </div>  
+           <div class="form-group mb-2">
+            <label for="status">Status</label>
+           <select class="form-control"  name="status" v-model="form.status">
+            <option value="" disabled selected>Select Status</option>
+            <option value="unapproved">Unapproved</option>
+            <option value="approved">Approved</option>
+           </select>
+            <div class="invalid-feedback" :class="{'d-block':errors?.status?.[0]}">${errors?.status?.[0]}</div>
+         </div>   
+        </div>
+        
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+</div>
+</div>

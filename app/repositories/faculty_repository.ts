@@ -13,6 +13,14 @@ export class FacultyRepository {
       .preload('loginCredential')
       .preload('fundSource')
   }
+  async getActive() {
+    return Faculty.query()
+      .preload('educations')
+      .preload('position')
+      .preload('loginCredential')
+      .preload('fundSource')
+      .whereIn('employment_status', ['regular', 'part-time'])
+  }
   async create(f: AddFacultyType) {
     const trx = await db.transaction()
     try {

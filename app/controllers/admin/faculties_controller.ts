@@ -28,17 +28,17 @@ export default class FacultiesController {
     protected facultyRepo: FacultyRepository
   ) {}
   async index({ view, request, response }: HttpContext) {
-    const faculties = await this.facultyRepo.getAll()
+    const faculty = await this.facultyRepo.getAll()
     const contentType = request.header('content-type')
     if (contentType === 'application/json') {
       return response.json({
         status: StatusCodes.OK,
         message: 'Faculties fetched.',
-        faculties,
+        faculty,
       })
     }
     return view.render('admin/faculties/index', {
-      faculties: faculties ?? [],
+      faculty: faculty ?? [],
     })
   }
   async add({ view }: HttpContext) {

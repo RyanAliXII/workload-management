@@ -1,12 +1,13 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, hasMany, hasOne } from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column, hasMany, hasOne } from '@adonisjs/lucid/orm'
 import LoginCredential from './login_credential.js'
-import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 import Position from './position.js'
 import FundSource from './fund_source.js'
 import Education from './education.js'
 import { compose } from '@adonisjs/core/helpers'
 import { SoftDeletes } from 'adonis-lucid-soft-deletes'
+import Event from './event.js'
 
 export default class Faculty extends compose(BaseModel, SoftDeletes) {
   static table = 'faculty'

@@ -1,14 +1,13 @@
-import { createApp, onMounted, ref, watch } from 'vue'
-import DataTable from 'primevue/datatable'
-import Column from 'primevue/column'
 import { Faculty } from '#types/faculty'
+import { StatusCodes } from 'http-status-codes'
+import Column from 'primevue/column'
 import PrimeVue from 'primevue/config'
+import DataTable from 'primevue/datatable'
+import MultiSelect from 'primevue/multiselect'
 import Paginator from 'primevue/paginator'
 import 'primevue/resources/themes/md-light-indigo/theme.css'
-import MultiSelect from 'primevue/multiselect'
-import { filter } from 'lodash'
 import Swal from 'sweetalert2'
-import { StatusCodes } from 'http-status-codes'
+import { createApp, onMounted, ref } from 'vue'
 
 createApp({
   compilerOptions: {
@@ -31,7 +30,7 @@ createApp({
       },
     })
     onMounted(() => {
-      faculties.value = window.viewData?.faculties ?? []
+      faculties.value = window.viewData?.faculty ?? []
     })
 
     const fetchFaculties = async () => {
@@ -42,7 +41,7 @@ createApp({
       })
       if (response.status === StatusCodes.OK) {
         const responseBody = await response.json()
-        faculties.value = responseBody?.faculties ?? []
+        faculties.value = responseBody?.faculty ?? []
       }
     }
     const initDelete = async (f: Faculty) => {
