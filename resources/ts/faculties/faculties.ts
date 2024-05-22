@@ -30,7 +30,7 @@ createApp({
       },
     })
     onMounted(() => {
-      faculties.value = window.viewData?.faculties ?? []
+      faculties.value = window.viewData?.faculty ?? []
     })
 
     const fetchFaculties = async () => {
@@ -41,7 +41,7 @@ createApp({
       })
       if (response.status === StatusCodes.OK) {
         const responseBody = await response.json()
-        faculties.value = responseBody?.faculties ?? []
+        faculties.value = responseBody?.faculty ?? []
       }
     }
     const initDelete = async (f: Faculty) => {

@@ -99,9 +99,8 @@
     @include('partials/admin/app_drawer')
     @include('partials/scripts')
     <script>
-      console.log(JSON.parse(`{{{JSON.stringify(activeFaculty)}}}`))
       window.viewData = {
-        activeFaculty: JSON.parse(`{{{JSON.stringify(activeFaculty)}}}`)
+        faculty: JSON.parse(`{{{JSON.stringify(faculty)}}}`)
       }
     </script>
     @vite('resources/ts/faculties/faculties.ts')

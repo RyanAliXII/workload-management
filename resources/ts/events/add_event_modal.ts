@@ -91,6 +91,8 @@ createApp({
       if (response.status === StatusCodes.OK) {
         $('#addEventModal').modal('hide')
         toastr.success('Event created.')
+        const event = new CustomEvent('calendar:refetch', {})
+        window.dispatchEvent(event)
       }
       if (response.status === StatusCodes.BAD_REQUEST) {
         if (responseBody?.errors) {

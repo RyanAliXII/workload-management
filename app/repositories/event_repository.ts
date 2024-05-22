@@ -16,7 +16,8 @@ export default class EventRepository {
       eventModel.to = DateTime.fromJSDate(event.to)
       eventModel.description = event.description ?? ''
       eventModel.location = event.location
-      eventModel.description = event.status
+      eventModel.description = event.description ?? ''
+      eventModel.status = event.status
       await eventModel.save()
       const facilitator = new EventFacilitator()
       facilitator.useTransaction(trx)
@@ -30,5 +31,8 @@ export default class EventRepository {
       await trx.rollback()
       throw error
     }
+  }
+  async getWithinRange(from: Date, to: Date) {
+    return Event.query().preload('facilitators').whereBetween('from', [from, to])
   }
 }

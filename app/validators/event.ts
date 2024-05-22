@@ -13,3 +13,11 @@ export const createEventValidator = vine.compile(
   })
 )
 createEventValidator.errorReporter = () => new JSONAPIErrorReporter()
+
+export const eventByRangeValidator = vine.compile(
+  vine.object({
+    from: vine.date(),
+    to: vine.date().afterOrSameAs('from'),
+  })
+)
+createEventValidator.errorReporter = () => new JSONAPIErrorReporter()
