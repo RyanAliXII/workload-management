@@ -22236,7 +22236,7 @@ tr.introjs-showElement > th {
   border-radius: 0.2em;
   /* IE hacks */
   zoom: 1;
-  *display: inline;
+  display: inline;
   margin-top: 10px;
 }
 
@@ -32597,12 +32597,14 @@ span.multiselect-native-select select {
 .after-img {
   max-width: 100%;
 }
+
 .event-bg-unapproved {
-  background: #f7b924;
-  border-color: unset;
+  background: #f7b924 !important;
 }
 .calendar-event {
   cursor: pointer;
+  background-color: #006faf;
+  color: white;
 }
 .p-multiselect-panel {
   z-index: 2000 !important;

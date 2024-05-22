@@ -10,6 +10,7 @@ const EducationalAttainmentsController = () =>
 const FundSourcesController = () => import('#controllers/admin/fund_sources_controller')
 const FacultiesController = () => import('#controllers/admin/faculties_controller')
 const EventsController = () => import('#controllers/admin/events_controller')
+const FacultyEventsController = () => import('#controllers/faculty/events_controller')
 import { HttpContext } from '@adonisjs/core/http'
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
@@ -69,6 +70,10 @@ router
     router
       .group(() => {
         router.get('/dashboard', [FacultyDashboardController, 'index'])
+        router.get('/events', [FacultyEventsController, 'index'])
+        router.post('/events', [FacultyEventsController, 'create'])
+        router.put('/events/:id', [FacultyEventsController, 'edit'])
+        router.delete('/events/:id', [FacultyEventsController, 'edit'])
       })
       .use(middleware.auth({ guards: ['faculty'], redirectTo: '/faculties/login' }))
   })

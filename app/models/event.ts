@@ -1,9 +1,10 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, manyToMany } from '@adonisjs/lucid/orm'
-import Faculty from './faculty.js'
-import type { ManyToMany } from '@adonisjs/lucid/types/relations'
+import { BaseModel, belongsTo, column, hasOne, manyToMany } from '@adonisjs/lucid/orm'
+
+import type { HasOne, ManyToMany, BelongsTo } from '@adonisjs/lucid/types/relations'
 import { compose } from '@adonisjs/core/helpers'
 import { SoftDeletes } from 'adonis-lucid-soft-deletes'
+import Faculty from './faculty.js'
 
 export default class Event extends compose(BaseModel, SoftDeletes) {
   static table = 'event'
@@ -21,6 +22,10 @@ export default class Event extends compose(BaseModel, SoftDeletes) {
   declare description: string
   @column({ columnName: 'status' })
   declare status: 'approved' | 'unapproved'
+  @column({ columnName: 'created_by_id' })
+  declare createdById: number | null
+  @belongsTo(() => Faculty, { foreignKey: 'createdById', localKey: 'id' })
+  declare createdBy: BelongsTo<typeof Faculty>
   @manyToMany(() => Faculty, {
     pivotTable: 'event_facilitator',
     localKey: 'id',

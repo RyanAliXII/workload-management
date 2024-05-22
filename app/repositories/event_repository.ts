@@ -18,6 +18,7 @@ export default class EventRepository {
       eventModel.location = event.location
       eventModel.description = event.description ?? ''
       eventModel.status = event.status
+      eventModel.createdById = event.createdById ?? null
       await eventModel.save()
       const facilitator = new EventFacilitator()
       facilitator.useTransaction(trx)
@@ -37,6 +38,7 @@ export default class EventRepository {
       .preload('facilitators', (builder) => {
         builder.preload('loginCredential')
       })
+      .preload('createdBy')
       .whereBetween('from', [from, to])
   }
   async update(event: EditEvent) {

@@ -6,7 +6,7 @@ import PrimeVue from 'primevue/config'
 import MultiSelect from 'primevue/multiselect'
 import 'primevue/resources/themes/md-light-indigo/theme.css'
 import { computed, createApp, onMounted, ref } from 'vue'
-import { toISO8601DateString } from '../utils/date.js'
+import { toISO8601DateString } from '../../utils/date.js'
 type EditEventFormType = {
   id: number
   name: string
@@ -14,7 +14,7 @@ type EditEventFormType = {
   to: Date
   location: string
   description: string
-  status: 'approved' | 'unapproved'
+
   facilitators: number[]
 }
 const INITIAL_FORM = {
@@ -25,7 +25,6 @@ const INITIAL_FORM = {
   facilitators: [],
   description: '',
   location: '',
-  status: 'approved',
 }
 createApp({
   components: {
@@ -38,7 +37,6 @@ createApp({
   setup() {
     const form = ref<EditEventFormType>({
       ...INITIAL_FORM,
-      status: 'approved',
     })
 
     const activeFaculty = ref<Faculty[]>([])
@@ -49,7 +47,6 @@ createApp({
         meta: f,
       }))
     )
-
     onMounted(() => {
       activeFaculty.value = window.viewData?.activeFaculty ?? []
 
@@ -66,8 +63,9 @@ createApp({
         form.value.from = e.from
         form.value.to = e.to
         form.value.location = e.location
-        form.value.status = e.status
+
         form.value.facilitators = e.facilitators?.map((f) => f.id)
+
         $('#editEventModal').modal('show')
       })
     })
@@ -83,7 +81,7 @@ createApp({
       errors.value = {}
     }
     const resetForm = () => {
-      form.value = { ...INITIAL_FORM, status: 'approved' }
+      form.value = { ...INITIAL_FORM }
     }
 
     const onSubmitCreate = async () => {
@@ -97,9 +95,8 @@ createApp({
         facilitatorIds: form.value.facilitators,
         description: form.value.description,
         location: form.value.location,
-        status: form.value.status,
       }
-      const response = await fetch(`/admin/events/${form.value.id}`, {
+      const response = await fetch(`/faculties/events/${form.value.id}`, {
         method: 'PUT',
         headers: new Headers({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(body),

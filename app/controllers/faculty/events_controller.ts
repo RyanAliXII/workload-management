@@ -1,11 +1,10 @@
-// import type { HttpContext } from '@adonisjs/core/http'
-
 import EventRepository from '#repositories/event_repository'
 import { FacultyRepository } from '#repositories/faculty_repository'
+import { AddEvent, EditEvent } from '#types/event'
 import {
-  createEventValidator,
+  createEventFacultyValidator,
   deleteEventValidator,
-  editEventValidator,
+  editEventFacultyValidator,
   eventByRangeValidator,
 } from '#validators/event'
 import { inject } from '@adonisjs/core'
@@ -13,14 +12,15 @@ import { HttpContext } from '@adonisjs/core/http'
 import { Logger } from '@adonisjs/core/logger'
 import { errors } from '@vinejs/vine'
 import { StatusCodes } from 'http-status-codes'
+
 @inject()
 export default class EventsController {
   constructor(
     protected logger: Logger,
-    protected facultyRepo: FacultyRepository,
-    protected eventRepo: EventRepository
+    protected eventRepo: EventRepository,
+    protected facultyRepo: FacultyRepository
   ) {}
-  async index({ view, request, response }: HttpContext) {
+  async index({ view, response, request }: HttpContext) {
     const activeFaculty = await this.facultyRepo.getActive()
     const contentType = request.header('content-type')
     if (contentType === 'application/json') {
@@ -50,14 +50,19 @@ export default class EventsController {
         })
       }
     }
-    return view.render('admin/events/index', {
-      activeFaculty,
+    return view.render('faculty/events/index', {
+      activeFaculty: activeFaculty,
     })
   }
-  async create({ request, response }: HttpContext) {
+  async create({ request, response, auth }: HttpContext) {
     try {
-      const data = await createEventValidator.validate(request.body())
-      await this.eventRepo.create(data)
+      const data = await createEventFacultyValidator.validate(request.body())
+      const event: AddEvent = {
+        ...data,
+        status: 'unapproved',
+        createdById: auth.user?.id,
+      }
+      await this.eventRepo.create(event)
       return response.json({
         status: StatusCodes.OK,
         message: 'Event created.',
@@ -81,8 +86,9 @@ export default class EventsController {
     try {
       const body = request.body()
       body.id = request.param('id')
-      const data = await editEventValidator.validate(body)
-      await this.eventRepo.update(data)
+      const data = await editEventFacultyValidator.validate(body)
+      const event: EditEvent = { ...data, status: 'unapproved' }
+      await this.eventRepo.update(event)
       return response.json({ status: StatusCodes.OK, message: 'Event updated.' })
     } catch (error) {
       if (error instanceof errors.E_VALIDATION_ERROR) {
@@ -106,14 +112,14 @@ export default class EventsController {
       return response.json({ status: StatusCodes.OK, message: 'Event deleted.' })
     } catch (error) {
       if (error instanceof errors.E_VALIDATION_ERROR) {
-        return response.status(StatusCodes.BAD_REQUEST).send({
+        return response.status(StatusCodes.BAD_REQUEST).json({
           status: StatusCodes.BAD_REQUEST,
           message: 'Validation error',
           errors: error.messages,
         })
       }
       this.logger.error(error)
-      return response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+      return response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
         status: StatusCodes.INTERNAL_SERVER_ERROR,
         message: 'Unknown error occured',
       })

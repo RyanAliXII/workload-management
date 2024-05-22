@@ -3,8 +3,8 @@ import { Faculty } from '#types/faculty'
 import { StatusCodes } from 'http-status-codes'
 import PrimeVue from 'primevue/config'
 import 'primevue/resources/themes/md-light-indigo/theme.css'
-import { createApp, onMounted, ref } from 'vue'
-import { toISO8601DateString } from '../utils/date.js'
+import { computed, createApp, onMounted, ref } from 'vue'
+import { toISO8601DateString } from '../../utils/date.js'
 import Swal from 'sweetalert2'
 type ViewEventFormType = {
   id: number
@@ -54,6 +54,9 @@ createApp({
         $('#viewEventModal').modal('show')
       })
     })
+    const isEditable = computed(
+      () => currentEvent.value?.createdById === window.viewData?.authUserId
+    )
     const edit = () => {
       $('#viewEventModal').modal('show')
       if (!currentEvent) return
@@ -80,7 +83,7 @@ createApp({
       deleteEvent()
     }
     const deleteEvent = async () => {
-      const response = await fetch(`/faculties/events/${form.value.id}`, { method: 'DELETE' })
+      const response = await fetch(`/admin/events/${form.value.id}`, { method: 'DELETE' })
       if (response.status === StatusCodes.OK) {
         $('#viewEventModal').modal('hide')
         const customEvent = new CustomEvent('calendar:refetch')
@@ -88,7 +91,7 @@ createApp({
         toastr.success('Event deleted.')
       }
     }
-    return { form, toISO8601DateString, edit, initDelete }
+    return { form, toISO8601DateString, edit, initDelete, isEditable, currentEvent }
   },
 })
   .use(PrimeVue as any)

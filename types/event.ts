@@ -8,6 +8,7 @@ export type AddEvent = {
   location: string
   description?: string
   status: 'approved' | 'unapproved'
+  createdById?: number | null
 }
 export type EditEvent = {
   id: number
@@ -28,6 +29,10 @@ export type Event = {
   facilitators: Faculty[]
   location: string
   description?: string
+
+  createdById?: number | null
+  createdBy?: Faculty | null
+
   status: 'approved' | 'unapproved'
 }
 

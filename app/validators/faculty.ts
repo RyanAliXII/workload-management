@@ -110,7 +110,7 @@ export const editFacultyValidator = vine.compile(
           },
         })
       ),
-    password: vine.string().maxLength(10).optional().requiredIfExists('password'),
+    password: vine.string().minLength(10).optional().requiredIfExists('password'),
     educations: vine
       .array(
         vine.object({
