@@ -2,7 +2,12 @@
 
 import EventRepository from '#repositories/event_repository'
 import { FacultyRepository } from '#repositories/faculty_repository'
-import { createEventValidator, editEventValidator, eventByRangeValidator } from '#validators/event'
+import {
+  createEventValidator,
+  deleteEventValidator,
+  editEventValidator,
+  eventByRangeValidator,
+} from '#validators/event'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 import { Logger } from '@adonisjs/core/logger'
@@ -79,6 +84,26 @@ export default class EventsController {
       const data = await editEventValidator.validate(body)
       await this.eventRepo.update(data)
       return response.json({ status: StatusCodes.OK, message: 'Event updated.' })
+    } catch (error) {
+      if (error instanceof errors.E_VALIDATION_ERROR) {
+        return response.status(StatusCodes.BAD_REQUEST).send({
+          status: StatusCodes.BAD_REQUEST,
+          message: 'Validation error',
+          errors: error.messages,
+        })
+      }
+      this.logger.error(error)
+      return response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
+        message: 'Unknown error occured',
+      })
+    }
+  }
+  async delete({ request, response }: HttpContext) {
+    try {
+      const data = await deleteEventValidator.validate({ id: request.param('id', 0) })
+      this.eventRepo.delete(data.id)
+      return response.json({ status: StatusCodes.OK, message: 'Event deleted.' })
     } catch (error) {
       if (error instanceof errors.E_VALIDATION_ERROR) {
         return response.status(StatusCodes.BAD_REQUEST).send({

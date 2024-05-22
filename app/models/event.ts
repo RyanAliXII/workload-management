@@ -2,8 +2,10 @@ import { DateTime } from 'luxon'
 import { BaseModel, column, manyToMany } from '@adonisjs/lucid/orm'
 import Faculty from './faculty.js'
 import type { ManyToMany } from '@adonisjs/lucid/types/relations'
+import { compose } from '@adonisjs/core/helpers'
+import { SoftDeletes } from 'adonis-lucid-soft-deletes'
 
-export default class Event extends BaseModel {
+export default class Event extends compose(BaseModel, SoftDeletes) {
   static table = 'event'
   @column({ isPrimary: true })
   declare id: number

@@ -64,4 +64,9 @@ export default class EventRepository {
       throw error
     }
   }
+  async delete(id: number) {
+    const event = await Event.findBy('id', id)
+    if (!event) return
+    await event.delete()
+  }
 }

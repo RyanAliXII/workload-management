@@ -80,11 +80,12 @@ createApp({
       deleteEvent()
     }
     const deleteEvent = async () => {
-      const response = await fetch(`/admin/positions/${form.value.id}`, { method: 'DELETE' })
+      const response = await fetch(`/admin/events/${form.value.id}`, { method: 'DELETE' })
       if (response.status === StatusCodes.OK) {
-        toastr.success('Event deleted.')
+        $('#viewEventModal').modal('hide')
         const customEvent = new CustomEvent('calendar:refetch')
         window.dispatchEvent(customEvent)
+        toastr.success('Event deleted.')
       }
     }
     return { form, toISO8601DateString, edit, initDelete }

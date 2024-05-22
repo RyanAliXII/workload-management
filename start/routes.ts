@@ -57,6 +57,7 @@ router
         router.get('/events', [EventsController, 'index'])
         router.post('/events', [EventsController, 'create'])
         router.put('/events/:id', [EventsController, 'edit'])
+        router.delete('/events/:id', [EventsController, 'delete'])
       })
       .use(middleware.auth({ guards: ['admin'], redirectTo: '/admin/login' }))
   })
