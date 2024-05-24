@@ -132,8 +132,8 @@ createApp({
           toastr.success('Task has been added.')
           resetForm()
           $('#addTaskModal').modal('hide')
-
-          //fetchPositions()
+          const customEvent = new CustomEvent('task:refetch')
+          window.dispatchEvent(customEvent)
         }
         if (response.status === StatusCodes.BAD_REQUEST) {
           if (responseBody?.errors) {

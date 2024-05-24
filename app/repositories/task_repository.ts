@@ -59,4 +59,31 @@ export class TaskRepository {
     if (!task) return
     task.delete()
   }
+  async getOne(id: number) {
+    return Task.query().preload('fileAttachments').where('id', id).limit(1).first()
+  }
+
+  async getByStatus(status: string) {
+    if (status === 'completed') {
+      return Task.query()
+        .preload('assignedBy')
+        .preload('faculty', (b) => {
+          b.preload('position')
+          b.preload('loginCredential')
+        })
+        .whereNotNull('completed_at')
+        .preload('fileAttachments')
+    }
+    if (status === 'pending') {
+      return Task.query()
+        .preload('assignedBy')
+        .preload('faculty', (b) => {
+          b.preload('position')
+          b.preload('loginCredential')
+        })
+        .whereNull('completed_at')
+        .preload('fileAttachments')
+    }
+    return this.getAll()
+  }
 }

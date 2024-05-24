@@ -32,6 +32,7 @@ createApp({
     const editor = ref(ClassicEditor)
     const attachments = ref<File[]>([])
     const task = ref<Task | null>(null)
+    const attachmentUrls = ref<string[]>([])
     onMounted(() => {
       activeFaculty.value = window.viewData?.activeFaculty ?? []
       window.addEventListener('task:edit', (event: Event) => {
@@ -41,6 +42,7 @@ createApp({
         form.value.facultyId = customEvent.detail.facultyId
         task.value = customEvent.detail
         $('#editTaskModal').modal('show')
+        loadAttachments(customEvent.detail.id)
       })
     })
     const isSubmitting = ref(false)
@@ -126,7 +128,11 @@ createApp({
         })) ?? []
     )
     const errors = ref({})
-
+    const loadAttachments = async (id: number) => {
+      const response = await fetch(`/admin/tasks/${id}/attachments`)
+      const responseBody = await response.json()
+      attachmentUrls.value = responseBody?.attachments ?? []
+    }
     const onSubmitCreate = async () => {
       isSubmitting.value = true
       try {
@@ -143,8 +149,8 @@ createApp({
           toastr.success('Task has been updated.')
           resetForm()
           $('#editTaskModal').modal('hide')
-
-          //fetchPositions()
+          const customEvent = new CustomEvent('task:refetch')
+          window.dispatchEvent(customEvent)
         }
         if (response.status === StatusCodes.BAD_REQUEST) {
           if (responseBody?.errors) {
@@ -170,6 +176,7 @@ createApp({
       task,
       handleFileAttachments,
       isSubmitting,
+      attachmentUrls,
     }
   },
 })

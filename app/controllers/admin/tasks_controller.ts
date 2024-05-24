@@ -9,6 +9,7 @@ import {
   createTaskValidator,
   deleteTaskValidator,
   editTaskValidator,
+  idValidator,
 } from '#validators/task'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
@@ -24,10 +25,19 @@ export default class TasksController {
     protected taskRepo: TaskRepository,
     protected taskAttachmentRepo: TaskAttachmentRepository
   ) {}
-  async index({ view }: HttpContext) {
+  async index({ view, request, response }: HttpContext) {
+    const contentType = request.header('content-type')
+    if (contentType === 'application/json') {
+      const status = request.input('status')
+      const tasks = await this.taskRepo.getByStatus(status)
+      return response.json({
+        status: StatusCodes.OK,
+        message: 'Tasks fetched.',
+        tasks,
+      })
+    }
     const activeFaculty = await this.facultyRepo.getActive()
     const tasks = await this.taskRepo.getAll()
-
     return view.render('admin/tasks/index', {
       activeFaculty,
       tasks: JSON.stringify(tasks),
@@ -168,6 +178,42 @@ export default class TasksController {
       return response.json({
         status: StatusCodes.OK,
         message: 'Task deleted.',
+      })
+    } catch (error) {
+      if (error instanceof errors.E_VALIDATION_ERROR) {
+        return response.status(StatusCodes.BAD_REQUEST).json({
+          status: StatusCodes.BAD_REQUEST,
+          message: 'Validation errors.',
+          errors: error.messages,
+        })
+      }
+      this.logger.error(error)
+      return response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
+        message: 'Unknown error occurred.',
+      })
+    }
+  }
+  async getAttachmentByTaskId({ request, response }: HttpContext) {
+    try {
+      const data = await idValidator.validate({ id: request.param('id') })
+      const task = await this.taskRepo.getOne(data.id)
+      if (!task) {
+        return response.json({
+          status: StatusCodes.NOT_FOUND,
+          message: 'Task not found.',
+        })
+      }
+      const attachments: string[] = []
+      task.fileAttachments.forEach((fa) => {
+        const url = this.cloudinaryService.generatePublicUrlAsAttachment(fa.objectName)
+        attachments.push(url)
+      })
+
+      return response.json({
+        status: StatusCodes.OK,
+        message: 'Task attachments fetched.',
+        attachments,
       })
     } catch (error) {
       if (error instanceof errors.E_VALIDATION_ERROR) {

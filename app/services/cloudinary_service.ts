@@ -24,4 +24,10 @@ export class CloudinaryService {
   generatePublicUrl(publicId: string) {
     return cloudinaryV2.url(publicId)
   }
+  generatePublicUrlAsAttachment(publicId: string) {
+    return cloudinaryV2.url(publicId, {
+      flags: 'attachment',
+      resource_type: 'raw',
+    })
+  }
 }

@@ -7,6 +7,8 @@ import 'primevue/resources/themes/md-light-indigo/theme.css'
 import { toReadableDatetime } from '../utils/date.js'
 import Swal from 'sweetalert2'
 import { StatusCodes } from 'http-status-codes'
+import { refresh } from '../../vendors/ionicons/icons/index.js'
+import { filter } from 'lodash'
 createApp({
   compilerOptions: {
     delimiters: ['${', '}'],
@@ -20,6 +22,7 @@ createApp({
     const filters = ref({
       global: {
         value: '',
+        status: '',
       },
     })
     onMounted(() => {
@@ -29,10 +32,27 @@ createApp({
           createdAt: new Date(t.createdAt),
           updatedAt: new Date(t.createdAt),
         })) ?? []
+      window.addEventListener('task:refetch', () => {
+        fetchTasks()
+      })
     })
     const initEdit = (task: Task) => {
       const event = new CustomEvent('task:edit', { detail: task })
       window.dispatchEvent(event)
+    }
+    const fetchTasks = async () => {
+      const url = new URL(window.location.origin + '/admin/tasks')
+      url.searchParams.set('status', filters.value.global.status)
+      const response = await fetch(url.toString(), {
+        headers: new Headers({ 'Content-Type': 'application/json' }),
+      })
+      const responseBody = await response.json()
+      tasks.value =
+        responseBody?.tasks?.map((t: any) => ({
+          ...t,
+          createdAt: new Date(t.createdAt),
+          updatedAt: new Date(t.createdAt),
+        })) ?? []
     }
     const initDelete = async (task: Task) => {
       $('#viewEventModal').modal('hide')
@@ -56,12 +76,19 @@ createApp({
       const response = await fetch(`/admin/tasks/${id}`, { method: 'DELETE' })
       if (response.status === StatusCodes.OK) {
         toastr.success('Task deleted.')
+        fetchTasks()
       }
+    }
+    const handleStatusChange = (event: Event) => {
+      const target = event.target as HTMLSelectElement
+      filters.value.global.status = target.value
+      fetchTasks()
     }
     return {
       tasks,
       toReadableDatetime,
       filters,
+      handleStatusChange,
       initDelete,
       initEdit,
     }
