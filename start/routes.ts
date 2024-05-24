@@ -11,6 +11,7 @@ const FundSourcesController = () => import('#controllers/admin/fund_sources_cont
 const FacultiesController = () => import('#controllers/admin/faculties_controller')
 const EventsController = () => import('#controllers/admin/events_controller')
 const FacultyEventsController = () => import('#controllers/faculty/events_controller')
+const AdminTaskController = () => import('#controllers/admin/tasks_controller')
 import { HttpContext } from '@adonisjs/core/http'
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
@@ -59,6 +60,7 @@ router
         router.post('/events', [EventsController, 'create'])
         router.put('/events/:id', [EventsController, 'edit'])
         router.delete('/events/:id', [EventsController, 'delete'])
+        router.get('/tasks', [AdminTaskController, 'index'])
       })
       .use(middleware.auth({ guards: ['admin'], redirectTo: '/admin/login' }))
   })
