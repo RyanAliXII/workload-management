@@ -62,6 +62,7 @@ router
         router.delete('/events/:id', [EventsController, 'delete'])
         router.get('/tasks', [AdminTaskController, 'index'])
         router.post('/tasks', [AdminTaskController, 'create'])
+        router.post('/tasks/attachments', [AdminTaskController, 'uploadTaskAttachments'])
       })
       .use(middleware.auth({ guards: ['admin'], redirectTo: '/admin/login' }))
   })

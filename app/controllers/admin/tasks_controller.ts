@@ -1,8 +1,10 @@
 // import type { HttpContext } from '@adonisjs/core/http'
 
 import { FacultyRepository } from '#repositories/faculty_repository'
+import { TaskAttachmentRepository } from '#repositories/task_attachment_repository'
+import { TaskRepository } from '#repositories/task_repository'
 import { CloudinaryService } from '#services/cloudinary_service'
-import { createTaskValidator } from '#validators/task'
+import { attachmentUploadValidator, createTaskValidator } from '#validators/task'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 import { Logger } from '@adonisjs/core/logger'
@@ -13,12 +15,17 @@ export default class TasksController {
   constructor(
     protected facultyRepo: FacultyRepository,
     protected logger: Logger,
-    protected cloudinaryService: CloudinaryService
+    protected cloudinaryService: CloudinaryService,
+    protected taskRepo: TaskRepository,
+    protected taskAttachmentRepo: TaskAttachmentRepository
   ) {}
   async index({ view }: HttpContext) {
     const activeFaculty = await this.facultyRepo.getActive()
+    const tasks = await this.taskRepo.getAll()
+
     return view.render('admin/tasks/index', {
       activeFaculty,
+      tasks: JSON.stringify(tasks),
     })
   }
 
@@ -32,7 +39,10 @@ export default class TasksController {
           message: 'No files uploaded.',
         })
       }
-
+      const data = await attachmentUploadValidator.validate({
+        taskId: request.input('taskId'),
+      })
+      const attachments = []
       for (const f of files) {
         if (!f) {
           return response.status(StatusCodes.BAD_REQUEST).json({
@@ -58,11 +68,16 @@ export default class TasksController {
           filePath: f.tmpPath,
           folder: 'task-attachments',
         })
+        attachments.push({
+          taskId: data.taskId,
+          objectName: publicId,
+        })
       }
-
+      const fileAttachments = await this.taskAttachmentRepo.createOrUpdateMany(attachments)
       return response.json({
         status: StatusCodes.OK,
         message: 'Files uploaded.',
+        attachments: fileAttachments,
       })
     } catch (error) {
       this.logger.error(error)
@@ -72,14 +87,22 @@ export default class TasksController {
       })
     }
   }
-  async create({ request, response }: HttpContext) {
+  async create({ request, response, auth }: HttpContext) {
     try {
       const body = await createTaskValidator.validate(request.body())
+      if (!auth.user?.id) {
+        return response.status(StatusCodes.UNAUTHORIZED).json({
+          status: StatusCodes.UNAUTHORIZED,
+          message: 'Unauthorized',
+        })
+      }
+      const data = { ...body, assignedById: auth.user.id }
+      const task = await this.taskRepo.create(data)
 
-      //const faculty = await this.facultyRepo.create(body)
       return response.json({
         status: StatusCodes.OK,
         message: 'Task added.',
+        task,
       })
     } catch (error) {
       if (error instanceof errors.E_VALIDATION_ERROR) {

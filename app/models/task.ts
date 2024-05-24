@@ -6,6 +6,7 @@ import User from './user.js'
 import TaskAttachment from './task_attachment.js'
 
 export default class Task extends BaseModel {
+  static table = 'task'
   @column({ isPrimary: true })
   declare id: number
   @column({ columnName: 'name' })

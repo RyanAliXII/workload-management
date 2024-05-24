@@ -15,6 +15,7 @@ export class CloudinaryService {
     const result = await cloudinaryV2.uploader.upload(filePath, {
       unique_filename: true,
       folder: folder,
+      resource_type: 'auto',
     })
     return result.public_id
   }

@@ -11,6 +11,7 @@ export default class extends BaseSchema {
       table.integer('faculty_id').unsigned().index().references('id').inTable('faculty')
       table.integer('assigned_by_id').unsigned().index().references('id').inTable('user')
       table.timestamp('deleted_at').nullable()
+      table.timestamp('completed_at').nullable()
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })
