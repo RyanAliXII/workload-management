@@ -6,6 +6,7 @@ import Column from 'primevue/column'
 import FundSource from '#models/fund_source'
 import { toReadableDatetime } from '../utils/date.js'
 import Swal from 'sweetalert2'
+import 'primevue/resources/themes/md-light-indigo/theme.css'
 createApp({
   components: {
     'data-table': DataTable,
