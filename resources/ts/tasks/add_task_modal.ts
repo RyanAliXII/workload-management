@@ -5,6 +5,15 @@ import 'primevue/resources/themes/md-light-indigo/theme.css'
 import { Faculty } from '#types/faculty'
 import CKEditor from '@ckeditor/ckeditor5-vue'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import { StatusCodes } from 'http-status-codes'
+import { toStructuredErrors } from '../utils/form.js'
+
+const INITIAL_FORM = {
+  name: '',
+  fileAttachments: [],
+  description: '',
+  facultyId: 0,
+}
 createApp({
   compilerOptions: {
     delimiters: ['${', '}'],
@@ -54,11 +63,14 @@ createApp({
       },
     }
     const form = ref({
-      name: '',
-      fileAttachments: [],
-      description: '',
-      facultyId: 0,
+      ...INITIAL_FORM,
     })
+    const removeErrors = () => {
+      errors.value = {}
+    }
+    const resetForm = () => {
+      form.value = { ...INITIAL_FORM }
+    }
     const facultyOptions = computed(
       () =>
         activeFaculty?.value?.map((f) => ({
@@ -67,7 +79,26 @@ createApp({
         })) ?? []
     )
     const errors = ref({})
-    const onSubmitCreate = () => {}
+    const onSubmitCreate = async () => {
+      removeErrors()
+      const response = await fetch('/admin/tasks', {
+        method: 'POST',
+        body: JSON.stringify(form.value),
+        headers: new Headers({ 'Content-Type': 'application/json' }),
+      })
+      const responseBody = await response.json()
+      if (response.status === StatusCodes.OK) {
+        toastr.success('Position has been added.')
+        resetForm()
+        $('#addTaskModal').modal('hide')
+        //fetchPositions()
+      }
+      if (response.status === StatusCodes.BAD_REQUEST) {
+        if (responseBody?.errors) {
+          errors.value = toStructuredErrors(responseBody.errors)
+        }
+      }
+    }
 
     return { form, errors, onSubmitCreate, facultyOptions, editor, editorConfig }
   },

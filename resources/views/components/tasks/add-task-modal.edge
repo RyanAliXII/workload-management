@@ -17,6 +17,7 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="form-group mb-2">
                 <label for="description">Description</label>
                 <ckeditor v-model="form.description" :editor="editor" :config="editorConfig"></ckeditor>
+                <div class="invalid-feedback" :class="{'d-block':errors?.description?.[0]}">${errors?.description?.[0]}</div>
             </div>
             <div>
                 <label for="fileAttachments">File attachments</label>
@@ -34,7 +35,7 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
                            
                     </template>
                 </multi-select> -->
-                <div class="invalid-feedback" :class="{'d-block':errors?.facilitatorIds?.[0]}">${errors?.facilitatorIds?.[0]}</div>
+                <div class="invalid-feedback" :class="{'d-block':errors?.facultyId?.[0]}">${errors?.facultyId?.[0]}</div>
             </div>
           
             
