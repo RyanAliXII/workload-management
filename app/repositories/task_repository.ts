@@ -22,6 +22,12 @@ export class TaskRepository {
     })
   }
   async getAll() {
-    return Task.query().preload('assignedBy').preload('faculty').preload('fileAttachments')
+    return Task.query()
+      .preload('assignedBy')
+      .preload('faculty', (b) => {
+        b.preload('position')
+        b.preload('loginCredential')
+      })
+      .preload('fileAttachments')
   }
 }

@@ -43,9 +43,65 @@
               <button type="button" class="btn btn-primary mb-3  " data-bs-toggle="modal" data-bs-target="#addTaskModal">
                 <i class="fas fa-add"></i> <span>New Task</span>
               </button>
-              <div class="main-card mb-3 card p-5">
-               
+              <div class="main-card mb-3 card p-5" id="taskTable">
                 
+                <data-table v-model:filters="filters" :value="tasks"  table-class="table table-striped" :paginator="true" :rows="10" :global-filter-fields="['name','faculty.givenName', 'faculty.middleName', 'faculty.loginCredential.email', 'faculty.surname', 'faculty.position.name']">
+                  <template #header>
+                    <div class="d-flex flex-column flex-lg-row justify-content-end gap-2">
+                      <div>
+                      <input type="text" class="form-control" v-model="filters.global.value" placeholder="Search">
+                    </div>
+                    <div>
+                     <select class="form-control" placeholder="Status">
+                      <option value="all">All</option>
+                      <option value="completed">Completed</option>
+                      <option value="pending">Pending</option>
+                     </select>
+                    </div>
+                    <div>
+                      
+                    </div>
+                    
+                    </div>
+                </template>
+                <template #empty> No task found. </template> 
+                 
+                <column field="name" header="Name" sortable></column>
+                 <column  header="Faculty" sortable>
+                    <template #body="slotProps">
+                      <div>
+                      ${slotProps.data.faculty.givenName} ${slotProps.data.middleName} ${slotProps.data.faculty.surname} 
+                    </div>
+                      <small>${slotProps.data.faculty.position.name}</small>
+                  </template>
+                 </column>
+                 <column header="Assigned By" sortable>
+                  <template #body="slotProps">
+                    ${slotProps.data.assignedBy.givenName} ${slotProps.data.assignedBy.middleName} ${slotProps.data.assignedBy.surname} 
+                </template>
+                </column>
+                <column header="Status">
+                  <template #body="slotProps">
+                    <button type="button" class="mb-2 mr-2 btn btn-success" v-if="slotProps.data.completedAt">Completed</button>
+                    <button class="mb-2 mr-2 btn btn-warning" v-else>Pending</button>
+                  </template>
+
+                </column>
+                 <column  header="Created At">
+                  <template #body="slotProps">
+                    ${toReadableDatetime(slotProps.data.createdAt)}
+                   </template>
+                </column>
+                
+               <column  header="Actions">
+                <template #body="slotProps">
+                 <div class="d-flex gap-2">
+                   <button class="btn btn-outline-primary" v-on:click="initEdit(slotProps.data)">Edit</button>
+                   <button class="btn btn-outline-danger" v-on:click="initDelete(slotProps.data)">Delete</button>
+                 </div>
+               </template>
+              </column>
+                </data-table>
                
               </div>
             </div>
@@ -59,9 +115,11 @@
     @include('partials/scripts')
     <script>
       window.viewData = {
-        activeFaculty: JSON.parse(`{{{JSON.stringify(activeFaculty)}}}`)
+        activeFaculty: JSON.parse(`{{{JSON.stringify(activeFaculty)}}}`),
+        tasks: JSON.parse(`{{{tasks}}}`)
       }
     </script>
     @vite('resources/ts/tasks/add_task_modal.ts')
+    @vite('resources/ts/tasks/task_table.ts')
   </body>
 </html>

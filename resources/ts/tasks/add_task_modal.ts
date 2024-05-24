@@ -1,12 +1,12 @@
 import { computed, createApp, onMounted, ref } from 'vue'
 import Dropdown from 'primevue/dropdown'
 import PrimeVue from 'primevue/config'
-import 'primevue/resources/themes/md-light-indigo/theme.css'
 import { Faculty } from '#types/faculty'
 import CKEditor from '@ckeditor/ckeditor5-vue'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { StatusCodes } from 'http-status-codes'
 import { toStructuredErrors } from '../utils/form.js'
+import { Task } from '#types/task'
 
 const INITIAL_FORM = {
   name: '',

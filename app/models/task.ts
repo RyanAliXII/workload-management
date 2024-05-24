@@ -23,6 +23,8 @@ export default class Task extends BaseModel {
   declare assignedBy: HasOne<typeof User>
   @hasMany(() => TaskAttachment, { foreignKey: 'taskId', localKey: 'id' })
   declare fileAttachments: HasMany<typeof TaskAttachment>
+  @column.dateTime()
+  declare completedAt: DateTime | null
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
   @column.dateTime({ autoCreate: true, autoUpdate: true })
