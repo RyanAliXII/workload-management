@@ -6,6 +6,7 @@ import PrimeVue from 'primevue/config'
 import Dropdown from 'primevue/dropdown'
 import { computed, createApp, onMounted, ref } from 'vue'
 import { toStructuredErrors } from '../utils/form.js'
+import { Task } from '#types/task'
 
 const INITIAL_FORM = {
   name: '',
@@ -30,8 +31,17 @@ createApp({
     const activeFaculty = ref<Faculty[]>([])
     const editor = ref(ClassicEditor)
     const attachments = ref<File[]>([])
+    const task = ref<Task | null>(null)
     onMounted(() => {
       activeFaculty.value = window.viewData?.activeFaculty ?? []
+      window.addEventListener('task:edit', (event: Event) => {
+        const customEvent = event as CustomEvent<Task>
+        form.value.name = customEvent.detail.name
+        form.value.description = customEvent.detail.description
+        form.value.facultyId = customEvent.detail.facultyId
+        task.value = customEvent.detail
+        $('#editTaskModal').modal('show')
+      })
     })
     const isSubmitting = ref(false)
     const editorConfig = {
@@ -121,17 +131,18 @@ createApp({
       isSubmitting.value = true
       try {
         removeErrors()
-        const response = await fetch('/admin/tasks', {
-          method: 'POST',
+        const response = await fetch(`/admin/tasks/${task.value?.id}`, {
+          method: 'PUT',
           body: JSON.stringify(form.value),
           headers: new Headers({ 'Content-Type': 'application/json' }),
         })
         const responseBody = await response.json()
         if (response.status === StatusCodes.OK) {
           await uploadFileAttachments(responseBody?.task?.id)
-          toastr.success('Task has been added.')
+
+          toastr.success('Task has been updated.')
           resetForm()
-          $('#addTaskModal').modal('hide')
+          $('#editTaskModal').modal('hide')
 
           //fetchPositions()
         }
@@ -156,6 +167,7 @@ createApp({
       fileInput,
       editor,
       editorConfig,
+      task,
       handleFileAttachments,
       isSubmitting,
     }
@@ -163,4 +175,4 @@ createApp({
 })
   .use(PrimeVue as any)
   .use(CKEditor as any)
-  .mount('#addTaskModal')
+  .mount('#editTaskModal')

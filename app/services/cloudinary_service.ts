@@ -8,14 +8,16 @@ cloudinaryV2.config({
   api_secret: env.get('CLOUDINARY_API_SECRET'),
   cloud_name: CLOUD_NAME,
 })
-type UploadOptions = { filePath: string; folder?: string }
+type UploadOptions = { filePath: string; folder?: string; fileExtension?: string }
 @inject()
 export class CloudinaryService {
-  async upload({ filePath, folder = '' }: UploadOptions) {
+  async upload({ filePath, folder = '', fileExtension }: UploadOptions) {
+    console.log(filePath)
     const result = await cloudinaryV2.uploader.upload(filePath, {
       unique_filename: true,
+      format: fileExtension,
       folder: folder,
-      resource_type: 'auto',
+      resource_type: 'raw',
     })
     return result.public_id
   }

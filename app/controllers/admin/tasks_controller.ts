@@ -3,8 +3,8 @@
 import { FacultyRepository } from '#repositories/faculty_repository'
 import { TaskAttachmentRepository } from '#repositories/task_attachment_repository'
 import { TaskRepository } from '#repositories/task_repository'
-import { CloudinaryService } from '#services/cloudinary_service'
-import { attachmentUploadValidator, createTaskValidator } from '#validators/task'
+import { BASE_URL, CloudinaryService } from '#services/cloudinary_service'
+import { attachmentUploadValidator, createTaskValidator, editTaskValidator } from '#validators/task'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 import { Logger } from '@adonisjs/core/logger'
@@ -26,6 +26,7 @@ export default class TasksController {
     return view.render('admin/tasks/index', {
       activeFaculty,
       tasks: JSON.stringify(tasks),
+      assetBaseUrl: BASE_URL,
     })
   }
 
@@ -67,7 +68,9 @@ export default class TasksController {
         const publicId = await this.cloudinaryService.upload({
           filePath: f.tmpPath,
           folder: 'task-attachments',
+          fileExtension: f.extname,
         })
+
         attachments.push({
           taskId: data.taskId,
           objectName: publicId,
@@ -102,6 +105,40 @@ export default class TasksController {
       return response.json({
         status: StatusCodes.OK,
         message: 'Task added.',
+        task,
+      })
+    } catch (error) {
+      if (error instanceof errors.E_VALIDATION_ERROR) {
+        return response.status(StatusCodes.BAD_REQUEST).json({
+          status: StatusCodes.BAD_REQUEST,
+          message: 'Validation errors.',
+          errors: error.messages,
+        })
+      }
+      this.logger.error(error)
+      return response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
+        message: 'Unknown error occurred.',
+      })
+    }
+  }
+  async edit({ request, response, auth }: HttpContext) {
+    try {
+      const body = request.body()
+      body.id = request.param('id')
+      const validatedBody = await editTaskValidator.validate(body)
+      if (!auth.user?.id) {
+        return response.status(StatusCodes.UNAUTHORIZED).json({
+          status: StatusCodes.UNAUTHORIZED,
+          message: 'Unauthorized',
+        })
+      }
+      const data = { ...validatedBody, assignedById: auth.user.id }
+      const task = await this.taskRepo.update(data)
+
+      return response.json({
+        status: StatusCodes.OK,
+        message: 'Task updated.',
         task,
       })
     } catch (error) {

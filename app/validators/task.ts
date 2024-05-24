@@ -22,3 +22,13 @@ export const attachmentUploadValidator = vine.compile(
 attachmentUploadValidator.messagesProvider = new SimpleMessagesProvider({
   'facultyId.min': 'Faculty is required',
 })
+
+export const editTaskValidator = vine.compile(
+  vine.object({
+    id: vine.number().min(1),
+    name: vine.string().maxLength(75),
+    description: vine.string(),
+    facultyId: vine.number().min(1),
+  })
+)
+editTaskValidator.errorReporter = () => new JSONAPIErrorReporter()

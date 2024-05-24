@@ -109,7 +109,7 @@
           </div>
         </div>
         @!component('components/tasks/add-task-modal')
-        
+        @!component('components/tasks/edit-task-modal', {assetBaseUrl: assetBaseUrl})
     </div>
     
     @include('partials/scripts')
@@ -120,6 +120,7 @@
       }
     </script>
     @vite('resources/ts/tasks/add_task_modal.ts')
+    @vite('resources/ts/tasks/edit_task_modal.ts')
     @vite('resources/ts/tasks/task_table.ts')
   </body>
 </html>

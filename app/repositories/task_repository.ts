@@ -21,6 +21,30 @@ export class TaskRepository {
       assignedById,
     })
   }
+
+  async update({
+    id,
+    name,
+    description,
+    facultyId,
+    assignedById,
+  }: {
+    id: number
+    name: string
+    description: string
+    facultyId: number
+    assignedById: number
+  }) {
+    return await Task.updateOrCreate(
+      { id },
+      {
+        name,
+        description,
+        facultyId,
+        assignedById,
+      }
+    )
+  }
   async getAll() {
     return Task.query()
       .preload('assignedBy')

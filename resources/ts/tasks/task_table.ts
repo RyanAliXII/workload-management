@@ -5,6 +5,7 @@ import PrimeVue from 'primevue/config'
 import Column from 'primevue/column'
 import 'primevue/resources/themes/md-light-indigo/theme.css'
 import { toReadableDatetime } from '../utils/date.js'
+import Task from '#models/task'
 createApp({
   compilerOptions: {
     delimiters: ['${', '}'],
@@ -21,12 +22,22 @@ createApp({
       },
     })
     onMounted(() => {
-      tasks.value = window.viewData?.tasks ?? []
+      tasks.value =
+        window.viewData?.tasks?.map((t: any) => ({
+          ...t,
+          createdAt: new Date(t.createdAt),
+          updatedAt: new Date(t.createdAt),
+        })) ?? []
     })
+    const initEdit = (task: Task) => {
+      const event = new CustomEvent('task:edit', { detail: task })
+      window.dispatchEvent(event)
+    }
     return {
       tasks,
       toReadableDatetime,
       filters,
+      initEdit,
     }
   },
 })
