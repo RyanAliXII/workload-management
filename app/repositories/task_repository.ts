@@ -54,4 +54,9 @@ export class TaskRepository {
       })
       .preload('fileAttachments')
   }
+  async delete(id: number) {
+    const task = await Task.findBy('id', id)
+    if (!task) return
+    task.delete()
+  }
 }

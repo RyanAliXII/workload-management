@@ -4,8 +4,10 @@ import Faculty from './faculty.js'
 import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 import User from './user.js'
 import TaskAttachment from './task_attachment.js'
+import { compose } from '@adonisjs/core/helpers'
+import { SoftDeletes } from 'adonis-lucid-soft-deletes'
 
-export default class Task extends BaseModel {
+export default class Task extends compose(BaseModel, SoftDeletes) {
   static table = 'task'
   @column({ isPrimary: true })
   declare id: number

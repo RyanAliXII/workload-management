@@ -64,6 +64,7 @@ router
         router.post('/tasks', [AdminTaskController, 'create'])
         router.post('/tasks/attachments', [AdminTaskController, 'uploadTaskAttachments'])
         router.put('/tasks/:id', [AdminTaskController, 'edit'])
+        router.delete('/tasks/:id', [AdminTaskController, 'delete'])
       })
       .use(middleware.auth({ guards: ['admin'], redirectTo: '/admin/login' }))
   })

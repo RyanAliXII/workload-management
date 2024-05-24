@@ -4,7 +4,12 @@ import { FacultyRepository } from '#repositories/faculty_repository'
 import { TaskAttachmentRepository } from '#repositories/task_attachment_repository'
 import { TaskRepository } from '#repositories/task_repository'
 import { BASE_URL, CloudinaryService } from '#services/cloudinary_service'
-import { attachmentUploadValidator, createTaskValidator, editTaskValidator } from '#validators/task'
+import {
+  attachmentUploadValidator,
+  createTaskValidator,
+  deleteTaskValidator,
+  editTaskValidator,
+} from '#validators/task'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 import { Logger } from '@adonisjs/core/logger'
@@ -140,6 +145,29 @@ export default class TasksController {
         status: StatusCodes.OK,
         message: 'Task updated.',
         task,
+      })
+    } catch (error) {
+      if (error instanceof errors.E_VALIDATION_ERROR) {
+        return response.status(StatusCodes.BAD_REQUEST).json({
+          status: StatusCodes.BAD_REQUEST,
+          message: 'Validation errors.',
+          errors: error.messages,
+        })
+      }
+      this.logger.error(error)
+      return response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
+        message: 'Unknown error occurred.',
+      })
+    }
+  }
+  async delete({ request, response }: HttpContext) {
+    try {
+      const data = await deleteTaskValidator.validate({ id: request.param('id') })
+      await this.taskRepo.delete(data.id)
+      return response.json({
+        status: StatusCodes.OK,
+        message: 'Task deleted.',
       })
     } catch (error) {
       if (error instanceof errors.E_VALIDATION_ERROR) {

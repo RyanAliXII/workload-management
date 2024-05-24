@@ -32,3 +32,10 @@ export const editTaskValidator = vine.compile(
   })
 )
 editTaskValidator.errorReporter = () => new JSONAPIErrorReporter()
+
+export const deleteTaskValidator = vine.compile(
+  vine.object({
+    id: vine.number().min(1),
+  })
+)
+deleteTaskValidator.errorReporter = () => new JSONAPIErrorReporter()

@@ -5,7 +5,8 @@ import PrimeVue from 'primevue/config'
 import Column from 'primevue/column'
 import 'primevue/resources/themes/md-light-indigo/theme.css'
 import { toReadableDatetime } from '../utils/date.js'
-import Task from '#models/task'
+import Swal from 'sweetalert2'
+import { StatusCodes } from 'http-status-codes'
 createApp({
   compilerOptions: {
     delimiters: ['${', '}'],
@@ -33,10 +34,35 @@ createApp({
       const event = new CustomEvent('task:edit', { detail: task })
       window.dispatchEvent(event)
     }
+    const initDelete = async (task: Task) => {
+      $('#viewEventModal').modal('hide')
+      const result = await Swal.fire({
+        title: 'Delete Task',
+        text: 'Are youre sure you want to delete this task?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#cc3939',
+        confirmButtonText: 'Yes, delete it',
+        cancelButtonText: `Don't delete`,
+        cancelButtonColor: '#858181',
+      })
+      if (!result.isConfirmed) {
+        $('#viewEventModal').modal('show')
+        return
+      }
+      deleteTask(task.id)
+    }
+    const deleteTask = async (id: number) => {
+      const response = await fetch(`/admin/tasks/${id}`, { method: 'DELETE' })
+      if (response.status === StatusCodes.OK) {
+        toastr.success('Task deleted.')
+      }
+    }
     return {
       tasks,
       toReadableDatetime,
       filters,
+      initDelete,
       initEdit,
     }
   },
