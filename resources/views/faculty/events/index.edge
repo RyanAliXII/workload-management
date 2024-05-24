@@ -3,9 +3,9 @@
   @include('partials/head')
   <body>
     <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar">
-      @include('partials/admin/header')
+      @include('partials/faculty/header')
       <div class="app-main" id="eventPage">
-        @include('partials/admin/sidebar')
+        @include('partials/faculty/sidebar')
         <div class="app-main__outer">
           <div class="app-main__inner">
             <div class="app-page-title app-page-title-simple">
@@ -49,7 +49,7 @@
            
           </div>
    
-          @include('partials/admin/footer')
+          @include('partials/faculty/footer')
         </div>
       </div>
       @!component('components/faculty/events/view-event-modal')
