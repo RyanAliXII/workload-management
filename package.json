@@ -61,6 +61,8 @@
     "@adonisjs/session": "^7.4.0",
     "@adonisjs/static": "^1.1.1",
     "@adonisjs/vite": "^2.0.2",
+    "@ckeditor/ckeditor5-build-classic": "^41.4.2",
+    "@ckeditor/ckeditor5-vue": "^5.1.0",
     "@fullcalendar/core": "^6.1.12",
     "@fullcalendar/daygrid": "^6.1.12",
     "@fullcalendar/interaction": "^6.1.12",

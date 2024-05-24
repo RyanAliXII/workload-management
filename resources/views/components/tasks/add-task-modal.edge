@@ -1,0 +1,50 @@
+<div class="modal fade" id="addTaskModal"  tabindex="-1" role="dialog"
+aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">New Task</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            </button>
+        </div>
+        <form v-on:submit.prevent="onSubmitCreate">
+        <div class="modal-body">
+            <div class="form-group mb-2">
+              <label for="name">Name</label>
+              <input name="name" v-model="form.name"  class="form-control"   :class="{'is-invalid':errors?.name?.[0]}">
+              <div class="invalid-feedback" :class="{'d-block':errors?.name?.[0]}">${errors?.name?.[0]}</div>
+            </div>
+            <div class="form-group mb-2">
+                <label for="description">Description</label>
+                <ckeditor v-model="form.description" :editor="editor" :config="editorConfig"></ckeditor>
+            </div>
+            <div>
+                <label for="fileAttachments">File attachments</label>
+                <input type="file" class="form-control">
+            </div>
+            <div class="form-group mb-2">
+                <label for="facilitator">Faculty</label>
+                <dropdown v-model="form.facultyId" class="w-100" option-label="label" option-value="value" :options="facultyOptions" append-to="body"></dropdown>
+                <!-- <multi-select filter v-model="form.facilitators" option-label="label" display="chip" option-value="value" :options="facilitators"  placeholder="Select Facilitators" class="w-100 p-2" append-to="body">
+                    <template #option="slotProps">
+                            <div class="d-flex flex-column w-100" >
+                                <span>${ slotProps.option.label}</span>
+                                <small class="text-muted">${slotProps.option.meta.loginCredential.email}</small>
+                            </div>
+                           
+                    </template>
+                </multi-select> -->
+                <div class="invalid-feedback" :class="{'d-block':errors?.facilitatorIds?.[0]}">${errors?.facilitatorIds?.[0]}</div>
+            </div>
+          
+            
+        </div>
+        
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+</div>
+</div>

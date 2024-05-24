@@ -16,7 +16,7 @@
                         <span class="d-inline-block pe-2">
                           <i class="lnr-apartment opacity-6"></i>
                         </span>
-                        <span class="d-inline-block">Task</span>
+                        <span class="d-inline-block">Tasks</span>
                       </div>
                       <div class="page-title-subheading opacity-10">
                         <nav class="" aria-label="breadcrumb">
@@ -30,7 +30,7 @@
                               <a>Dashboards</a>
                             </li>
                             <li class="active breadcrumb-item" aria-current="page">
-                              Task
+                              Tasks
                             </li>
                           </ol>
                         </nav>
@@ -40,7 +40,7 @@
                   
                 </div>
               </div>
-              <button type="button" class="btn btn-primary mb-3  " data-bs-toggle="modal" data-bs-target="#addSubjectModal">
+              <button type="button" class="btn btn-primary mb-3  " data-bs-toggle="modal" data-bs-target="#addTaskModal">
                 <i class="fas fa-add"></i> <span>New Task</span>
               </button>
               <div class="main-card mb-3 card p-5">
@@ -52,10 +52,16 @@
             @include('partials/admin/footer')
           </div>
         </div>
-        
+        @!component('components/tasks/add-task-modal')
         
     </div>
     
     @include('partials/scripts')
+    <script>
+      window.viewData = {
+        activeFaculty: JSON.parse(`{{{JSON.stringify(activeFaculty)}}}`)
+      }
+    </script>
+    @vite('resources/ts/tasks/add_task_modal.ts')
   </body>
 </html>
