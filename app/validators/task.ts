@@ -14,3 +14,12 @@ createTaskValidator.errorReporter = () => new JSONAPIErrorReporter()
 createTaskValidator.messagesProvider = new SimpleMessagesProvider({
   'facultyId.min': 'Faculty is required',
 })
+
+export const attachmentUploadValidator = vine.compile(
+  vine.object({
+    taskId: vine.number().min(1),
+  })
+)
+attachmentUploadValidator.messagesProvider = new SimpleMessagesProvider({
+  'facultyId.min': 'Faculty is required',
+})
