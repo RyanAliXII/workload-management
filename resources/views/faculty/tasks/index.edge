@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  @include('partials/head')
+  <body>
+    <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar">
+        @include('partials/faculty/header')
+        <div class="app-main">
+          @include('partials/faculty/sidebar')
+          <div class="app-main__outer">
+            <div class="app-main__inner">
+              <div class="app-page-title app-page-title-simple">
+                <div class="page-title-wrapper">
+                  <div class="page-title-heading">
+                    <div>
+                      <div class="page-title-head center-elem">
+                        <span class="d-inline-block pe-2">
+                          <i class="lnr-apartment opacity-6"></i>
+                        </span>
+                        <span class="d-inline-block">Tasks</span>
+                      </div>
+                      <div class="page-title-subheading opacity-10">
+                        <nav class="" aria-label="breadcrumb">
+                          <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                              <a>
+                                <i aria-hidden="true" class="fa fa-home"></i>
+                              </a>
+                            </li>
+                            <li class="breadcrumb-item">
+                              <a>Dashboard</a>
+                            </li>
+                            <li class="active breadcrumb-item" aria-current="page">
+                             Tasks
+                            </li>
+                          </ol>
+                        </nav>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+           
+              <div class="main-card mb-3 card p-5" id="taskTable">
+                <data-table v-model:filters="filters" :value="tasks"  table-class="table table-striped" :paginator="true" :rows="10" :global-filter-fields="['name','faculty.givenName', 'faculty.middleName', 'faculty.loginCredential.email', 'faculty.surname', 'faculty.position.name']">
+                  <template #header>
+                    <div class="d-flex flex-column flex-lg-row justify-content-end gap-2">
+                      <div>
+                      <input type="text" class="form-control" v-model="filters.global.value" placeholder="Search">
+                    </div>
+                    <div>
+                     <select class="form-control" placeholder="Status" v-on:change="handleStatusChange">
+                      <option value="">All</option>
+                      <option value="completed">Completed</option>
+                      <option value="pending">Pending</option>
+                     </select>
+                    </div>
+                    <div>
+                      
+                    </div>
+                    
+                    </div>
+                </template>
+                <template #empty> No task found. </template> 
+                 
+                <column field="name" header="Name" sortable></column>
+                 <column  header="Faculty" sortable>
+                    <template #body="slotProps">
+                      <div>
+                      ${slotProps.data.faculty.givenName} ${slotProps.data.middleName} ${slotProps.data.faculty.surname} 
+                    </div>
+                      <small>${slotProps.data.faculty.position.name}</small>
+                  </template>
+                 </column>
+                 <column header="Assigned By" sortable>
+                  <template #body="slotProps">
+                    ${slotProps.data.assignedBy.givenName} ${slotProps.data.assignedBy.middleName} ${slotProps.data.assignedBy.surname} 
+                </template>
+                </column>
+                <column header="Status">
+                  <template #body="slotProps">
+                    <button type="button" class="mb-2 mr-2 btn btn-success" v-if="slotProps.data.completedAt">Completed</button>
+                    <button class="mb-2 mr-2 btn btn-warning" v-else>Pending</button>
+                  </template>
+
+                </column>
+                 <column  header="Created At">
+                  <template #body="slotProps">
+                    ${toReadableDatetime(slotProps.data.createdAt)}
+                   </template>
+                </column>
+                
+               <column  header="Actions">
+                <template #body="slotProps">
+                 <div class="d-flex gap-2">
+                   <button class="btn btn-outline-primary" v-on:click="initView(slotProps.data)">View</button>
+                   <button class="btn btn-success" v-on:click="initCompletion(slotProps.data)">Mark as Complete</button>
+                 </div>
+               </template>
+              </column>
+                </data-table>
+                
+               
+              </div>
+            </div>
+            @include('partials/faculty/footer')
+          </div>
+        </div>
+        
+        @!component('components/faculty/tasks/view-task-modal')
+        @!component('components/faculty/tasks/completion-modal')
+    </div>
+
+    @include('partials/scripts')
+    <script>
+         window.viewData = {
+            tasks: JSON.parse(`{{{tasks}}}`)
+         }
+    </script>
+    @vite('resources/ts/faculty/tasks/task_table.ts')
+    @vite('resources/ts/faculty/tasks/view_task_modal.ts')
+    @vite('resources/ts/faculty/tasks/completion_modal.ts')
+  </body>
+</html>

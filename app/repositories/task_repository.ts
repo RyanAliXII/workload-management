@@ -86,4 +86,39 @@ export class TaskRepository {
     }
     return this.getAll()
   }
+  async getByStatusAndFacultyId(status: string, facultyId: number) {
+    if (status === 'completed') {
+      return Task.query()
+        .preload('assignedBy')
+        .preload('faculty', (b) => {
+          b.preload('position')
+          b.preload('loginCredential')
+        })
+        .whereNotNull('completed_at')
+        .where('faculty_id', facultyId)
+        .preload('fileAttachments')
+    }
+    if (status === 'pending') {
+      return Task.query()
+        .preload('assignedBy')
+        .preload('faculty', (b) => {
+          b.preload('position')
+          b.preload('loginCredential')
+        })
+        .whereNull('completed_at')
+        .where('faculty_id', facultyId)
+        .preload('fileAttachments')
+    }
+    return this.getByFacultyId(facultyId)
+  }
+  async getByFacultyId(facultyId: number) {
+    return Task.query()
+      .preload('assignedBy')
+      .preload('faculty', (b) => {
+        b.preload('position')
+        b.preload('loginCredential')
+      })
+      .preload('fileAttachments')
+      .where('faculty_id', facultyId)
+  }
 }

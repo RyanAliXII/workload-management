@@ -1,9 +1,9 @@
-<div class="modal fade" id="editTaskModal"  tabindex="-1" role="dialog"
+<div class="modal fade" id="viewTaskModal"  tabindex="-1" role="dialog"
 aria-labelledby="exampleModalLabel" aria-hidden="true">
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title">Edit Task</h5>
+            <h5 class="modal-title">Task</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
             </button>
         </div>
@@ -11,37 +11,32 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-body">
             <div class="form-group mb-2">
               <label for="name">Name</label>
-              <input name="name" v-model="form.name"  class="form-control"   :class="{'is-invalid':errors?.name?.[0]}">
+              <input name="name" v-model="form.name"  class="form-control"   :class="{'is-invalid':errors?.name?.[0]}" disabled>
               <div class="invalid-feedback" :class="{'d-block':errors?.name?.[0]}">${errors?.name?.[0]}</div>
             </div>
             <div class="form-group mb-2">
                 <label for="description">Description</label>
-                <ckeditor v-model="form.description" :editor="editor" :config="editorConfig"></ckeditor>
+                <ckeditor v-model="form.description" :editor="editor" :config="editorConfig" :disabled="true"></ckeditor>
                 <div class="invalid-feedback" :class="{'d-block':errors?.description?.[0]}">${errors?.description?.[0]}</div>
             </div>
             <div>
-                <label for="fileAttachments">File attachments</label>
-                <input ref="fileInput" type="file" v-on:change="handleFileAttachments" class="form-control" multiple>
+                
                 <h5 class="mt-2" v-if="task?.fileAttachments?.length > 0">Attached files</h5>
-                <ul class="p-5">
-                   
+                <ul>
+                  
                     <li v-for="url in attachmentUrls">
                         <a :href="url" download>${url}</a>
                     </li>
                 </ul>
             </div>
-            <div class="form-group mb-2">
-                <label for="facilitator">Faculty</label>
-                <dropdown v-model="form.facultyId" class="w-100" option-label="label" option-value="value" :options="facultyOptions" append-to="body"></dropdown>
-                <div class="invalid-feedback" :class="{'d-block':errors?.facultyId?.[0]}">${errors?.facultyId?.[0]}</div>
-            </div>
+           
           
             
         </div>
         
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary" :disabled="isSubmitting">Save</button>
+           
         </div>
       </form>
     </div>

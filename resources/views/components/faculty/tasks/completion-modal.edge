@@ -1,0 +1,32 @@
+<div class="modal fade" id="completionModal"  tabindex="-1" role="dialog"
+aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Task Completion</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            </button>
+        </div>
+        <form v-on:submit.prevent="onSubmitCreate">
+        <div class="modal-body">
+            <div class="mb-2">
+                <label for="fileAttachments">File attachments</label>
+                <input ref="fileInput" type="file" v-on:change="handleFileAttachments" class="form-control" multiple>
+            </div>
+            <div class="form-group mb-2">
+                <label for="remarks">Remarks</label>
+                <ckeditor v-model="form.remarks" :editor="editor" :config="editorConfig"></ckeditor>
+                <div class="invalid-feedback" :class="{'d-block':errors?.remarks?.[0]}">${errors?.remarks?.[0]}</div>
+            </div>
+         
+        </div>
+        
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button class="btn btn-primary">Mark as Complete</button>
+            
+        </div>
+      </form>
+    </div>
+</div>
+</div>
