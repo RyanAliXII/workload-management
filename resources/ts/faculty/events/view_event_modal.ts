@@ -71,7 +71,7 @@ createApp({
     }
 
     const initDelete = async () => {
-      $('#viewEventModal').modal('hide')
+      viewModal.value?.hide()
       const result = await Swal.fire({
         title: 'Delete Event',
         text: 'Are youre sure you want to delete this event?',
