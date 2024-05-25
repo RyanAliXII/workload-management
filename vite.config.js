@@ -31,6 +31,11 @@ export default defineConfig({
         'resources/vendors/@fortawesome/fontawesome-free/css/all.min.css',
         'resources/vendors/ionicons-npm/css/ionicons.css',
         'resources/vendors/linearicons-master/dist/web-font/style.css',
+        'resources/vendors/pixeden-stroke-7-icon-master/pe-icon-7-stroke/dist/pe-icon-7-stroke.css',
+        'resources/css/base.css',
+        'resources/vendors/jquery/dist/jquery.min.js',
+        'resources/vendors/bootstrap/dist/js/bootstrap.bundle.min.js',
+        'resources/vendors/moment/moment.js',
       ],
 
       /**
