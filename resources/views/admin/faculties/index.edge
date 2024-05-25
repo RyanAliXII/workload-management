@@ -58,23 +58,23 @@
               <template #empty> No faculties found. </template>
                 <column header="Name" :sortable="true" field="givenName" >
                 <template #body="slotProps">
-                ${slotProps.data.givenName} ${slotProps.data.middleName} ${slotProps.data.surname}  
+                ${slotProps.data?.givenName} ${slotProps.data?.middleName} ${slotProps.data?.surname}  
                 </template>
                 </column>
                 <column header="Email" :sortable="true" field="email">
                   <template #body="slotProps">
-                  ${slotProps.data.loginCredential.email} 
+                  ${slotProps.data?.loginCredential?.email} 
                   </template>
                 </column>
-                <column header="Position" :sortable="true" field="position.name">
+                <column header="Position" :sortable="true" >
                    
                   <template #body="slotProps">
-                  ${slotProps.data.position.name} 
+                  ${slotProps.data?.position?.name} 
                   </template>
                 </column>
                 <column header="Status" class style="text-transform: capitalize;" field="employmentStatus" :sortable="true" >
                   <template #body="{data}">
-                    ${data.employmentStatus}
+                    ${data?.employmentStatus}
                   </template>
                  
                 </column>
