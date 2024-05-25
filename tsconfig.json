@@ -1,7 +1,7 @@
 {
   "extends": "@adonisjs/tsconfig/tsconfig.app.json",
   "compilerOptions": {
-    "lib": ["dom"],
+    "lib": ["dom", "DOM.Iterable"],
     "rootDir": "./",
     "outDir": "./build"
   }

@@ -197,10 +197,10 @@ address {
   line-height: inherit;
 }
 
-ol,
+/* ol,
 ul {
   padding-left: 2rem;
-}
+} */
 
 ol,
 ul,
@@ -32612,4 +32612,14 @@ span.multiselect-native-select select {
 .fc-h-event {
   border: 0px;
   padding: 5px;
+}
+.p-dropdown-panel {
+  z-index: 2000 !important;
+}
+.p-dropdown-items {
+  margin-left: 0px !important;
+}
+.ck-editor__editable_inline:not(.ck-comment__input *) {
+  height: 300px;
+  overflow-y: auto;
 }

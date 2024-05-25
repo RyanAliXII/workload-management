@@ -11,6 +11,8 @@ const FundSourcesController = () => import('#controllers/admin/fund_sources_cont
 const FacultiesController = () => import('#controllers/admin/faculties_controller')
 const EventsController = () => import('#controllers/admin/events_controller')
 const FacultyEventsController = () => import('#controllers/faculty/events_controller')
+const AdminTaskController = () => import('#controllers/admin/tasks_controller')
+const FacultyTasksController = () => import('#controllers/faculty/tasks_controller')
 import { HttpContext } from '@adonisjs/core/http'
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
@@ -59,6 +61,12 @@ router
         router.post('/events', [EventsController, 'create'])
         router.put('/events/:id', [EventsController, 'edit'])
         router.delete('/events/:id', [EventsController, 'delete'])
+        router.get('/tasks', [AdminTaskController, 'index'])
+        router.post('/tasks', [AdminTaskController, 'create'])
+        router.post('/tasks/attachments', [AdminTaskController, 'uploadTaskAttachments'])
+        router.put('/tasks/:id', [AdminTaskController, 'edit'])
+        router.delete('/tasks/:id', [AdminTaskController, 'delete'])
+        router.get('/tasks/:id/attachments', [AdminTaskController, 'getAttachmentByTaskId'])
       })
       .use(middleware.auth({ guards: ['admin'], redirectTo: '/admin/login' }))
   })
@@ -74,6 +82,10 @@ router
         router.post('/events', [FacultyEventsController, 'create'])
         router.put('/events/:id', [FacultyEventsController, 'edit'])
         router.delete('/events/:id', [FacultyEventsController, 'edit'])
+        router.get('/tasks', [FacultyTasksController, 'index'])
+        router.get('/tasks/:id/attachments', [FacultyTasksController, 'getAttachmentByTaskId'])
+        router.post('/tasks/attachments', [FacultyTasksController, 'uploadTaskAttachments'])
+        router.patch('/tasks/:id/completion', [FacultyTasksController, 'updateCompletion'])
       })
       .use(middleware.auth({ guards: ['faculty'], redirectTo: '/faculties/login' }))
   })
