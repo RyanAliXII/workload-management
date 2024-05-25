@@ -7,6 +7,7 @@ import { Position } from '#types/position'
 import { toReadableDatetime } from '../utils/date.js'
 import Swal from 'sweetalert2'
 import 'primevue/resources/themes/md-light-indigo/theme.css'
+import { Modal } from 'bootstrap'
 import toastr from 'toastr'
 createApp({
   compilerOptions: {
@@ -32,13 +33,21 @@ createApp({
     const removeErrors = () => {
       errors.value = {}
     }
+    const addModalRef = ref<HTMLDivElement | null>(null)
+    const editModalRef = ref<HTMLDivElement | null>(null)
+    const addModal = ref<InstanceType<typeof Modal> | null>(null)
+    const editModal = ref<InstanceType<typeof Modal> | null>(null)
     onMounted(() => {
       fetchPositions()
-      $('#addPositionModal').on('hidden.bs.modal', function () {
+      if (!addModalRef.value || !editModalRef.value) return
+      addModal.value = new Modal(addModalRef.value)
+      editModal.value = new Modal(editModalRef.value)
+      console
+      addModalRef.value.addEventListener('hidden.bs.modal', () => {
         resetForm()
         removeErrors()
       })
-      $('#editPositionModal').on('hidden.bs.modal', function () {
+      editModalRef.value.addEventListener('hidden.bs.modal', () => {
         resetForm()
         removeErrors()
       })
@@ -54,7 +63,7 @@ createApp({
       if (response.status === StatusCodes.OK) {
         toastr.success('Position has been added.')
         resetForm()
-        $('#addPositionModal').modal('hide')
+        addModal.value?.hide()
         fetchPositions()
       }
       if (response.status === StatusCodes.BAD_REQUEST) {
@@ -75,7 +84,7 @@ createApp({
       if (response.status === StatusCodes.OK) {
         toastr.success('Position has been updated.')
         resetForm()
-        $('#editPositionModal').modal('hide')
+        editModal.value?.hide()
         fetchPositions()
       }
       if (response.status === StatusCodes.BAD_REQUEST) {
@@ -87,7 +96,10 @@ createApp({
     const initEdit = (position: Position) => {
       form.value.id = position.id
       form.value.name = position.name
-      $('#editPositionModal').modal('show')
+      editModal.value?.show()
+    }
+    const openAddModal = () => {
+      addModal.value?.show()
     }
 
     const fetchPositions = async () => {
@@ -134,6 +146,9 @@ createApp({
       initEdit,
       initDelete,
       toReadableDatetime,
+      addModalRef,
+      editModalRef,
+      openAddModal,
     }
   },
 }).mount('#positionPage')
