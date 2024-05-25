@@ -69,7 +69,6 @@ createApp({
         cancelButtonColor: '#858181',
       })
       if (!result.isConfirmed) {
-        $('#viewEventModal').modal('show')
         return
       }
       deleteTask(task.id)
