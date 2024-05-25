@@ -37,7 +37,7 @@ createApp({
       })
     }
     const removeEducationByIndex = (index: number) => {
-      form.value.educations = form.value.educations.filter((e, idx) => idx !== index)
+      form.value.educations = form.value.educations.filter((_, idx) => idx !== index)
     }
     const handleDateOfBirth = (event: Event) => {
       const input = event.target as HTMLInputElement

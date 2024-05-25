@@ -1,8 +1,8 @@
+import { BaseModel, belongsTo, column, manyToMany } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, column, hasOne, manyToMany } from '@adonisjs/lucid/orm'
 
-import type { HasOne, ManyToMany, BelongsTo } from '@adonisjs/lucid/types/relations'
 import { compose } from '@adonisjs/core/helpers'
+import type { BelongsTo, ManyToMany } from '@adonisjs/lucid/types/relations'
 import { SoftDeletes } from 'adonis-lucid-soft-deletes'
 import Faculty from './faculty.js'
 

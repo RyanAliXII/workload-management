@@ -17,7 +17,7 @@ export class JSONAPIErrorReporter implements ErrorReporterContract {
   /**
    * VineJS call the report method
    */
-  report(message: string, rule: string, field: FieldContext) {
+  report(message: string, _: string, field: FieldContext) {
     this.hasErrors = true
 
     const key = field.wildCardPath
