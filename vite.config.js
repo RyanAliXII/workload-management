@@ -52,8 +52,8 @@ export default defineConfig({
         // 'resources/js/treeview.js',
         // 'resources/js/form-components/toggle-switch.js',
         // 'resources/js/app.js',
-        // 'resources/vendors/slick-carousel/slick/slick.min.js',
-        // 'resources/js/carousel-slider.js',
+        'resources/vendors/slick-carousel/slick/slick.min.js',
+        'resources/js/carousel-slider.js',
       ],
 
       /**
