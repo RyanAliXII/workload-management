@@ -13,7 +13,8 @@ export default class extends BaseSeeder {
       email: env.get('ROOT_USER_EMAIL')?.toLowerCase(),
       password,
     })
-
+    const user = await User.query().limit(1).first()
+    if (user) return
     await User.create({
       givenName: env.get('ROOT_USER_GIVEN_NAME'),
       middleName: env.get('ROOT_USER_MIDDLE_NAME'),
