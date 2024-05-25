@@ -6,6 +6,8 @@ import 'primevue/resources/themes/md-light-indigo/theme.css'
 import { createApp, onMounted, ref } from 'vue'
 import { toISO8601DateString } from '../utils/date.js'
 import Swal from 'sweetalert2'
+import { Modal } from 'bootstrap'
+import toastr from 'toastr'
 type ViewEventFormType = {
   id: number
   name: string
@@ -37,7 +39,8 @@ createApp({
       status: 'approved',
     })
     const currentEvent = ref<EventType | null>(null)
-
+    const viewModalRef = ref<HTMLDivElement | null>(null)
+    const viewModal = ref<InstanceType<typeof Modal> | null>(null)
     onMounted(() => {
       window.addEventListener('event:view', (event: Event) => {
         const customEvent = event as CustomEvent<EventType>
@@ -51,18 +54,21 @@ createApp({
         form.value.location = e.location
         form.value.status = e.status
         currentEvent.value = e
-        $('#viewEventModal').modal('show')
+        viewModalRef.value = document.querySelector('#viewEventModal')
+        if (!viewModalRef.value) return
+        viewModal.value = new Modal(viewModalRef.value)
+        viewModal.value.show()
       })
     })
     const edit = () => {
-      $('#viewEventModal').modal('show')
+      viewModal.value?.hide()
       if (!currentEvent) return
       const customEvent = new CustomEvent('event:edit', { detail: currentEvent.value })
       window.dispatchEvent(customEvent)
     }
 
     const initDelete = async () => {
-      $('#viewEventModal').modal('hide')
+      viewModal.value?.hide()
       const result = await Swal.fire({
         title: 'Delete Event',
         text: 'Are youre sure you want to delete this event?',
@@ -74,13 +80,13 @@ createApp({
         cancelButtonColor: '#858181',
       })
       if (!result.isConfirmed) {
-        $('#viewEventModal').modal('show')
+        viewModal.value?.show()
         return
       }
       deleteEvent()
     }
     const deleteEvent = async () => {
-      const response = await fetch(`/faculties/events/${form.value.id}`, { method: 'DELETE' })
+      const response = await fetch(`/admin  /events/${form.value.id}`, { method: 'DELETE' })
       if (response.status === StatusCodes.OK) {
         $('#viewEventModal').modal('hide')
         const customEvent = new CustomEvent('calendar:refetch')

@@ -7,6 +7,8 @@ import MultiSelect from 'primevue/multiselect'
 import 'primevue/resources/themes/md-light-indigo/theme.css'
 import { computed, createApp, onMounted, ref } from 'vue'
 import { toISO8601DateString } from '../../utils/date.js'
+import { Modal } from 'bootstrap'
+import toastr from 'toastr'
 type EditEventFormType = {
   id: number
   name: string
@@ -47,10 +49,14 @@ createApp({
         meta: f,
       }))
     )
+    const editModalRef = ref<HTMLDivElement | null>(null)
+    const editModal = ref<InstanceType<typeof Modal> | null>(null)
     onMounted(() => {
       activeFaculty.value = window.viewData?.activeFaculty ?? []
-
-      $('#editEventModal').on('hidden.bs.modal', () => {
+      editModalRef.value = document.querySelector('#editEventModal')
+      if (!editModalRef.value) return
+      editModal.value = new Modal(editModalRef.value)
+      editModalRef.value.addEventListener('hidden.bs.modal', () => {
         clearErrors()
         resetForm()
       })
@@ -66,7 +72,7 @@ createApp({
 
         form.value.facilitators = e.facilitators?.map((f) => f.id)
 
-        $('#editEventModal').modal('show')
+        editModal.value?.show()
       })
     })
 
@@ -103,7 +109,7 @@ createApp({
       })
       const responseBody = await response.json()
       if (response.status === StatusCodes.OK) {
-        $('#editEventModal').modal('hide')
+        editModal.value?.hide()
         toastr.success('Event updated.')
         const event = new CustomEvent('calendar:refetch', {})
         window.dispatchEvent(event)

@@ -2,6 +2,7 @@ import { Faculty } from '#types/faculty'
 import { Task } from '#types/task'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import CKEditor from '@ckeditor/ckeditor5-vue'
+import { Modal } from 'bootstrap'
 import PrimeVue from 'primevue/config'
 import Dropdown from 'primevue/dropdown'
 import { createApp, onMounted, ref } from 'vue'
@@ -32,15 +33,20 @@ createApp({
     const task = ref<Task | null>(null)
     const attachmentUrls = ref<string[]>([])
     const facultyAttachmentUrls = ref<string[]>([])
+    const viewModalRef = ref<HTMLDivElement | null>(null)
+    const viewModal = ref<InstanceType<typeof Modal> | null>()
     onMounted(() => {
       activeFaculty.value = window.viewData?.activeFaculty ?? []
+      viewModalRef.value = document.querySelector('#viewTaskModal')
+      if (!viewModalRef.value) return
+      viewModal.value = new Modal(viewModalRef.value)
       window.addEventListener('task:view', (event: Event) => {
         const customEvent = event as CustomEvent<Task>
         form.value.name = customEvent.detail.name
         form.value.description = customEvent.detail.description
         form.value.facultyId = customEvent.detail.facultyId
         task.value = customEvent.detail
-        $('#viewTaskModal').modal('show')
+        viewModal.value?.show()
         loadAttachments(customEvent.detail.id)
       })
     })

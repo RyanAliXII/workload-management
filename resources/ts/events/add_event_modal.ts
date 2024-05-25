@@ -6,6 +6,8 @@ import MultiSelect from 'primevue/multiselect'
 import 'primevue/resources/themes/md-light-indigo/theme.css'
 import { computed, createApp, onMounted, ref } from 'vue'
 import { toISO8601DateString } from '../utils/date.js'
+import { Modal } from 'bootstrap'
+import toastr from 'toastr'
 type AddEventFormType = {
   name: string
   from: Date
@@ -46,12 +48,20 @@ createApp({
         meta: f,
       }))
     )
-
+    const addModalRef = ref<HTMLDivElement | null>(null)
+    const addModal = ref<InstanceType<typeof Modal> | null>(null)
     onMounted(() => {
       activeFaculty.value = window.viewData?.activeFaculty ?? []
-      $('#addEventModal').on('hidden.bs.modal', () => {
+      addModalRef.value = document.querySelector('#addEventModal')
+
+      if (!addModalRef.value) return
+      addModal.value = new Modal(addModalRef.value)
+      addModalRef.value?.addEventListener('hidden.bs.modal', () => {
         clearErrors()
         resetForm()
+      })
+      window.addEventListener('event:add', () => {
+        addModal.value?.show()
       })
     })
     const handleDateInput = (event: Event) => {
@@ -87,7 +97,7 @@ createApp({
       })
       const responseBody = await response.json()
       if (response.status === StatusCodes.OK) {
-        $('#addEventModal').modal('hide')
+        addModal.value?.hide()
         toastr.success('Event created.')
         const event = new CustomEvent('calendar:refetch', {})
         window.dispatchEvent(event)
@@ -101,7 +111,15 @@ createApp({
         toastr.error('Unknown error occured.')
       }
     }
-    return { form, onSubmitCreate, errors, facilitators, toISO8601DateString, handleDateInput }
+    return {
+      form,
+      onSubmitCreate,
+      errors,
+      facilitators,
+      toISO8601DateString,
+      handleDateInput,
+      addModalRef,
+    }
   },
 })
   .use(PrimeVue as any)

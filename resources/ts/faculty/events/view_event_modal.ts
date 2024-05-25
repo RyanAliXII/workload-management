@@ -6,6 +6,7 @@ import 'primevue/resources/themes/md-light-indigo/theme.css'
 import { computed, createApp, onMounted, ref } from 'vue'
 import { toISO8601DateString } from '../../utils/date.js'
 import Swal from 'sweetalert2'
+import toastr from 'toastr'
 type ViewEventFormType = {
   id: number
   name: string

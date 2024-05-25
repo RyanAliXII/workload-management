@@ -67,14 +67,14 @@
                  <column  header="Faculty" sortable>
                     <template #body="slotProps">
                       <div>
-                      ${slotProps.data.faculty.givenName} ${slotProps.data.middleName} ${slotProps.data.faculty.surname} 
+                      ${slotProps.data.faculty?.givenName} ${slotProps.data?.faculty?.middleName} ${slotProps.data.faculty?.surname} 
                     </div>
-                      <small>${slotProps.data.faculty.position.name}</small>
+                      <small>${slotProps.data.faculty?.position?.name}</small>
                   </template>
                  </column>
                  <column header="Assigned By" sortable>
                   <template #body="slotProps">
-                    ${slotProps.data.assignedBy.givenName} ${slotProps.data.assignedBy.middleName} ${slotProps.data.assignedBy.surname} 
+                    ${slotProps.data.assignedBy?.givenName} ${slotProps.data.assignedBy?.middleName} ${slotProps.data.assignedBy?.surname} 
                 </template>
                 </column>
                 <column header="Status">

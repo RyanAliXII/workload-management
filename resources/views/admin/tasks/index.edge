@@ -6,7 +6,7 @@
         @include('partials/admin/header')
         <div class="app-main">
           @include('partials/admin/sidebar')
-          <div class="app-main__outer">
+          <div class="app-main__outer" id="taskTable">
             <div class="app-main__inner">
               <div class="app-page-title app-page-title-simple">
                 <div class="page-title-wrapper">
@@ -40,10 +40,10 @@
                   
                 </div>
               </div>
-              <button type="button" class="btn btn-primary mb-3  " data-bs-toggle="modal" data-bs-target="#addTaskModal">
+              <button type="button" class="btn btn-primary mb-3" v-on:click="openAddModal" >
                 <i class="fas fa-add"></i> <span>New Task</span>
               </button>
-              <div class="main-card mb-3 card p-5" id="taskTable">
+              <div class="main-card mb-3 card p-5">
                 
                 <data-table v-model:filters="filters" :value="tasks"  table-class="table table-striped" :paginator="true" :rows="10" :global-filter-fields="['name','faculty.givenName', 'faculty.middleName', 'faculty.loginCredential.email', 'faculty.surname', 'faculty.position.name']">
                   <template #header>
@@ -72,12 +72,12 @@
                       <div>
                       ${slotProps.data.faculty.givenName} ${slotProps.data.middleName} ${slotProps.data.faculty.surname} 
                     </div>
-                      <small>${slotProps.data.faculty.position.name}</small>
+                      <small>${slotProps.data.faculty?.position?.name}</small>
                   </template>
                  </column>
                  <column header="Assigned By" sortable>
                   <template #body="slotProps">
-                    ${slotProps.data.assignedBy.givenName} ${slotProps.data.assignedBy.middleName} ${slotProps.data.assignedBy.surname} 
+                    ${slotProps.data?.assignedBy?.givenName} ${slotProps.data?.assignedBy?.middleName} ${slotProps.data?.assignedBy?.surname} 
                 </template>
                 </column>
                 <column header="Status">
@@ -121,6 +121,7 @@
         activeFaculty: JSON.parse(`{{{JSON.stringify(activeFaculty)}}}`),
         tasks: JSON.parse(`{{{tasks}}}`)
       }
+      console.log(window.viewData)
     </script>
     @vite('resources/ts/tasks/add_task_modal.ts')
     @vite('resources/ts/tasks/edit_task_modal.ts')

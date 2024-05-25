@@ -1,6 +1,6 @@
-import { defineConfig, optimizeDeps } from 'vite'
 import adonisjs from '@adonisjs/vite/client'
-// import inject from '@rollup/plugin-inject'
+import { defineConfig } from 'vite'
+
 export default defineConfig({
   define: {
     __VUE_OPTIONS_API__: 'true',
@@ -28,11 +28,19 @@ export default defineConfig({
         'resources/ts/faculties/edit_faculty.ts',
         'resources/ts/events/add_event_modal.ts',
         'resources/ts/events/edit_event_modal.ts',
+        'resources/ts/faculty/events/edit_event_modal.ts',
+        'resources/ts/faculty/events/add_event_modal.ts',
+        'resources/ts/faculty/tasks/completion_modal.ts',
+        'resources/ts/faculty/tasks/view_task_modal.ts',
         'resources/ts/events/event_calendar.ts',
         'resources/ts/events/view_event_modal.ts',
         'resources/ts/faculties/add_faculty.ts',
         'resources/ts/faculties/edit_faculty.ts',
         'resources/ts/faculties/faculties.ts',
+        'resources/ts/tasks/add_task_modal.ts',
+        'resources/ts/tasks/edit_task_modal.ts',
+        'resources/ts/tasks/view_task_modal.ts',
+        'resources/ts/tasks/task_table.ts',
         'resources/vendors/bootstrap/dist/css/bootstrap.min.css',
         'resources/vendors/@fortawesome/fontawesome-free/css/all.min.css',
         'resources/vendors/ionicons-npm/css/ionicons.css',

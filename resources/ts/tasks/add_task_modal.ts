@@ -6,7 +6,8 @@ import PrimeVue from 'primevue/config'
 import Dropdown from 'primevue/dropdown'
 import { computed, createApp, onMounted, ref } from 'vue'
 import { toStructuredErrors } from '../utils/form.js'
-
+import { Modal } from 'bootstrap'
+import toastr from 'toastr'
 const INITIAL_FORM = {
   name: '',
   fileAttachments: [],
@@ -30,8 +31,20 @@ createApp({
     const activeFaculty = ref<Faculty[]>([])
     const editor = ref(ClassicEditor)
     const attachments = ref<File[]>([])
+    const addModalRef = ref<HTMLDivElement | null>(null)
+    const addModal = ref<InstanceType<typeof Modal> | null>(null)
     onMounted(() => {
       activeFaculty.value = window.viewData?.activeFaculty ?? []
+      addModalRef.value = document.querySelector('#addTaskModal')
+      if (!addModalRef.value) return
+      addModal.value = new Modal(addModalRef.value)
+      addModalRef.value?.addEventListener('hidden.bs.modal', () => {
+        removeErrors()
+        resetForm()
+      })
+      window.addEventListener('task:add', () => {
+        addModal.value?.show()
+      })
     })
     const isSubmitting = ref(false)
     const editorConfig = {
@@ -131,7 +144,7 @@ createApp({
           await uploadFileAttachments(responseBody?.task?.id)
           toastr.success('Task has been added.')
           resetForm()
-          $('#addTaskModal').modal('hide')
+          addModal.value?.hide()
           const customEvent = new CustomEvent('task:refetch')
           window.dispatchEvent(customEvent)
         }

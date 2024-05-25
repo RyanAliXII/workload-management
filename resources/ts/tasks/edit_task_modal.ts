@@ -7,7 +7,8 @@ import Dropdown from 'primevue/dropdown'
 import { computed, createApp, onMounted, ref } from 'vue'
 import { toStructuredErrors } from '../utils/form.js'
 import { Task } from '#types/task'
-
+import { Modal } from 'bootstrap'
+import toastr from 'toastr'
 const INITIAL_FORM = {
   name: '',
   fileAttachments: [],
@@ -33,15 +34,20 @@ createApp({
     const attachments = ref<File[]>([])
     const task = ref<Task | null>(null)
     const attachmentUrls = ref<string[]>([])
+    const editModalRef = ref<HTMLDivElement | null>(null)
+    const editModal = ref<InstanceType<typeof Modal> | null>(null)
     onMounted(() => {
       activeFaculty.value = window.viewData?.activeFaculty ?? []
+      editModalRef.value = document.querySelector('#editTaskModal')
+      if (!editModalRef.value) return
+      editModal.value = new Modal(editModalRef.value)
       window.addEventListener('task:edit', (event: Event) => {
         const customEvent = event as CustomEvent<Task>
         form.value.name = customEvent.detail.name
         form.value.description = customEvent.detail.description
         form.value.facultyId = customEvent.detail.facultyId
         task.value = customEvent.detail
-        $('#editTaskModal').modal('show')
+        editModal.value?.show()
         loadAttachments(customEvent.detail.id)
       })
     })
@@ -148,7 +154,7 @@ createApp({
 
           toastr.success('Task has been updated.')
           resetForm()
-          $('#editTaskModal').modal('hide')
+          editModal.value?.hide()
           const customEvent = new CustomEvent('task:refetch')
           window.dispatchEvent(customEvent)
         }

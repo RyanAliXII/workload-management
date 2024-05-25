@@ -55,9 +55,13 @@ createApp({
         reloadCalendar()
       })
     })
+    const openAddModal = () => {
+      window.dispatchEvent(new CustomEvent('event:add'))
+    }
     return {
       calendarOptions,
       fullCalendar,
+      openAddModal,
     }
   },
 }).mount('#eventPage')

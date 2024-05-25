@@ -47,8 +47,12 @@ createApp({
         window.dispatchEvent(customEvent)
       },
     }
+
     const reloadCalendar = () => {
       fullCalendar.value?.getApi().refetchEvents()
+    }
+    const openAddModal = () => {
+      window.dispatchEvent(new CustomEvent('event:add'))
     }
     onMounted(() => {
       window.addEventListener('calendar:refetch', () => {
@@ -58,6 +62,7 @@ createApp({
     return {
       calendarOptions,
       fullCalendar,
+      openAddModal,
     }
   },
 }).mount('#eventPage')

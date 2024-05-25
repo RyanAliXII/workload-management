@@ -7,6 +7,7 @@ import 'primevue/resources/themes/md-light-indigo/theme.css'
 import Swal from 'sweetalert2'
 import { createApp, onMounted, ref } from 'vue'
 import { toReadableDatetime } from '../utils/date.js'
+import toastr from 'toastr'
 createApp({
   compilerOptions: {
     delimiters: ['${', '}'],
@@ -74,6 +75,9 @@ createApp({
       }
       deleteTask(task.id)
     }
+    const openAddModal = () => {
+      window.dispatchEvent(new CustomEvent('task:add'))
+    }
     const deleteTask = async (id: number) => {
       const response = await fetch(`/admin/tasks/${id}`, { method: 'DELETE' })
       if (response.status === StatusCodes.OK) {
@@ -94,6 +98,7 @@ createApp({
       initDelete,
       initEdit,
       initView,
+      openAddModal,
     }
   },
 })

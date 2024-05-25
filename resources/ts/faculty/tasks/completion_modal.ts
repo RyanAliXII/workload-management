@@ -6,7 +6,8 @@ import PrimeVue from 'primevue/config'
 import Dropdown from 'primevue/dropdown'
 import { createApp, onMounted, ref } from 'vue'
 import { toStructuredErrors } from '../../utils/form.js'
-
+import { Modal } from 'bootstrap'
+import toastr from 'toastr'
 const INITIAL_FORM = {
   remarks: '',
   fileAttachments: [],
@@ -26,12 +27,16 @@ createApp({
     const editor = ref(ClassicEditor)
     const attachments = ref<File[]>([])
     const task = ref<Task | null>(null)
-
+    const completionModalRef = ref<HTMLDivElement | null>(null)
+    const completionModal = ref<InstanceType<typeof Modal> | null>(null)
     onMounted(() => {
+      completionModalRef.value = document.querySelector('#completionModal')
+      if (!completionModalRef.value) return
+      completionModal.value = new Modal(completionModalRef.value)
       window.addEventListener('task:completion', (event: Event) => {
         const customEvent = event as CustomEvent<Task>
         task.value = customEvent.detail
-        $('#completionModal').modal('show')
+        completionModal.value?.show()
       })
     })
     const isSubmitting = ref(false)
@@ -127,7 +132,7 @@ createApp({
 
           toastr.success('Task has been updated.')
           resetForm()
-          $('#completionModal').modal('hide')
+          completionModal.value?.hide()
           const customEvent = new CustomEvent('task:refetch')
           window.dispatchEvent(customEvent)
         }
