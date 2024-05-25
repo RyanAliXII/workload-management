@@ -1,6 +1,6 @@
-import { defineConfig } from 'vite'
+import { defineConfig, optimizeDeps } from 'vite'
 import adonisjs from '@adonisjs/vite/client'
-
+// import inject from '@rollup/plugin-inject'
 export default defineConfig({
   define: {
     __VUE_OPTIONS_API__: 'true',
@@ -8,16 +8,19 @@ export default defineConfig({
     __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'true',
   },
   resolve: { alias: { vue: 'vue/dist/vue.esm-bundler.js' } },
+
   plugins: [
     adonisjs({
       /**
        * Entrypoints of your application. Each entrypoint will
        * result in a separate bundle.
        */
+
       entrypoints: [
+        'resources/js/setup.js',
         'resources/ts/login/login.ts',
         'resources/ts/departments/departments.ts',
-        'resources/ts/positions/positions.ts',
+        // 'resources/ts/positions/positions.ts',
         'resources/ts/subjects/subjects.ts',
         'resources/ts/educational_attainments/educational_attainments.ts',
         'resources/ts/fund_sources/fund_sources.ts',
@@ -35,22 +38,22 @@ export default defineConfig({
         'resources/css/base.css',
         'resources/vendors/jquery/dist/jquery.min.js',
         'resources/vendors/bootstrap/dist/js/bootstrap.bundle.min.js',
-        'resources/vendors/moment/moment.js',
-        'resources/vendors/metismenu/dist/metisMenu.js',
-        'resources/vendors/bootstrap4-toggle/js/bootstrap4-toggle.min.js',
-        'resources/vendors/jquery-circle-progress/dist/circle-progress.min.js',
-        'resources/vendors/perfect-scrollbar/dist/perfect-scrollbar.min.js',
-        'resources/vendors/jquery.fancytree/dist/jquery.fancytree-all-deps.min.js',
-        'resources/vendors/apexcharts/dist/apexcharts.min.js',
-        'resources/js/charts/apex-charts.js',
-        'resources/js/circle-progress.js',
-        'resources/js/demo.js',
-        'resources/js/scrollbar.js',
-        'resources/js/treeview.js',
-        'resources/js/form-components/toggle-switch.js',
-        'resources/js/app.js',
-        'resources/vendors/slick-carousel/slick/slick.min.js',
-        'resources/js/carousel-slider.js',
+        // 'resources/vendors/moment/moment.js',
+        // 'resources/vendors/metismenu/dist/metisMenu.js',
+        // 'resources/vendors/bootstrap4-toggle/js/bootstrap4-toggle.min.js',
+        // 'resources/vendors/jquery-circle-progress/dist/circle-progress.min.js',
+        // 'resources/vendors/perfect-scrollbar/dist/perfect-scrollbar.min.js',
+        // 'resources/vendors/jquery.fancytree/dist/jquery.fancytree-all-deps.min.js',
+        // 'resources/vendors/apexcharts/dist/apexcharts.min.js',
+        // 'resources/js/charts/apex-charts.js',
+        // 'resources/js/circle-progress.js',
+        // 'resources/js/demo.js',
+        // 'resources/js/scrollbar.js',
+        // 'resources/js/treeview.js',
+        // 'resources/js/form-components/toggle-switch.js',
+        // 'resources/js/app.js',
+        // 'resources/vendors/slick-carousel/slick/slick.min.js',
+        // 'resources/js/carousel-slider.js',
       ],
 
       /**
