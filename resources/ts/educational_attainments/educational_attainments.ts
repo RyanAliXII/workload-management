@@ -7,6 +7,8 @@ import Column from 'primevue/column'
 import { toReadableDatetime } from '../utils/date.js'
 import Swal from 'sweetalert2'
 import 'primevue/resources/themes/md-light-indigo/theme.css'
+import { Modal } from 'bootstrap'
+import toastr from 'toastr'
 createApp({
   components: {
     'data-table': DataTable,
@@ -24,13 +26,21 @@ createApp({
       ...INITIAL_FORM,
     })
     const educationalAttainments = ref<EducationalAttainment[]>([])
+
+    const addModalRef = ref<HTMLDivElement | null>(null)
+    const editModalRef = ref<HTMLDivElement | null>(null)
+    const addModal = ref<InstanceType<typeof Modal> | null>(null)
+    const editModal = ref<InstanceType<typeof Modal> | null>(null)
     onMounted(() => {
       fetchEducationalAttainments()
-      $('#addEducationalAttainmentModal').on('hidden.bs.modal', () => {
+      if (!addModalRef.value || !editModalRef.value) return
+      addModal.value = new Modal(addModalRef.value)
+      editModal.value = new Modal(editModalRef.value)
+      addModalRef.value.addEventListener('hidden.bs.modal', () => {
         resetForm()
         removeErrors()
       })
-      $('#editEducationalAttainmentModal').on('hidden.bs.modal', () => {
+      editModalRef.value.addEventListener('hidden.bs.modal', () => {
         resetForm()
         removeErrors()
       })
@@ -66,7 +76,7 @@ createApp({
       if (response.status === StatusCodes.OK) {
         toastr.success('Educational attainment has been added.')
         resetForm()
-        $('#addEducationalAttainmentModal').modal('hide')
+        addModal.value?.hide()
         fetchEducationalAttainments()
       }
       if (response.status === StatusCodes.BAD_REQUEST) {
@@ -87,7 +97,7 @@ createApp({
       if (response.status === StatusCodes.OK) {
         toastr.success('Educational attainment has been updated.')
         resetForm()
-        $('#editEducationalAttainmentModal').modal('hide')
+        editModal.value?.hide()
         fetchEducationalAttainments()
       }
       if (response.status === StatusCodes.BAD_REQUEST) {
@@ -96,10 +106,14 @@ createApp({
         }
       }
     }
+    const openAddModal = () => {
+      addModal.value?.show()
+    }
+
     const initEdit = (ea: EducationalAttainment) => {
       form.value.id = ea.id
       form.value.name = ea.name
-      $('#editEducationalAttainmentModal').modal('show')
+      editModal.value?.show()
     }
     const initDelete = async (ea: EducationalAttainment) => {
       form.value.id = ea.id
@@ -135,6 +149,9 @@ createApp({
       educationalAttainments,
       initEdit,
       initDelete,
+      editModalRef,
+      addModalRef,
+      openAddModal,
     }
   },
 }).mount('#educationalAttainmentPage')

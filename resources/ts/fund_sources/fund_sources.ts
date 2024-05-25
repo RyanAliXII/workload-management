@@ -7,6 +7,8 @@ import FundSource from '#models/fund_source'
 import { toReadableDatetime } from '../utils/date.js'
 import Swal from 'sweetalert2'
 import 'primevue/resources/themes/md-light-indigo/theme.css'
+import { Modal } from 'bootstrap'
+import toastr from 'toastr'
 createApp({
   components: {
     'data-table': DataTable,
@@ -28,12 +30,19 @@ createApp({
     const removeErrors = () => {
       errors.value = {}
     }
+    const addModalRef = ref<HTMLDivElement | null>(null)
+    const editModalRef = ref<HTMLDivElement | null>(null)
+    const addModal = ref<InstanceType<typeof Modal> | null>(null)
+    const editModal = ref<InstanceType<typeof Modal> | null>(null)
     onMounted(() => {
-      $('#addFundSourceModal').on('hidden.bs.modal', () => {
+      if (!addModalRef.value || !editModalRef.value) return
+      addModal.value = new Modal(addModalRef.value)
+      editModal.value = new Modal(editModalRef.value)
+      addModalRef.value.addEventListener('hidden.bs.modal', () => {
         resetForm()
         removeErrors()
       })
-      $('#editFundSourceModal').on('hidden.bs.modal', () => {
+      editModalRef.value.addEventListener('hidden.bs.modal', () => {
         resetForm()
         removeErrors()
       })
@@ -64,7 +73,7 @@ createApp({
       if (response.status === StatusCodes.OK) {
         toastr.success('Fund source added.')
         resetForm()
-        $('#addFundSourceModal').modal('hide')
+        addModal.value?.hide()
         fetchFundSources()
       }
       if (response.status === StatusCodes.BAD_REQUEST) {
@@ -72,6 +81,9 @@ createApp({
           errors.value = toStructuredErrors(responseBody.errors)
         }
       }
+    }
+    const openAddModal = () => {
+      addModal.value?.show()
     }
     const onSubmitUpdate = async () => {
       removeErrors()
@@ -84,7 +96,7 @@ createApp({
       if (response.status === StatusCodes.OK) {
         toastr.success('Fund source updated.')
         resetForm()
-        $('#editFundSourceModal').modal('hide')
+        editModal.value?.hide()
         fetchFundSources()
       }
       if (response.status === StatusCodes.BAD_REQUEST) {
@@ -96,7 +108,7 @@ createApp({
     const initEdit = (source: FundSource) => {
       form.value.id = source.id
       form.value.name = source.name
-      $('#editFundSourceModal').modal('show')
+      editModal.value?.show()
     }
     const initDelete = async (fundSource: FundSource) => {
       form.value.id = fundSource.id
@@ -134,6 +146,9 @@ createApp({
       fundSources,
       toReadableDatetime,
       initDelete,
+      openAddModal,
+      addModalRef,
+      editModalRef,
     }
   },
 }).mount('#fundSourcePage')

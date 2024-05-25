@@ -7,6 +7,8 @@ import Column from 'primevue/column'
 import { toReadableDatetime } from '../utils/date.js'
 import Swal from 'sweetalert2'
 import 'primevue/resources/themes/md-light-indigo/theme.css'
+import { Modal } from 'bootstrap'
+import toastr from 'toastr'
 createApp({
   components: {
     'data-table': DataTable,
@@ -23,13 +25,20 @@ createApp({
     const form = ref({ ...INITIAL_FORM })
     const errors = ref({})
     const subjects = ref<Subject[]>([])
+    const addModalRef = ref<HTMLDivElement | null>(null)
+    const editModalRef = ref<HTMLDivElement | null>(null)
+    const addModal = ref<InstanceType<typeof Modal> | null>(null)
+    const editModal = ref<InstanceType<typeof Modal> | null>(null)
     onMounted(() => {
       fetchSubjects()
-      $('#addSubjectModal').on('hidden.bs.modal', () => {
+      if (!addModalRef.value || !editModalRef.value) return
+      addModal.value = new Modal(addModalRef.value)
+      editModal.value = new Modal(editModalRef.value)
+      addModalRef.value.addEventListener('hidden.bs.modal', () => {
         resetForm()
         removeErrors()
       })
-      $('#editSubjectModal').on('hidden.bs.modal', () => {
+      editModalRef.value.addEventListener('hidden.bs.modal', () => {
         resetForm()
         removeErrors()
       })
@@ -63,7 +72,7 @@ createApp({
       const responseBody = await response.json()
       if (response.status === StatusCodes.OK) {
         fetchSubjects()
-        $('#addSubjectModal').modal('hide')
+        addModal.value?.hide()
         toastr.success('Subject has been added.')
         resetForm()
       }
@@ -76,7 +85,7 @@ createApp({
     const initEdit = (subject: Subject) => {
       form.value.id = subject.id
       form.value.name = subject.name
-      $('#editSubjectModal').modal('show')
+      editModal.value?.show()
     }
     const onSubmitUpdate = async () => {
       removeErrors()
@@ -88,7 +97,7 @@ createApp({
       const responseBody = await response.json()
       if (response.status === StatusCodes.OK) {
         fetchSubjects()
-        $('#editSubjectModal').modal('hide')
+        editModal.value?.hide()
         toastr.success('Subject has been updated.')
         resetForm()
       }
@@ -121,6 +130,9 @@ createApp({
         fetchSubjects()
       }
     }
+    const openAddModal = () => {
+      addModal.value?.show()
+    }
     return {
       form,
       onSubmitCreate,
@@ -130,6 +142,9 @@ createApp({
       initEdit,
       initDelete,
       toReadableDatetime,
+      openAddModal,
+      addModalRef,
+      editModalRef,
     }
   },
 }).mount('#subjectPage')

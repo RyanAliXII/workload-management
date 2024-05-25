@@ -42,7 +42,6 @@ createApp({
       if (!addModalRef.value || !editModalRef.value) return
       addModal.value = new Modal(addModalRef.value)
       editModal.value = new Modal(editModalRef.value)
-      console
       addModalRef.value.addEventListener('hidden.bs.modal', () => {
         resetForm()
         removeErrors()
