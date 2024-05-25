@@ -58,7 +58,6 @@ createApp({
       window.dispatchEvent(event)
     }
     const initDelete = async (task: Task) => {
-      $('#viewEventModal').modal('hide')
       const result = await Swal.fire({
         title: 'Delete Task',
         text: 'Are youre sure you want to delete this task?',
