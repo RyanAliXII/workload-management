@@ -1,5 +1,6 @@
 import Task from '#models/task'
 import { inject } from '@adonisjs/core'
+import { DateTime } from 'luxon'
 
 @inject()
 export class TaskRepository {
@@ -53,6 +54,7 @@ export class TaskRepository {
         b.preload('loginCredential')
       })
       .preload('fileAttachments')
+      .preload('facultyAttachments')
   }
   async delete(id: number) {
     const task = await Task.findBy('id', id)
@@ -60,7 +62,12 @@ export class TaskRepository {
     task.delete()
   }
   async getOne(id: number) {
-    return Task.query().preload('fileAttachments').where('id', id).limit(1).first()
+    return Task.query()
+      .preload('fileAttachments')
+      .preload('facultyAttachments')
+      .where('id', id)
+      .limit(1)
+      .first()
   }
 
   async getByStatus(status: string) {
@@ -73,6 +80,7 @@ export class TaskRepository {
         })
         .whereNotNull('completed_at')
         .preload('fileAttachments')
+        .preload('facultyAttachments')
     }
     if (status === 'pending') {
       return Task.query()
@@ -83,6 +91,7 @@ export class TaskRepository {
         })
         .whereNull('completed_at')
         .preload('fileAttachments')
+        .preload('facultyAttachments')
     }
     return this.getAll()
   }
@@ -97,6 +106,7 @@ export class TaskRepository {
         .whereNotNull('completed_at')
         .where('faculty_id', facultyId)
         .preload('fileAttachments')
+        .preload('facultyAttachments')
     }
     if (status === 'pending') {
       return Task.query()
@@ -108,6 +118,7 @@ export class TaskRepository {
         .whereNull('completed_at')
         .where('faculty_id', facultyId)
         .preload('fileAttachments')
+        .preload('facultyAttachments')
     }
     return this.getByFacultyId(facultyId)
   }
@@ -119,6 +130,10 @@ export class TaskRepository {
         b.preload('loginCredential')
       })
       .preload('fileAttachments')
+      .preload('facultyAttachments')
       .where('faculty_id', facultyId)
+  }
+  async markAsComplete({ remarks, id }: { remarks?: string; id: number }) {
+    return Task.updateOrCreate({ id }, { remarks: remarks ?? '', completedAt: DateTime.now() })
   }
 }

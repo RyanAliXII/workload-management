@@ -6,6 +6,7 @@ import User from './user.js'
 import TaskAttachment from './task_attachment.js'
 import { compose } from '@adonisjs/core/helpers'
 import { SoftDeletes } from 'adonis-lucid-soft-deletes'
+import FacultyTaskAttachment from './faculty_task_attachment.js'
 
 export default class Task extends compose(BaseModel, SoftDeletes) {
   static table = 'task'
@@ -19,12 +20,16 @@ export default class Task extends compose(BaseModel, SoftDeletes) {
   declare facultyId: number
   @column({ columnName: 'assigned_by_id' })
   declare assignedById: number
+  @column({ columnName: 'remarks' })
+  declare remarks: string | null
   @hasOne(() => Faculty, { foreignKey: 'id', localKey: 'facultyId' })
   declare faculty: HasOne<typeof Faculty>
   @hasOne(() => User, { foreignKey: 'id', localKey: 'assignedById' })
   declare assignedBy: HasOne<typeof User>
   @hasMany(() => TaskAttachment, { foreignKey: 'taskId', localKey: 'id' })
   declare fileAttachments: HasMany<typeof TaskAttachment>
+  @hasMany(() => FacultyTaskAttachment, { foreignKey: 'taskId', localKey: 'id' })
+  declare facultyAttachments: HasMany<typeof FacultyTaskAttachment>
   @column.dateTime()
   declare completedAt: DateTime | null
   @column.dateTime({ autoCreate: true })

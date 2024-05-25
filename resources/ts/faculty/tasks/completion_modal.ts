@@ -1,12 +1,11 @@
-import { Faculty } from '#types/faculty'
+import { Task } from '#types/task'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import CKEditor from '@ckeditor/ckeditor5-vue'
 import { StatusCodes } from 'http-status-codes'
 import PrimeVue from 'primevue/config'
 import Dropdown from 'primevue/dropdown'
-import { computed, createApp, onMounted, ref } from 'vue'
+import { createApp, onMounted, ref } from 'vue'
 import { toStructuredErrors } from '../../utils/form.js'
-import { Task } from '#types/task'
 
 const INITIAL_FORM = {
   remarks: '',
@@ -27,7 +26,7 @@ createApp({
     const editor = ref(ClassicEditor)
     const attachments = ref<File[]>([])
     const task = ref<Task | null>(null)
-    const attachmentUrls = ref<string[]>([])
+
     onMounted(() => {
       window.addEventListener('task:completion', (event: Event) => {
         const customEvent = event as CustomEvent<Task>
@@ -105,7 +104,7 @@ createApp({
         formData.append('attachments[]', a)
       })
 
-      return fetch('/admin/tasks/attachments', {
+      return fetch('/faculties/tasks/attachments', {
         method: 'POST',
         body: formData,
       })
@@ -117,8 +116,8 @@ createApp({
       isSubmitting.value = true
       try {
         removeErrors()
-        const response = await fetch(`/admin/tasks/${task.value?.id}`, {
-          method: 'PUT',
+        const response = await fetch(`/faculties/tasks/${task.value?.id}/completion`, {
+          method: 'PATCH',
           body: JSON.stringify(form.value),
           headers: new Headers({ 'Content-Type': 'application/json' }),
         })
@@ -128,7 +127,7 @@ createApp({
 
           toastr.success('Task has been updated.')
           resetForm()
-          $('#editTaskModal').modal('hide')
+          $('#completionModal').modal('hide')
           const customEvent = new CustomEvent('task:refetch')
           window.dispatchEvent(customEvent)
         }
@@ -149,14 +148,12 @@ createApp({
       form,
       errors,
       onSubmitCreate,
-      facultyOptions,
       fileInput,
       editor,
       editorConfig,
       task,
       handleFileAttachments,
       isSubmitting,
-      attachmentUrls,
     }
   },
 })

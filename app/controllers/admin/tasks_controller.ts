@@ -205,15 +205,21 @@ export default class TasksController {
         })
       }
       const attachments: string[] = []
+      const facultyAttachments: string[] = []
       task.fileAttachments.forEach((fa) => {
         const url = this.cloudinaryService.generatePublicUrlAsAttachment(fa.objectName)
         attachments.push(url)
+      })
+      task.facultyAttachments.forEach((fa) => {
+        const url = this.cloudinaryService.generatePublicUrlAsAttachment(fa.objectName)
+        facultyAttachments.push(url)
       })
 
       return response.json({
         status: StatusCodes.OK,
         message: 'Task attachments fetched.',
         attachments,
+        facultyAttachments,
       })
     } catch (error) {
       if (error instanceof errors.E_VALIDATION_ERROR) {

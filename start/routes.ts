@@ -84,6 +84,8 @@ router
         router.delete('/events/:id', [FacultyEventsController, 'edit'])
         router.get('/tasks', [FacultyTasksController, 'index'])
         router.get('/tasks/:id/attachments', [FacultyTasksController, 'getAttachmentByTaskId'])
+        router.post('/tasks/attachments', [FacultyTasksController, 'uploadTaskAttachments'])
+        router.patch('/tasks/:id/completion', [FacultyTasksController, 'updateCompletion'])
       })
       .use(middleware.auth({ guards: ['faculty'], redirectTo: '/faculties/login' }))
   })

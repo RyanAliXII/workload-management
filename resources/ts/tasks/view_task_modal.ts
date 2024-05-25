@@ -74,7 +74,7 @@ createApp({
 
     const errors = ref({})
     const loadAttachments = async (id: number) => {
-      const response = await fetch(`/faculties/tasks/${id}/attachments`)
+      const response = await fetch(`/admin/tasks/${id}/attachments`)
       const responseBody = await response.json()
       attachmentUrls.value = responseBody?.attachments ?? []
       facultyAttachmentUrls.value = responseBody?.facultyAttachments ?? []

@@ -35,7 +35,7 @@ createApp({
       })
     })
     const initView = (task: Task) => {
-      const event = new CustomEvent('task:edit', { detail: task })
+      const event = new CustomEvent('task:view', { detail: task })
       window.dispatchEvent(event)
     }
     const initCompletion = (task: Task) => {

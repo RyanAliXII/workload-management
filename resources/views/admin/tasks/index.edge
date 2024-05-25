@@ -96,7 +96,8 @@
                <column  header="Actions">
                 <template #body="slotProps">
                  <div class="d-flex gap-2">
-                   <button class="btn btn-outline-primary" v-on:click="initEdit(slotProps.data)">Edit</button>
+                   <button class="btn btn-outline-primary" v-on:click="initEdit(slotProps.data)" v-if="!slotProps.data.completedAt">Edit</button>
+                   <button class="btn btn-outline-success" v-on:click="initView(slotProps.data)">View</button>
                    <button class="btn btn-outline-danger" v-on:click="initDelete(slotProps.data)">Delete</button>
                  </div>
                </template>
@@ -110,6 +111,8 @@
         </div>
         @!component('components/tasks/add-task-modal')
         @!component('components/tasks/edit-task-modal', {assetBaseUrl: assetBaseUrl})
+        @!component('components/tasks/view-task-modal')
+
     </div>
     
     @include('partials/scripts')
@@ -122,5 +125,6 @@
     @vite('resources/ts/tasks/add_task_modal.ts')
     @vite('resources/ts/tasks/edit_task_modal.ts')
     @vite('resources/ts/tasks/task_table.ts')
+    @vite('resources/ts/tasks/view_task_modal.ts')
   </body>
 </html>

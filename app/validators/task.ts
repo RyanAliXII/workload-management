@@ -46,3 +46,11 @@ export const idValidator = vine.compile(
   })
 )
 idValidator.errorReporter = () => new JSONAPIErrorReporter()
+
+export const completionValidator = vine.compile(
+  vine.object({
+    id: vine.number().min(1),
+    remarks: vine.string().optional(),
+  })
+)
+completionValidator.errorReporter = () => new JSONAPIErrorReporter()

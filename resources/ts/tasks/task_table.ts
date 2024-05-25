@@ -52,6 +52,10 @@ createApp({
           updatedAt: new Date(t.createdAt),
         })) ?? []
     }
+    const initView = (task: Task) => {
+      const event = new CustomEvent('task:view', { detail: task })
+      window.dispatchEvent(event)
+    }
     const initDelete = async (task: Task) => {
       $('#viewEventModal').modal('hide')
       const result = await Swal.fire({
@@ -89,6 +93,7 @@ createApp({
       handleStatusChange,
       initDelete,
       initEdit,
+      initView,
     }
   },
 })

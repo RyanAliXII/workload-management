@@ -94,7 +94,7 @@
                 <template #body="slotProps">
                  <div class="d-flex gap-2">
                    <button class="btn btn-outline-primary" v-on:click="initView(slotProps.data)">View</button>
-                   <button class="btn btn-success" v-on:click="initCompletion(slotProps.data)">Mark as Complete</button>
+                   <button class="btn btn-success" v-on:click="initCompletion(slotProps.data)" v-if="!slotProps.data.completedAt">Mark as Complete</button>
                  </div>
                </template>
               </column>
