@@ -23,6 +23,14 @@ export default defineConfig({
         'resources/ts/fund_sources/fund_sources.ts',
         'resources/ts/faculties/add_faculty.ts',
         'resources/ts/faculties/edit_faculty.ts',
+        'resources/ts/events/add_event_modal.ts',
+        'resources/ts/events/edit_event_modal.ts',
+        'resources/ts/events/event_calendar.ts',
+        'resources/ts/events/view_event_modal.ts',
+        'resources/vendors/bootstrap/dist/css/bootstrap.min.css',
+        'resources/vendors/@fortawesome/fontawesome-free/css/all.min.css',
+        'resources/vendors/ionicons-npm/css/ionicons.css',
+        'resources/vendors/linearicons-master/dist/web-font/style.css',
       ],
 
       /**
