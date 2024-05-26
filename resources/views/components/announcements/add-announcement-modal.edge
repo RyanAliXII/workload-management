@@ -1,0 +1,31 @@
+<div class="modal fade" ref="addModalEl"  tabindex="-1" role="dialog"
+aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">New Announcement</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            </button>
+        </div>
+        <form v-on:submit.prevent="onSubmitCreate">
+        <div class="modal-body">
+            <div class="form-group mb-2">
+              <label for="name">Title</label>
+              <textarea name="title" v-model="form.title"  class="form-control"   :class="{'is-invalid':errors?.title?.[0]}"></textarea>
+              <div class="invalid-feedback" :class="{'d-block':errors?.name?.[0]}">${errors?.title?.[0]}</div>
+            </div>
+            <div class="form-group mb-2">
+                <label for="description">Content</label>
+                <ckeditor v-model="form.content" :editor="editor" :config="editorConfig"></ckeditor>
+                <div class="invalid-feedback" :class="{'d-block':errors?.description?.[0]}">${errors?.content?.[0]}</div>
+            </div>
+        </div>
+        
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" :disabled="isSubmitting">Save</button>
+        </div>
+      </form>
+    </div>
+</div>
+</div>
