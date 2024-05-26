@@ -1,1 +1,60 @@
-<div class="tab-pane" id="table-view-tab" role="tabpanel"></div>
+<div class="tab-pane active" id="table-view-tab" role="tabpanel">
+  <table class="table table-bordered">
+    <tr>
+      <th colspan="6" class="header">${form.name}</th>
+    </tr>
+    <tr>
+      <th>School</th>
+      <td>Valenzuela National High School</td>
+      <th>Grade Level</th>
+      <td>${form.grade}</td>
+    </tr>
+    <tr>
+      <th>Teacher</th>
+      <td >{{ auth.user.givenName }} {{ auth.user.surname }}</td>
+      <th>Learning Area</th>
+      <td >${form.learningAreas}</td>
+    </tr>
+    <tr>
+      <th>Teaching Dates and Time</th>
+      <td> ${toReadableDate(form.startDate)} - ${toReadableDate(form.endDate)}</td>
+      <th>Quarter</th>
+      <td >
+        ${form.quarter} - ${'Week ' + form.weekNumber} 
+      </td>
+    </tr>
+    
+    <tr>
+      <th class="header">OBJECTIVE/S</th>
+      <td>${form.objective}</td>
+    </tr>
+    <tr>
+      <th>Content Standards</th>
+      <td >
+        ${form.contentStandard}
+      </td>
+    </tr>
+    <tr>
+        <th>Performance Standard</th>
+        <td >
+          ${form.performanceStandard}
+        </td>
+    </tr>
+    <tr>
+        <th></th>
+
+        <td v-for="(s, index) in form.sessions">
+            Session ${index + 1}
+        </td>
+        
+    </tr>
+    <tr v-for="(label, labelIdx) in form.rowLabels">
+        <th  >${label}</th>
+
+        <td  v-for="(session, index) in form.sessions">
+            ${session?.texts?.[labelIdx]}
+        </td>
+    </tr>
+ 
+  </table>
+</div>

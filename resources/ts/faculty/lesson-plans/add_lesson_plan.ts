@@ -1,5 +1,6 @@
 import { Tab } from 'bootstrap'
 import { createApp, onMounted, ref } from 'vue'
+import { toISO8601DateString, toReadableDate } from '../../utils/date.js'
 createApp({
   compilerOptions: {
     delimiters: ['${', '}'],
@@ -15,7 +16,6 @@ createApp({
         tableViewTabTrigger.value = new Tab(tableViewTabTriggerEl.value)
         formTabTriggerEl.value.addEventListener('click', function (event) {
           event.preventDefault()
-
           formTabTrigger.value?.show()
         })
         tableViewTabTriggerEl.value.addEventListener('click', function (event) {
@@ -26,6 +26,7 @@ createApp({
       }
     })
     const form = ref({
+      name: '',
       grade: '',
       quarter: '',
       weekNumber: 0,
@@ -67,10 +68,21 @@ createApp({
         `F. What difficulties did I encounter which my principal or supervisor can help me solve?`,
         `G. What innovation or localized materials did I use/discover which I wish to share with other teachers?`,
       ],
-      sessions: [] as { text: string }[],
+      sessions: [
+        {
+          texts: [],
+        },
+        {
+          texts: [],
+        },
+      ] as { texts: string[] }[],
     })
     const removeRowLabel = (index: number) => {
       form.value.rowLabels = form.value.rowLabels.filter((_, idx) => idx !== index)
+      form.value.sessions = form.value.sessions.map((s) => {
+        s.texts[index] = ''
+        return s
+      })
     }
     const addRowLabel = () => {
       form.value.rowLabels.push('')
@@ -78,6 +90,9 @@ createApp({
     const addRowLabelBefore = (index: number) => {
       const rows = form.value.rowLabels
       form.value.rowLabels = [...rows.slice(0, index), '', ...rows.slice(index)]
+      form.value.sessions = form.value.sessions.map((s) => {
+        return s
+      })
     }
     const addRowLabelAfter = (index: number) => {
       if (index === form.value.rowLabels.length - 1) {
@@ -88,11 +103,17 @@ createApp({
       form.value.rowLabels = [...rows.slice(0, index + 1), '', ...rows.slice(index + 1)]
     }
     const addSession = () => {
-      form.value.sessions.push({ text: '' })
+      form.value.sessions.push({ texts: [] })
     }
 
     const removeSession = (index: number) => {
       form.value.sessions = form.value.sessions.filter((_, idx) => idx !== index)
+    }
+    const handleDateInput = (event: Event) => {
+      const target = event.target as HTMLInputElement
+      const value = target.value
+      const name = target.name as 'startDate' | 'endDate'
+      form.value[name] = new Date(value)
     }
 
     return {
@@ -105,6 +126,9 @@ createApp({
       removeSession,
       formTabTriggerEl,
       tableViewTabTriggerEl,
+      toReadableDate,
+      handleDateInput,
+      toISO8601DateString,
     }
   },
 }).mount('#createLessonPlan')

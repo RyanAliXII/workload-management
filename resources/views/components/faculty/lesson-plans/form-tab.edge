@@ -1,5 +1,9 @@
-<div class="tab-pane active" id="form-tab" role="tabpanel">
+<div class="tab-pane" id="form-tab" role="tabpanel">
     <div class="row">
+        <div class="col-lg-6">
+            <label>Name</label>
+            <input class="form-control" type="text" v-model="form.name">
+        </div>
        <div class="col-lg-6">
            <label>Grade/Level</label>
            <select class="form-control" v-model="form.grade">
@@ -35,11 +39,11 @@
        </div>
        <div class="col-lg-6">
            <label>Start date</label>
-           <input type="date"  class="form-control">
+           <input v-on:change="handleDateInput" name="startDate" :value="toISO8601DateString(form.startDate)" type="date"  class="form-control">
        </div>
        <div class="col-lg-6">
            <label>End date</label>
-           <input type="date"  class="form-control">
+           <input v-on:change="handleDateInput" name="endDate" :value="toISO8601DateString(form.endDate)" type="date"  class="form-control">
        </div>
        
    
@@ -58,7 +62,7 @@
        </div>
        <div class="col-lg-12">
            <label>Performance Standard</label>
-          <textarea  v-model="form.performanceStandardq" class="form-control"></textarea>
+          <textarea  v-model="form.performanceStandard" class="form-control"></textarea>
        </div>
       </div>
 
@@ -69,16 +73,16 @@
       <button class="btn btn-outline-primary" v-on:click="addSession">
        <i class="fas fa-plus"></i>
        Add Session</button>
-       <div class="p-4" v-for="(session,index) in form.sessions">
+       <div class="p-4" v-for="(session,sessionIdx) in form.sessions">
            <div class="d-flex gap-4 align-items-center">
-           <h4>Session ${index + 1}</h4>
-           <button type="button" class="btn btn-danger"  v-on:click="removeSession(index)"><i class="fas fa-times"></i></button>  
+           <h4>Session ${sessionIdx + 1}</h4>
+           <button type="button" class="btn btn-danger"  v-on:click="removeSession(sessionIdx)"><i class="fas fa-times"></i></button>  
           </div>
            <hr>
            <div class="row py-1"  v-for="(label,index) in form.rowLabels">
                    <div class="col-lg-6">${label}</div>
                    <div class="col-lg-6">
-                       <textarea class="form-control"></textarea>
+                       <textarea class="form-control" v-model="form.sessions[sessionIdx].texts[index]"></textarea>
                    </div>
             </div>
            
@@ -97,7 +101,7 @@
        <div class="d-flex align-items-center gap-2"  v-for="(label,index) in form.rowLabels">
            <div style="flex-basis: 90%;">
                <label>Label</label>
-              <textarea  v-model="form.rowLabels[index]" class="form-control"></textarea>
+              <textarea v-model="form.rowLabels[index]" class="form-control"></textarea>
            </div>
            <button type="button" class="btn btn-danger"  v-on:click="removeRowLabel(index)"><i class="fas fa-times"></i></button>
            <button data-toggle="tooltip" data-placement="right" title="Add row on top" type="button" class="btn btn-outline-primary" v-on:click="addRowLabelBefore(index)"><i class="fa-solid fa-arrow-up"></i></button>
