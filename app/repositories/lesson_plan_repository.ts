@@ -12,7 +12,9 @@ export class LessonPlanRepository {
   async getByFacultyId(facultyId: number) {
     return LessonPlan.query()
       .where('faculty_id', facultyId)
-      .preload('faculty')
+      .preload('faculty', (b) => {
+        b.preload('position')
+      })
       .preload('rowLabels', (b) => {
         b.orderBy('id', 'asc')
       })
@@ -52,9 +54,11 @@ export class LessonPlanRepository {
           { lessonPlanId: lessonPlan.id },
           { client: trx }
         )
-        for (const text of s.texts) {
+
+        for (const [index] of plan.rowLabels.entries()) {
+          const value = s.texts?.[index] ?? ''
           await LessonPlanSessionValue.create(
-            { sessionId: session.id, text: text ?? '' },
+            { sessionId: session.id, text: value },
             { client: trx }
           )
         }

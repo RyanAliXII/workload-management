@@ -25,3 +25,45 @@ export type CreateLessonPlan = {
   rowLabels: string[]
   facultyId: number
 }
+
+export type LessonPlan = {
+  name: string
+  grade:
+    | 'grade-1'
+    | 'grade-2'
+    | 'grade-3'
+    | 'grade-4'
+    | 'grade-5'
+    | 'grade-6'
+    | 'grade-7'
+    | 'grade-8'
+    | 'grade-9'
+    | 'grade-10'
+    | 'grade-11'
+    | 'grade-12'
+  quarter: string
+  startDate: Date
+  endDate: Date
+  weekNumber: number
+  learningAreas?: string
+  objective?: string
+  contentStandard?: string
+  performanceStandard?: string
+  rowLabels: RowLabel[]
+  sessions: Session[]
+  facultyId: number
+}
+export type RowLabel = {
+  id: number
+  name: string
+}
+export type Session = {
+  id: number
+  lessonPlanId: number
+  values: SessionValue[]
+}
+
+export type SessionValue = {
+  id: number
+  text: string
+}

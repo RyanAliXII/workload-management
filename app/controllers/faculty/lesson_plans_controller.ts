@@ -32,6 +32,7 @@ export default class LessonPlansController {
       const body = request.body()
       body.facultyId = auth.user?.id
       const data = await createLessonPlanValidator.validate(body)
+
       await this.lessonPlanRepo.create(data)
       return response.json({
         status: StatusCodes.OK,
