@@ -89,6 +89,7 @@ router
         router.patch('/tasks/:id/completion', [FacultyTasksController, 'updateCompletion'])
         router.get('/lesson-plans/', [FacultyLessonPlansController, 'index'])
         router.get('/lesson-plans/create', [FacultyLessonPlansController, 'createPage'])
+        router.post('/lesson-plans', [FacultyLessonPlansController, 'create'])
       })
       .use(middleware.auth({ guards: ['faculty'], redirectTo: '/faculties/login' }))
   })

@@ -1,6 +1,8 @@
 import { Tab } from 'bootstrap'
 import { createApp, onMounted, ref } from 'vue'
 import { toISO8601DateString, toReadableDate } from '../../utils/date.js'
+import { StatusCodes } from 'http-status-codes'
+import { toStructuredErrors } from '../../utils/form.js'
 createApp({
   compilerOptions: {
     delimiters: ['${', '}'],
@@ -10,6 +12,7 @@ createApp({
     const tableViewTabTriggerEl = ref<HTMLButtonElement | null>()
     const formTabTrigger = ref<InstanceType<typeof Tab> | null>(null)
     const tableViewTabTrigger = ref<InstanceType<typeof Tab> | null>(null)
+    const errors = ref({})
     onMounted(() => {
       if (formTabTriggerEl.value && tableViewTabTriggerEl.value) {
         formTabTrigger.value = new Tab(formTabTriggerEl.value)
@@ -68,14 +71,7 @@ createApp({
         `F. What difficulties did I encounter which my principal or supervisor can help me solve?`,
         `G. What innovation or localized materials did I use/discover which I wish to share with other teachers?`,
       ],
-      sessions: [
-        {
-          texts: [],
-        },
-        {
-          texts: [],
-        },
-      ] as { texts: string[] }[],
+      sessions: [] as { texts: string[] }[],
     })
     const removeRowLabel = (index: number) => {
       form.value.rowLabels = form.value.rowLabels.filter((_, idx) => idx !== index)
@@ -115,7 +111,28 @@ createApp({
       const name = target.name as 'startDate' | 'endDate'
       form.value[name] = new Date(value)
     }
-
+    const onSubmitCreate = async () => {
+      try {
+        errors.value = {}
+        const data = {
+          ...form.value,
+          startDate: toISO8601DateString(form.value.startDate),
+          endDate: toISO8601DateString(form.value.endDate),
+        }
+        const response = await fetch('/faculties/lesson-plans', {
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: new Headers({ 'Content-Type': 'application/json' }),
+        })
+        const responseBody = await response.json()
+        if (response.status === StatusCodes.OK) {
+          toastr.success('Lesson plan has been created.')
+        }
+        if (response.status === StatusCodes.BAD_REQUEST) {
+          errors.value = toStructuredErrors(responseBody?.errors ?? {})
+        }
+      } catch (error) {}
+    }
     return {
       form,
       removeRowLabel,
@@ -129,6 +146,8 @@ createApp({
       toReadableDate,
       handleDateInput,
       toISO8601DateString,
+      errors,
+      onSubmitCreate,
     }
   },
 }).mount('#createLessonPlan')
