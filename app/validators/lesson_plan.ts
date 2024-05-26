@@ -27,6 +27,7 @@ export const createLessonPlanValidator = vine.compile(
     contentStandard: vine.string().optional(),
     performanceStandard: vine.string().optional(),
     rowLabels: vine.array(vine.string().trim()).minLength(1),
+    facultyId: vine.number().min(1),
     sessions: vine
       .array(
         vine.object({

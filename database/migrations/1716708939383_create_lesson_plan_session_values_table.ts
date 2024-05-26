@@ -7,7 +7,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.integer('session_id').unsigned().index().references('id').inTable('lesson_plan_session')
-      table.string('text').defaultTo('')
+      table.text('text').defaultTo('')
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })

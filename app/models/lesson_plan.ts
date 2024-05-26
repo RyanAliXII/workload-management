@@ -1,10 +1,12 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
+import { BaseModel, column, hasMany, hasOne } from '@adonisjs/lucid/orm'
 import LessonPlanSession from './lesson_plan_session.js'
-import type { HasMany } from '@adonisjs/lucid/types/relations'
+import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 import LessonPlanRowLabel from './lesson_plan_row_label.js'
+import Faculty from './faculty.js'
 
 export default class LessonPlan extends BaseModel {
+  static table = 'lesson_plan'
   @column({ isPrimary: true })
   declare id: number
   @column({ columnName: 'name' })
@@ -27,6 +29,10 @@ export default class LessonPlan extends BaseModel {
   declare contentStandard: string
   @column({ columnName: 'performance_standard' })
   declare performanceStandard: string
+  @column({ columnName: 'faculty_id' })
+  declare facultyId: number
+  @hasOne(() => Faculty, { foreignKey: 'id', localKey: 'facultyId' })
+  declare faculty: HasOne<typeof Faculty>
   @hasMany(() => LessonPlanSession, { foreignKey: 'lessonPlanId', localKey: 'id' })
   declare sessions: HasMany<typeof LessonPlanSession>
   @hasMany(() => LessonPlanRowLabel, { foreignKey: 'lessonPlanId', localKey: 'id' })

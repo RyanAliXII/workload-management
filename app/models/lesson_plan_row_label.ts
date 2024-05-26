@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 
 export default class LessonPlanRowLabel extends BaseModel {
+  static table = 'lesson_plan_row_label'
   @column({ isPrimary: true })
   declare id: number
   @column({ columnName: 'label' })

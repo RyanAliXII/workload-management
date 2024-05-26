@@ -25,6 +25,7 @@ export default class extends BaseSchema {
       table.integer('week_number')
       table.date('start_date')
       table.date('end_date')
+      table.integer('faculty_id').unsigned().index().references('id').inTable('faculty')
       table.text('learning_areas').defaultTo('')
       table.text('objective').defaultTo('')
       table.text('content_standard').defaultTo('')
