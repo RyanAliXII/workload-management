@@ -74,7 +74,7 @@
                <template #body="slotProps">
                 <div class="d-flex gap-2">
                   <a :href="'/faculties/lesson-plans/view/' + slotProps.data?.id" class="btn btn-outline-primary" >View</a>
-                  <button class="btn btn-success">Edit</button>
+                  <a :href="'/faculties/lesson-plans/edit/' + slotProps.data?.id" class="btn btn-success">Edit</a>
                   <button class="btn btn-danger">Delete</button>
                 </div>
               </template>

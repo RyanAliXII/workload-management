@@ -35,17 +35,67 @@ export default class LessonPlansController {
       })
 
       const lessonPlan = await this.lessonPlanRepo.getByIdAndFacultyId(filter.id, filter.facultyId)
-      if (!lessonPlan) return response.abort('Not Found', StatusCodes.BAD_REQUEST)
+      if (!lessonPlan) return response.abort('Not Found', StatusCodes.NOT_FOUND)
 
-      const contentType = request.header('Content-Type')
-      if (contentType === 'application/json') {
-        return response.json({
-          status: StatusCodes.OK,
-          message: 'Lesson plan fetched.',
-          lessonPlan,
+      return view.render('faculty/lesson-plans/view-lesson-plan', {
+        lessonPlanId: lessonPlan.id,
+      })
+    } catch (error) {
+      if (error instanceof errors.E_VALIDATION_ERROR) {
+        return response.status(StatusCodes.NOT_FOUND).json({
+          status: StatusCodes.NOT_FOUND,
+          message: 'Validation error',
+          errors: error.messages,
         })
       }
-      return view.render('faculty/lesson-plans/view-lesson-plan')
+      this.logger.error(error)
+      return response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
+        message: 'Unknown error occured',
+      })
+    }
+  }
+  async editPage({ request, response, auth, view }: HttpContext) {
+    try {
+      const filter = await editPageValidator.validate({
+        id: request.param('id'),
+        facultyId: auth.user?.id,
+      })
+
+      const lessonPlan = await this.lessonPlanRepo.getByIdAndFacultyId(filter.id, filter.facultyId)
+      if (!lessonPlan) return response.abort('Not Found', StatusCodes.NOT_FOUND)
+      return view.render('faculty/lesson-plans/edit-lesson-plan', {
+        lessonPlanId: lessonPlan.id,
+      })
+    } catch (error) {
+      if (error instanceof errors.E_VALIDATION_ERROR) {
+        return response.status(StatusCodes.NOT_FOUND).json({
+          status: StatusCodes.NOT_FOUND,
+          message: 'Validation error',
+          errors: error.messages,
+        })
+      }
+      this.logger.error(error)
+      return response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
+        message: 'Unknown error occured',
+      })
+    }
+  }
+  async getOne({ request, response, auth }: HttpContext) {
+    try {
+      const filter = await editPageValidator.validate({
+        id: request.param('id'),
+        facultyId: auth.user?.id,
+      })
+
+      const lessonPlan = await this.lessonPlanRepo.getByIdAndFacultyId(filter.id, filter.facultyId)
+      if (!lessonPlan) return response.abort('Not Found', StatusCodes.NOT_FOUND)
+      return response.json({
+        status: StatusCodes.OK,
+        message: 'lesson plan fetched',
+        lessonPlan,
+      })
     } catch (error) {
       if (error instanceof errors.E_VALIDATION_ERROR) {
         return response.status(StatusCodes.NOT_FOUND).json({

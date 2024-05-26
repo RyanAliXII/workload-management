@@ -111,7 +111,11 @@
         
         
     </div>
- 
+  <script>
+    window.viewData = {
+        lessonPlanId: "{{lessonPlanId}}"
+    }
+  </script>
     @include('partials/scripts')
     @vite(['resources/ts/faculty/lesson-plans/view_lesson_plan.ts'])
   </body>

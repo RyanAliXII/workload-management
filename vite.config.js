@@ -38,6 +38,7 @@ export default defineConfig({
         'resources/ts/faculty/events/event_calendar.ts',
         'resources/ts/faculty/lesson-plans/add_lesson_plan.ts',
         'resources/ts/faculty/lesson-plans/view_lesson_plan.ts',
+        'resources/ts/faculty/lesson-plans/edit_lesson_plan.ts',
         'resources/ts/faculty/lesson-plans/lesson_plans.ts',
         'resources/ts/events/event_calendar.ts',
         'resources/ts/events/view_event_modal.ts',
