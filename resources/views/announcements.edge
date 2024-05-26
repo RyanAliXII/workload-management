@@ -57,62 +57,75 @@
                 Valenzuela National High School offers true to life education forged by the true to
                 life experience. Learn life at ValNat, your gateway to QUALITY LIFE
               </p>
-              <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
-                <a class="btn btn-primary btn-lg px-4 me-sm-3" href="/announcements#announcements"
+              <!-- <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                <a class="btn btn-primary btn-lg px-4 me-sm-3" href="/announcements"
                   >Announcements</a
                 >
                 <a class="btn btn-outline-light btn-lg px-4" href="/">Learn More</a>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
       </div>
     </header>
     <!-- Features section-->
-    <section class="py-5 border-bottom">
-      <div class="container px-5 my-5">
-        <div class="row gx-5">
-          <div class="col-lg-4 mb-5 mb-lg-0">
-            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3">
-              <i class="bi bi-collection"></i>
+    <section class="py-5 border-bottom" id="announcements">
+      <h1 class="text-center">Announcements</h1>
+      <div class="container">
+        <div class="card" v-for="announcement in announcements" style="cursor: pointer;" v-on:click="viewAnnouncement(announcement)">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <img
+                style="max-width: 150px"
+                src="https://t3.ftcdn.net/jpg/03/13/59/86/360_F_313598699_jyO0OFvaccHWe9YsAY1s8Ycpf0qVPIVz.jpg"
+              />
+              <div>
+                <h1 class="card-title">${announcement.title}</h1>
+                <small class="text-muted">${toReadableDatetime(announcement.createdAt)}</small>
+                <!-- <p class="card-text">
+              With supporting text below as a natural lead-in to additional content.
+            </p> -->
+                <!-- <a href="#" class="btn btn-primary">Button</a> -->
+              </div>
             </div>
-            <h2 class="h4 fw-bolder">Vision</h2>
-            <p>
-              We dream of Filipinos who passionately love their country and whose values and
-              competencies enable them to realize their full potential and contribute meaningfully
-              to building the nation. As a learner-centered public institution, the Department of
-              Education continuously improves itself to better serve its stakeholders
-            </p>
-          </div>
-          <div class="col-lg-4 mb-5 mb-lg-0">
-            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3">
-              <i class="bi bi-building"></i>
-            </div>
-            <h2 class="h4 fw-bolder">Mission</h2>
-            <p>
-              To protect and promote the right of every Filipino to quality, equitable,
-              culture-based, and complete basic education where: Students learn in a child-friendly,
-              gender-sensitive, safe, and motivating environment. Teachers facilitate learning and
-              constantly nurture every learner. Administrators and staff, as stewards of the
-              institution, ensure an enabling and supportive environment for effective learning to
-              happen. Family, community, and other stakeholders are actively engaged and share
-              responsibility for developing life-long learners.
-            </p>
-          </div>
-          <div class="col-lg-4">
-            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3">
-              <i class="bi bi-toggles2"></i>
-            </div>
-            <h2 class="h4 fw-bolder">Core Values</h2>
-            <p>
-              Paragraph of text beneath the heading to explain the heading. We'll add onto it with
-              another sentence and probably just keep going until we run out of words.
-            </p>
           </div>
         </div>
       </div>
-    </section>
+      <div class="modal fade" id="viewAnnouncement" ref="announcementModalEl"  tabindex="-1" role="dialog"
+aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Announcement!</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            </button>
+        </div>
+        <form >
+        <div class="modal-body">
+            <div class="d-flex justify-content-center">
+          <img src="https://t3.ftcdn.net/jpg/03/13/59/86/360_F_313598699_jyO0OFvaccHWe9YsAY1s8Ycpf0qVPIVz.jpg" alt="..." class=" img-fluid">
+        </div>
+          <div>
+            <h1 class="text-center">${announcement?.title}</h1>
+            <div v-html="announcement?.content"></div>
+          </div>
+       
+           
 
+           
+          
+            
+        </div>
+        
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        
+        </div>
+      </form>
+    </div>
+</div>
+</div>
+    </section>
     <!-- Pricing section-->
 
     <footer class="py-5 bg-primary">
@@ -131,5 +144,6 @@
     <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
     <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
     <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+    @vite(['resources/ts/announcements/public_announcement.ts'])
   </body>
 </html>

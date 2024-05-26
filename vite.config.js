@@ -51,6 +51,7 @@ export default defineConfig({
         'resources/ts/tasks/view_task_modal.ts',
         'resources/ts/tasks/task_table.ts',
         'resources/ts/announcements/announcements.ts',
+        'resources/ts/announcements/public_announcement.ts',
         'resources/vendors/bootstrap/dist/css/bootstrap.min.css',
         'resources/vendors/@fortawesome/fontawesome-free/css/all.min.css',
         'resources/vendors/ionicons-npm/css/ionicons.css',

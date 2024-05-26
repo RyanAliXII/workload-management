@@ -23,7 +23,10 @@ import { middleware } from './kernel.js'
 router.get('/', async (ctx: HttpContext) => {
   return ctx.view.render('welcome')
 })
-
+router.get('/announcements', (ctx: HttpContext) => {
+  return ctx.view.render('announcements')
+})
+router.get('/announcements/all', [AnnouncementsController, 'getAll'])
 /*Start of admin routes*/
 router
   .group(() => {
@@ -78,6 +81,10 @@ router
           'createComment',
         ])
         router.get('/announcements', [AnnouncementsController, 'index'])
+        router.post('/announcements', [AnnouncementsController, 'create'])
+        router.get('/announcements/all', [AnnouncementsController, 'getAll'])
+        router.put('/announcements/:id', [AnnouncementsController, 'edit'])
+        router.delete('/announcements/:id', [AnnouncementsController, 'delete'])
       })
       .use(middleware.auth({ guards: ['admin'], redirectTo: '/admin/login' }))
   })
