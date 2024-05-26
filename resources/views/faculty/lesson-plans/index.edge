@@ -40,7 +40,12 @@
                   
                 </div>
               </div>
-            
+              <div class="mb-2 mt-2">
+              <a href="/faculties/lesson-plans/create" class="btn btn-outline-primary" >
+                <i class="fas fa-plus"></i>
+                Create Lesson Plan
+              </a>
+            </div>
               <div class="main-card mb-3 card p-5">
                <data-table :value="lessonPlans" :paginator="true" :rows="10" table-class="table">
                 <column field="name" header="Name" sortable></column>
@@ -75,7 +80,7 @@
                 <div class="d-flex gap-2">
                   <a :href="'/faculties/lesson-plans/view/' + slotProps.data?.id" class="btn btn-outline-primary" >View</a>
                   <a :href="'/faculties/lesson-plans/edit/' + slotProps.data?.id" class="btn btn-success">Edit</a>
-                  <button class="btn btn-danger">Delete</button>
+                  <button class="btn btn-danger" v-on:click="initDelete(slotProps?.data)">Delete</button>
                 </div>
               </template>
              </column>

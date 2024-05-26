@@ -1,5 +1,10 @@
 import { LessonPlanRepository } from '#repositories/lesson_plan_repository'
-import { createLessonPlanValidator, editPageValidator } from '#validators/lesson_plan'
+import {
+  createLessonPlanValidator,
+  editLessonPlanValidator,
+  editPageValidator,
+} from '#validators/lesson_plan'
+import { idValidator } from '#validators/task'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import { Logger } from '@adonisjs/core/logger'
@@ -121,6 +126,54 @@ export default class LessonPlansController {
       return response.json({
         status: StatusCodes.OK,
         message: 'Lesson plan created.',
+      })
+    } catch (error) {
+      if (error instanceof errors.E_VALIDATION_ERROR) {
+        return response.status(StatusCodes.BAD_REQUEST).json({
+          status: StatusCodes.BAD_REQUEST,
+          message: 'Validation error',
+          errors: error.messages,
+        })
+      }
+      this.logger.error(error)
+      return response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
+        message: 'Unknown error occured',
+      })
+    }
+  }
+  async edit({ request, response }: HttpContext) {
+    try {
+      const body = request.body()
+      body.id = request.param('id')
+      const data = await editLessonPlanValidator.validate(body)
+      await this.lessonPlanRepo.update(data)
+      return response.json({
+        status: StatusCodes.OK,
+        message: 'Lesson plan updated.',
+      })
+    } catch (error) {
+      if (error instanceof errors.E_VALIDATION_ERROR) {
+        return response.status(StatusCodes.BAD_REQUEST).json({
+          status: StatusCodes.BAD_REQUEST,
+          message: 'Validation error',
+          errors: error.messages,
+        })
+      }
+      this.logger.error(error)
+      return response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
+        message: 'Unknown error occured',
+      })
+    }
+  }
+  async delete({ request, response }: HttpContext) {
+    try {
+      const data = await idValidator.validate({ id: request.param('id') })
+      await this.lessonPlanRepo.delete(data.id)
+      return response.json({
+        status: StatusCodes.OK,
+        message: 'Lesson plan deleted.',
       })
     } catch (error) {
       if (error instanceof errors.E_VALIDATION_ERROR) {

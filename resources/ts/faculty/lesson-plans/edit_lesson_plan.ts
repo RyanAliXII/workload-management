@@ -6,6 +6,7 @@ import { toStructuredErrors } from '../../utils/form.js'
 import toastr from 'toastr'
 import { LessonPlan } from '#types/lesson_plan'
 const INITIAL_VALUES = {
+  id: 0,
   name: '',
   grade: '',
   quarter: '',
@@ -130,16 +131,14 @@ createApp({
           startDate: toISO8601DateString(form.value.startDate),
           endDate: toISO8601DateString(form.value.endDate),
         }
-        const response = await fetch('/faculties/lesson-plans', {
-          method: 'POST',
+        const response = await fetch(`/faculties/lesson-plans/${form.value.id}`, {
+          method: 'PUT',
           body: JSON.stringify(data),
           headers: new Headers({ 'Content-Type': 'application/json' }),
         })
         const responseBody = await response.json()
-        console.log(response.status)
         if (response.status === StatusCodes.OK) {
-          toastr.success('Lesson plan has been created.')
-          resetForm()
+          toastr.success('Lesson plan has been updated.')
         }
         if (response.status === StatusCodes.BAD_REQUEST) {
           errors.value = toStructuredErrors(responseBody?.errors ?? {})
@@ -151,12 +150,13 @@ createApp({
     }
 
     const fetchLessonPlan = async () => {
-      const response = await fetch(`/faculties/lesson-plans/${window.viewData?.lessonPlanId}`, {
+      const response = await fetch(`/faculties/lesson-plans/one/${window.viewData?.lessonPlanId}`, {
         headers: new Headers({ 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' }),
       })
       const data = await response.json()
       if (data?.lessonPlan) {
         const plan = data?.lessonPlan as LessonPlan
+        form.value.id = plan.id
         form.value.name = plan.name
         form.value.startDate = new Date(plan.startDate)
         form.value.endDate = new Date(plan.endDate)

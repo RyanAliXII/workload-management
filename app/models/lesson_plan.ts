@@ -4,8 +4,10 @@ import LessonPlanSession from './lesson_plan_session.js'
 import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 import LessonPlanRowLabel from './lesson_plan_row_label.js'
 import Faculty from './faculty.js'
+import { SoftDeletes } from 'adonis-lucid-soft-deletes'
+import { compose } from '@adonisjs/core/helpers'
 
-export default class LessonPlan extends BaseModel {
+export default class LessonPlan extends compose(BaseModel, SoftDeletes) {
   static table = 'lesson_plan'
   @column({ isPrimary: true })
   declare id: number

@@ -61,7 +61,7 @@ createApp({
     const form = ref({ ...INITIAL_VALUES })
 
     const fetchLessonPlan = async () => {
-      const response = await fetch(`/faculties/lesson-plans/${window.viewData?.lessonPlanId}`, {
+      const response = await fetch(`/faculties/lesson-plans/one/${window.viewData?.lessonPlanId}`, {
         headers: new Headers({ 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' }),
       })
       const data = await response.json()
