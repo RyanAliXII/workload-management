@@ -2,11 +2,11 @@
 <html lang="en">
   @include('partials/head')
   <body>
-    <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar">
+    <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar" id="viewLessonPlan">
         @include('partials/admin/header')
-        <div class="app-main">
+        <div class="app-main" >
           @include('partials/admin/sidebar')
-          <div class="app-main__outer" id="viewLessonPlan">
+          <div class="app-main__outer" >
             <div class="app-main__inner">
               <div class="app-page-title app-page-title-simple">
                 <div class="page-title-wrapper">
@@ -40,7 +40,7 @@
                   
                 </div>
               </div>
-            
+            <button class="btn btn-primary mb-2 mt-2" v-on:click="openCommentModal">Comments</button>
               <div class="main-card mb-3 card p-5" v-cloak>
               
                     <table class="table table-bordered" style="margin-bottom: 0px;">
@@ -106,10 +106,12 @@
                </div>
             </div>
             @include('partials/faculty/footer')
+       
           </div>
+         
         </div>
-        
-        
+       
+        @!component('components/lesson_plans/comment-modal')
     </div>
   <script>
     window.viewData = {

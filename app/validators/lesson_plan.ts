@@ -1,6 +1,5 @@
 import vine from '@vinejs/vine'
 import { JSONAPIErrorReporter } from './json_api_error_reporter.js'
-import LessonPlan from '#models/lesson_plan'
 
 export const createLessonPlanValidator = vine.compile(
   vine.object({

@@ -1,4 +1,5 @@
 import Faculty from '#models/faculty'
+import { User } from './user.js'
 
 export type CreateLessonPlan = {
   name: string
@@ -83,6 +84,12 @@ export type LessonPlan = {
   sessions: Session[]
   facultyId: number
   faculty: Faculty
+  comments: LessonPlanComment[]
+}
+export type LessonPlanComment = {
+  id: number
+  text: string
+  user: User
 }
 export type RowLabel = {
   id: number

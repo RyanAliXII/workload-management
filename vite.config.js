@@ -40,7 +40,7 @@ export default defineConfig({
         'resources/ts/faculty/lesson-plans/view_lesson_plan.ts',
         'resources/ts/faculty/lesson-plans/edit_lesson_plan.ts',
         'resources/ts/faculty/lesson-plans/lesson_plans.ts',
-        'resources/ts/lesson_plans/lesson_plans.ts',
+        'resources/ts/lesson-plans/lesson_plans.ts',
         'resources/ts/lesson-plans/view_lesson_plan.ts',
         'resources/ts/events/view_event_modal.ts',
         'resources/ts/faculties/add_faculty.ts',

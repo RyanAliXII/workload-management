@@ -1,7 +1,11 @@
-import { LessonPlan } from '#types/lesson_plan'
+import { LessonPlan, LessonPlanComment } from '#types/lesson_plan'
 import { createApp, onMounted, ref } from 'vue'
 import { toISO8601DateString, toReadableDate } from '../utils/date.js'
+import { Modal } from 'bootstrap'
+import { StatusCodes } from 'http-status-codes'
+
 const INITIAL_VALUES = {
+  id: 0,
   name: '',
   grade: '',
   quarter: '',
@@ -12,6 +16,7 @@ const INITIAL_VALUES = {
   objective: '',
   contentStandard: '',
   performanceStandard: '',
+  comments: [] as LessonPlanComment[],
   rowLabels: [
     `C. Learning Competencies / Objectives
     Write the LC code for each`,
@@ -52,9 +57,18 @@ createApp({
     delimiters: ['${', '}'],
   },
   setup() {
+    const commentModalEl = ref<HTMLDivElement | null>(null)
+    const commentModal = ref<InstanceType<typeof Modal> | null>(null)
+    const comment = ref<string>('')
     onMounted(() => {
       fetchLessonPlan()
+
+      if (!commentModalEl.value) return
+      commentModal.value = new Modal(commentModalEl.value)
     })
+    const openCommentModal = () => {
+      commentModal.value?.show()
+    }
     const form = ref({ ...INITIAL_VALUES })
 
     const fetchLessonPlan = async () => {
@@ -64,7 +78,7 @@ createApp({
       const data = await response.json()
       if (data?.lessonPlan) {
         const plan = data?.lessonPlan as LessonPlan
-        form.value.name = plan.name
+        ;(form.value.id = plan.id), (form.value.name = plan.name)
         form.value.startDate = new Date(plan.startDate)
         form.value.faculty = `${plan.faculty.givenName} ${plan.faculty.surname}`
         form.value.endDate = new Date(plan.endDate)
@@ -76,15 +90,33 @@ createApp({
         form.value.contentStandard = plan.contentStandard ?? ''
         form.value.performanceStandard = plan.performanceStandard ?? ''
         form.value.rowLabels = plan.rowLabels.map((l) => l.name)
+        form.value.comments = plan.comments
         form.value.sessions = plan.sessions.map((s) => ({
           texts: s.values.map((value) => value.text),
         }))
+      }
+    }
+    const onCreateComment = async () => {
+      const response = await fetch(`/admin/lesson-plans/${form.value.id}/comments`, {
+        method: 'POST',
+        headers: new Headers({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify({
+          text: comment.value,
+        }),
+      })
+      if (response.status === StatusCodes.OK) {
+        comment.value = ''
+        fetchLessonPlan()
       }
     }
     return {
       form,
       toReadableDate,
       toISO8601DateString,
+      openCommentModal,
+      commentModalEl,
+      comment,
+      onCreateComment,
     }
   },
 }).mount('#viewLessonPlan')

@@ -1,6 +1,7 @@
-import { LessonPlan } from '#types/lesson_plan'
+import { LessonPlan, LessonPlanComment } from '#types/lesson_plan'
 import { createApp, onMounted, ref } from 'vue'
 import { toISO8601DateString, toReadableDate } from '../../utils/date.js'
+import { Modal } from 'bootstrap'
 const INITIAL_VALUES = {
   name: '',
   grade: '',
@@ -45,14 +46,19 @@ const INITIAL_VALUES = {
     `G. What innovation or localized materials did I use/discover which I wish to share with other teachers?`,
   ],
   sessions: [] as { texts: string[] }[],
+  comments: [] as LessonPlanComment[],
 }
 createApp({
   compilerOptions: {
     delimiters: ['${', '}'],
   },
   setup() {
+    const commentModalEl = ref<HTMLDivElement | null>(null)
+    const commentModal = ref<InstanceType<typeof Modal> | null>(null)
     onMounted(() => {
       fetchLessonPlan()
+      if (!commentModalEl.value) return
+      commentModal.value = new Modal(commentModalEl.value)
     })
     const form = ref({ ...INITIAL_VALUES })
 
@@ -77,12 +83,18 @@ createApp({
         form.value.sessions = plan.sessions.map((s) => ({
           texts: s.values.map((value) => value.text),
         }))
+        form.value.comments = plan?.comments ?? []
       }
+    }
+    const openCommentModal = () => {
+      commentModal.value?.show()
     }
     return {
       form,
       toReadableDate,
       toISO8601DateString,
+      commentModalEl,
+      openCommentModal,
     }
   },
 }).mount('#viewLessonPlan')

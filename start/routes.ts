@@ -72,6 +72,10 @@ router
         router.get('/lesson-plans', [AdminLessonPlansController, 'index'])
         router.get('/lesson-plans/view/:id', [AdminLessonPlansController, 'viewPage'])
         router.get('/lesson-plans/one/:id', [AdminLessonPlansController, 'getOne'])
+        router.post('/lesson-plans/:lessonPlanId/comments', [
+          AdminLessonPlansController,
+          'createComment',
+        ])
       })
       .use(middleware.auth({ guards: ['admin'], redirectTo: '/admin/login' }))
   })

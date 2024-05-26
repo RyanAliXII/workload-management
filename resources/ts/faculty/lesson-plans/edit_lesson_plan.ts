@@ -117,9 +117,7 @@ createApp({
       const name = target.name as 'startDate' | 'endDate'
       form.value[name] = new Date(value)
     }
-    const resetForm = () => {
-      form.value = { ...INITIAL_VALUES, rowLabels: [...INITIAL_VALUES.rowLabels], sessions: [] }
-    }
+
     const clearErrors = () => {
       errors.value = {}
     }

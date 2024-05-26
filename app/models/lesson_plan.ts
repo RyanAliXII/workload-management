@@ -6,6 +6,7 @@ import LessonPlanRowLabel from './lesson_plan_row_label.js'
 import Faculty from './faculty.js'
 import { SoftDeletes } from 'adonis-lucid-soft-deletes'
 import { compose } from '@adonisjs/core/helpers'
+import LessonPlanComment from './lesson_plan_comment.js'
 
 export default class LessonPlan extends compose(BaseModel, SoftDeletes) {
   static table = 'lesson_plan'
@@ -37,6 +38,8 @@ export default class LessonPlan extends compose(BaseModel, SoftDeletes) {
   declare faculty: HasOne<typeof Faculty>
   @hasMany(() => LessonPlanSession, { foreignKey: 'lessonPlanId', localKey: 'id' })
   declare sessions: HasMany<typeof LessonPlanSession>
+  @hasMany(() => LessonPlanComment, { foreignKey: 'lessonPlanId', localKey: 'id' })
+  declare comments: HasMany<typeof LessonPlanComment>
   @hasMany(() => LessonPlanRowLabel, { foreignKey: 'lessonPlanId', localKey: 'id' })
   declare rowLabels: HasMany<typeof LessonPlanRowLabel>
   @column.dateTime({ autoCreate: true })

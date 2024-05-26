@@ -57,6 +57,9 @@ export class LessonPlanRepository {
           builder.orderBy('id', 'asc')
         })
       })
+      .preload('comments', (b) => {
+        b.preload('user')
+      })
       .limit(1)
       .first()
   }
@@ -73,6 +76,9 @@ export class LessonPlanRepository {
         b.preload('values', (builder) => {
           builder.orderBy('id', 'asc')
         })
+      })
+      .preload('comments', (b) => {
+        b.preload('user')
       })
       .limit(1)
       .first()
