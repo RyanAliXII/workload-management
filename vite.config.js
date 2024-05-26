@@ -36,6 +36,7 @@ export default defineConfig({
         'resources/ts/faculty/events/view_event_modal.ts',
         'resources/ts/faculty/tasks/task_table.ts',
         'resources/ts/faculty/events/event_calendar.ts',
+        'resources/ts/faculty/lesson-plans/add_lesson_plan.ts',
         'resources/ts/events/event_calendar.ts',
         'resources/ts/events/view_event_modal.ts',
         'resources/ts/faculties/add_faculty.ts',
