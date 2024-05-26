@@ -1,10 +1,30 @@
-import { createApp, ref } from 'vue'
-
+import { Tab } from 'bootstrap'
+import { createApp, onMounted, ref } from 'vue'
 createApp({
   compilerOptions: {
     delimiters: ['${', '}'],
   },
   setup() {
+    const formTabTriggerEl = ref<HTMLButtonElement | null>()
+    const tableViewTabTriggerEl = ref<HTMLButtonElement | null>()
+    const formTabTrigger = ref<InstanceType<typeof Tab> | null>(null)
+    const tableViewTabTrigger = ref<InstanceType<typeof Tab> | null>(null)
+    onMounted(() => {
+      if (formTabTriggerEl.value && tableViewTabTriggerEl.value) {
+        formTabTrigger.value = new Tab(formTabTriggerEl.value)
+        tableViewTabTrigger.value = new Tab(tableViewTabTriggerEl.value)
+        formTabTriggerEl.value.addEventListener('click', function (event) {
+          event.preventDefault()
+
+          formTabTrigger.value?.show()
+        })
+        tableViewTabTriggerEl.value.addEventListener('click', function (event) {
+          event.preventDefault()
+
+          tableViewTabTrigger.value?.show()
+        })
+      }
+    })
     const form = ref({
       grade: '',
       quarter: '',
@@ -83,6 +103,8 @@ createApp({
       addRowLabelAfter,
       addSession,
       removeSession,
+      formTabTriggerEl,
+      tableViewTabTriggerEl,
     }
   },
 }).mount('#createLessonPlan')
