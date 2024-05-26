@@ -12,9 +12,10 @@ const FacultiesController = () => import('#controllers/admin/faculties_controlle
 const EventsController = () => import('#controllers/admin/events_controller')
 const FacultyEventsController = () => import('#controllers/faculty/events_controller')
 const AdminTaskController = () => import('#controllers/admin/tasks_controller')
-const FacultyTasksController = () => import('#controllers/faculty/tasks_controller')
+const FacultyTasksController = () => import('#controllers/admin/faculty/tasks_controller')
 const FacultyLessonPlansController = () => import('#controllers/faculty/lesson_plans_controller')
 const AdminLessonPlansController = () => import('#controllers/admin/lesson_plans_controller')
+const AnnouncementsController = () => import('#controllers/admin/announcements_controller')
 import { HttpContext } from '@adonisjs/core/http'
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
@@ -76,6 +77,7 @@ router
           AdminLessonPlansController,
           'createComment',
         ])
+        router.get('/announcements', [AnnouncementsController, 'index'])
       })
       .use(middleware.auth({ guards: ['admin'], redirectTo: '/admin/login' }))
   })
