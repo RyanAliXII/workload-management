@@ -13,6 +13,7 @@ const EventsController = () => import('#controllers/admin/events_controller')
 const FacultyEventsController = () => import('#controllers/faculty/events_controller')
 const AdminTaskController = () => import('#controllers/admin/tasks_controller')
 const FacultyTasksController = () => import('#controllers/faculty/tasks_controller')
+const FacultyLessonPlansController = () => import('#controllers/faculty/lesson_plans_controller')
 import { HttpContext } from '@adonisjs/core/http'
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
@@ -86,6 +87,7 @@ router
         router.get('/tasks/:id/attachments', [FacultyTasksController, 'getAttachmentByTaskId'])
         router.post('/tasks/attachments', [FacultyTasksController, 'uploadTaskAttachments'])
         router.patch('/tasks/:id/completion', [FacultyTasksController, 'updateCompletion'])
+        router.get('/lesson-plans/', [FacultyLessonPlansController, 'index'])
       })
       .use(middleware.auth({ guards: ['faculty'], redirectTo: '/faculties/login' }))
   })
