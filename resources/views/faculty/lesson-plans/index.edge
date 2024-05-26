@@ -73,7 +73,7 @@
               <column  header="Actions">
                <template #body="slotProps">
                 <div class="d-flex gap-2">
-                  <a :href="'faculties/lesson-plans/' + slotProps.data?.id" class="btn btn-outline-primary" >View</a>
+                  <a :href="'/faculties/lesson-plans/view/' + slotProps.data?.id" class="btn btn-outline-primary" >View</a>
                   <button class="btn btn-success">Edit</button>
                   <button class="btn btn-danger">Delete</button>
                 </div>

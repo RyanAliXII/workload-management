@@ -90,6 +90,7 @@ router
         router.get('/lesson-plans/', [FacultyLessonPlansController, 'index'])
         router.get('/lesson-plans/create', [FacultyLessonPlansController, 'createPage'])
         router.post('/lesson-plans', [FacultyLessonPlansController, 'create'])
+        router.get('/lesson-plans/view/:id', [FacultyLessonPlansController, 'viewPage'])
       })
       .use(middleware.auth({ guards: ['faculty'], redirectTo: '/faculties/login' }))
   })

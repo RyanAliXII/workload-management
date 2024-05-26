@@ -24,6 +24,26 @@ export class LessonPlanRepository {
         })
       })
   }
+  async getByIdAndFacultyId(id: number, facultyId: number) {
+    return LessonPlan.query()
+      .andWhere((b) => {
+        b.where('id', id)
+        b.where('facultyId', facultyId)
+      })
+      .preload('faculty', (b) => {
+        b.preload('position')
+      })
+      .preload('rowLabels', (b) => {
+        b.orderBy('id', 'asc')
+      })
+      .preload('sessions', (b) => {
+        b.preload('values', (builder) => {
+          builder.orderBy('id', 'asc')
+        })
+      })
+      .limit(1)
+      .first()
+  }
   async create(plan: CreateLessonPlan) {
     const trx = await db.transaction()
     try {

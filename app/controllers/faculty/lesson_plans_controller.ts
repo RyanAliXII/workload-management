@@ -1,5 +1,5 @@
 import { LessonPlanRepository } from '#repositories/lesson_plan_repository'
-import { createLessonPlanValidator } from '#validators/lesson_plan'
+import { createLessonPlanValidator, editPageValidator } from '#validators/lesson_plan'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import { Logger } from '@adonisjs/core/logger'
@@ -26,6 +26,40 @@ export default class LessonPlansController {
   }
   async createPage({ view }: HttpContext) {
     return view.render('faculty/lesson-plans/add-lesson-plan')
+  }
+  async viewPage({ view, request, auth, response }: HttpContext) {
+    try {
+      const filter = await editPageValidator.validate({
+        id: request.param('id'),
+        facultyId: auth.user?.id,
+      })
+
+      const lessonPlan = await this.lessonPlanRepo.getByIdAndFacultyId(filter.id, filter.facultyId)
+      if (!lessonPlan) return response.abort('Not Found', StatusCodes.BAD_REQUEST)
+
+      const contentType = request.header('Content-Type')
+      if (contentType === 'application/json') {
+        return response.json({
+          status: StatusCodes.OK,
+          message: 'Lesson plan fetched.',
+          lessonPlan,
+        })
+      }
+      return view.render('faculty/lesson-plans/view-lesson-plan')
+    } catch (error) {
+      if (error instanceof errors.E_VALIDATION_ERROR) {
+        return response.status(StatusCodes.NOT_FOUND).json({
+          status: StatusCodes.NOT_FOUND,
+          message: 'Validation error',
+          errors: error.messages,
+        })
+      }
+      this.logger.error(error)
+      return response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
+        message: 'Unknown error occured',
+      })
+    }
   }
   async create({ request, response, auth }: HttpContext) {
     try {

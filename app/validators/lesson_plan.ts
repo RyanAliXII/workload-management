@@ -38,3 +38,10 @@ export const createLessonPlanValidator = vine.compile(
   })
 )
 createLessonPlanValidator.errorReporter = () => new JSONAPIErrorReporter()
+
+export const editPageValidator = vine.compile(
+  vine.object({
+    id: vine.number().min(1),
+    facultyId: vine.number().min(1),
+  })
+)
