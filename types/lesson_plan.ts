@@ -1,3 +1,5 @@
+import Faculty from '#models/faculty'
+
 export type CreateLessonPlan = {
   name: string
   grade:
@@ -80,6 +82,7 @@ export type LessonPlan = {
   rowLabels: RowLabel[]
   sessions: Session[]
   facultyId: number
+  faculty: Faculty
 }
 export type RowLabel = {
   id: number

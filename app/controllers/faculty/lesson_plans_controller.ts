@@ -3,8 +3,9 @@ import {
   createLessonPlanValidator,
   editLessonPlanValidator,
   editPageValidator,
+  idValidator,
 } from '#validators/lesson_plan'
-import { idValidator } from '#validators/task'
+
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import { Logger } from '@adonisjs/core/logger'

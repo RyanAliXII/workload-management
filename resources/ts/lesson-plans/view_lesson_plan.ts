@@ -1,6 +1,6 @@
 import { LessonPlan } from '#types/lesson_plan'
 import { createApp, onMounted, ref } from 'vue'
-import { toISO8601DateString, toReadableDate } from '../../utils/date.js'
+import { toISO8601DateString, toReadableDate } from '../utils/date.js'
 const INITIAL_VALUES = {
   name: '',
   grade: '',
@@ -45,6 +45,7 @@ const INITIAL_VALUES = {
     `G. What innovation or localized materials did I use/discover which I wish to share with other teachers?`,
   ],
   sessions: [] as { texts: string[] }[],
+  faculty: '',
 }
 createApp({
   compilerOptions: {
@@ -57,7 +58,7 @@ createApp({
     const form = ref({ ...INITIAL_VALUES })
 
     const fetchLessonPlan = async () => {
-      const response = await fetch(`/faculties/lesson-plans/one/${window.viewData?.lessonPlanId}`, {
+      const response = await fetch(`/admin/lesson-plans/one/${window.viewData?.lessonPlanId}`, {
         headers: new Headers({ 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' }),
       })
       const data = await response.json()
@@ -65,6 +66,7 @@ createApp({
         const plan = data?.lessonPlan as LessonPlan
         form.value.name = plan.name
         form.value.startDate = new Date(plan.startDate)
+        form.value.faculty = `${plan.faculty.givenName} ${plan.faculty.surname}`
         form.value.endDate = new Date(plan.endDate)
         form.value.grade = plan.grade
         form.value.weekNumber = plan.weekNumber

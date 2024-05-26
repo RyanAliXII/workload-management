@@ -84,7 +84,7 @@ export const editLessonPlanValidator = vine.compile(
 )
 editLessonPlanValidator.errorReporter = () => new JSONAPIErrorReporter()
 
-const idValidator = vine.compile(
+export const idValidator = vine.compile(
   vine.object({
     id: vine.number().min(1),
   })

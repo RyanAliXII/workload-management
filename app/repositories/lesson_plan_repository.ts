@@ -23,6 +23,22 @@ export class LessonPlanRepository {
           builder.orderBy('id', 'asc')
         })
       })
+      .orderBy('created_at', 'desc')
+  }
+  async getAll() {
+    return LessonPlan.query()
+      .preload('faculty', (b) => {
+        b.preload('position')
+      })
+      .preload('rowLabels', (b) => {
+        b.orderBy('id', 'asc')
+      })
+      .preload('sessions', (b) => {
+        b.preload('values', (builder) => {
+          builder.orderBy('id', 'asc')
+        })
+      })
+      .orderBy('created_at', 'desc')
   }
   async getByIdAndFacultyId(id: number, facultyId: number) {
     return LessonPlan.query()
@@ -30,6 +46,23 @@ export class LessonPlanRepository {
         b.where('id', id)
         b.where('facultyId', facultyId)
       })
+      .preload('faculty', (b) => {
+        b.preload('position')
+      })
+      .preload('rowLabels', (b) => {
+        b.orderBy('id', 'asc')
+      })
+      .preload('sessions', (b) => {
+        b.preload('values', (builder) => {
+          builder.orderBy('id', 'asc')
+        })
+      })
+      .limit(1)
+      .first()
+  }
+  async getById(id: number) {
+    return LessonPlan.query()
+      .where('id', id)
       .preload('faculty', (b) => {
         b.preload('position')
       })
