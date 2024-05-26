@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  @include('partials/head')
+  <body>
+    <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar">
+        @include('partials/faculty/header')
+        <div class="app-main">
+          @include('partials/faculty/sidebar')
+          <div class="app-main__outer" id="lessonPlanPage">
+            <div class="app-main__inner">
+              <div class="app-page-title app-page-title-simple">
+                <div class="page-title-wrapper">
+                  <div class="page-title-heading">
+                    <div>
+                      <div class="page-title-head center-elem">
+                        <span class="d-inline-block pe-2">
+                          <i class="lnr-apartment opacity-6"></i>
+                        </span>
+                        <span class="d-inline-block">Lesson Plans</span>
+                      </div>
+                      <div class="page-title-subheading opacity-10">
+                        <nav class="" aria-label="breadcrumb">
+                          <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                              <a>
+                                <i aria-hidden="true" class="fa fa-home"></i>
+                              </a>
+                            </li>
+                            <li class="breadcrumb-item">
+                              <a>Dashboard</a>
+                            </li>
+                            <li class="active breadcrumb-item" aria-current="page">
+                              Lesson Plans
+                            </li>
+                          </ol>
+                        </nav>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+              <div class="mb-2 mt-2">
+              <a href="/faculties/lesson-plans/create" class="btn btn-primary" >
+                <i class="fas fa-plus"></i>
+                Create Lesson Plan
+              </a>
+            </div>
+              <div class="main-card mb-3 card p-5">
+               <data-table :value="lessonPlans" :paginator="true" :rows="10" table-class="table">
+                <column field="name" header="Name" sortable></column>
+                <column  header="Faculty" sortable>
+                   <template #body="slotProps">
+                     <div>
+                     ${slotProps.data.faculty?.givenName} ${slotProps.data?.faculty?.middleName} ${slotProps.data.faculty?.surname} 
+                   </div>
+                     <small>${slotProps.data.faculty?.position?.name}</small>
+                 </template>
+                </column>
+                <!-- <column header="Assigned By" sortable>
+                 <template #body="slotProps">
+                   ${slotProps.data.assignedBy?.givenName} ${slotProps.data.assignedBy?.middleName} ${slotProps.data.assignedBy?.surname} 
+               </template>
+               </column>
+               <column header="Status">
+                 <template #body="slotProps">
+                   <button type="button" class="mb-2 mr-2 btn btn-success" v-if="slotProps.data.completedAt">Completed</button>
+                   <button class="mb-2 mr-2 btn btn-warning" v-else>Pending</button>
+                 </template>
+
+               </column> -->
+                <column  header="Created At">
+                 <template #body="slotProps">
+                   ${toReadableDatetime(slotProps.data.createdAt)}
+                  </template>
+               </column>
+               
+              <column  header="Actions">
+               <template #body="slotProps">
+                <div class="d-flex gap-2">
+                  <a :href="'/faculties/lesson-plans/view/' + slotProps.data?.id" class="btn btn-outline-primary" >View</a>
+                  <a :href="'/faculties/lesson-plans/edit/' + slotProps.data?.id" class="btn btn-success">Edit</a>
+                  <button class="btn btn-danger" v-on:click="initDelete(slotProps?.data)">Delete</button>
+                </div>
+              </template>
+             </column>
+               </data-table>
+                
+               
+              </div>
+            </div>
+            @include('partials/faculty/footer')
+          </div>
+        </div>
+        
+        
+    </div>
+    
+    @include('partials/scripts')
+    @vite(['resources/ts/faculty/lesson-plans/lesson_plans.ts'])
+  </body>
+</html>

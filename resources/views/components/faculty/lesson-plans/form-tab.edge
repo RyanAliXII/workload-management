@@ -1,0 +1,133 @@
+<div class="tab-pane active" id="form-tab" role="tabpanel">
+    <form v-on:submit.prevent="onSubmitCreate">
+    <div class="row">
+        <div class="col-lg-6">
+            <label>Name</label>
+            <input class="form-control" type="text" v-model="form.name" :class="{'is-invalid':errors?.name?.[0]}">
+            <div class="invalid-feedback" :class="{'d-block':errors?.name?.[0]}">${errors?.name?.[0]}</div>
+        </div>
+       <div class="col-lg-6">
+           <label>Grade/Level</label>
+           <select class="form-control" v-model="form.grade" :class="{'is-invalid':errors?.grade?.[0]}">
+               <option value="" disabled >Select Grade/Level</option>
+               <option value="grade-1">Grade 1</option>
+               <option value="grade-2">Grade 2</option>
+               <option value="grade-3">Grade 3</option>
+               <option value="grade-4">Grade 4</option>
+               <option value="grade-5">Grade 5</option>
+               <option value="grade-6">Grade 6</option>
+               <option value="grade-7">Grade 7</option>
+               <option value="grade-8">Grade 8</option>
+               <option value="grade-9">Grade 9</option>
+               <option value="grade-10">Grade 10</option>
+               <option value="grade-11">Grade 11</option>
+               <option value="grade-12">Grade 12</option>
+           </select>
+           <div class="invalid-feedback" :class="{'d-block':errors?.grade?.[0]}">${errors?.grade?.[0]}</div>
+       </div>
+
+       <div class="col-lg-6">
+           <label>Quarter</label>
+           <select class="form-control" v-model="form.quarter" :class="{'is-invalid':errors?.quarter?.[0]}">
+               <option value="" disabled >Select Quarter</option>
+               <option value="quarter-1">Quarter 1</option>
+               <option value="quarter-2">Quarter 2</option>
+               <option value="quarter-3">Quarter 3</option>
+               <option value="quarter-4">Quarter 4</option>
+           </select>
+           <div class="invalid-feedback" :class="{'d-block':errors?.quarter?.[0]}">${errors?.quarter?.[0]}</div>
+       </div>
+       <div class="col-lg-6">
+           <label>Week number</label>
+           <input type="number" v-model="form.weekNumber" class="form-control" :class="{'is-invalid':errors?.weekNumber?.[0]}">
+           <div class="invalid-feedback" :class="{'d-block':errors?.weekNumber?.[0]}">${errors?.weekNumber?.[0]}</div>
+       </div>
+       <div class="col-lg-6">
+           <label>Start date</label>
+           <input v-on:change="handleDateInput" name="startDate" :value="toISO8601DateString(form.startDate)" type="date"  class="form-control" :class="{'is-invalid':errors?.startDate?.[0]}">
+           <div class="invalid-feedback" :class="{'d-block':errors?.startDate?.[0]}">${errors?.startDate?.[0]}</div>
+       </div>
+       <div class="col-lg-6">
+           <label>End date</label>
+           <input v-on:change="handleDateInput" name="endDate" :value="toISO8601DateString(form.endDate)" type="date"  class="form-control"  :class="{'is-invalid':errors?.endDate?.[0]}">
+           <div class="invalid-feedback" :class="{'d-block':errors?.endDate?.[0]}">${errors?.endDate?.[0]}</div>
+        </div>
+       
+   
+
+       <div class="col-lg-12">
+           <label>Learning Areas</label>
+          <textarea v-model="form.learningAreas" class="form-control"></textarea>
+       </div>
+       <div class="col-lg-12">
+           <label>Objective</label>
+          <textarea v-model="form.objective" class="form-control"></textarea>
+       </div>
+       <div class="col-lg-12">
+           <label>Content Standard</label>
+          <textarea v-model="form.contentStandard" class="form-control"></textarea>
+       </div>
+       <div class="col-lg-12">
+           <label>Performance Standard</label>
+          <textarea  v-model="form.performanceStandard" class="form-control"></textarea>
+       </div>
+      </div>
+
+      <div class="alert alert-secondary mt-3" role="alert">
+       <i class="fa-solid fa-z"></i>  Session
+      </div>
+      <div>
+      <button type="button" class="btn btn-outline-primary" v-on:click="addSession">
+       <i class="fas fa-plus"></i>
+       Add Session</button>
+       <div class="alert alert-danger mt-3 mb-2" role="alert" v-if="errors?.sessions?.[0]">
+        Sessions should have atleast one item.
+      </div>
+       <div class="p-4" v-for="(session,sessionIdx) in form.sessions">
+           <div class="d-flex gap-4 align-items-center">
+           <h4>Session ${sessionIdx + 1}</h4>
+           <button type="button" class="btn btn-danger"  v-on:click="removeSession(sessionIdx)"><i class="fas fa-times"></i></button>  
+          </div>
+           <hr>
+           <div class="row py-1"  v-for="(label,index) in form.rowLabels">
+                   <div class="col-lg-6">${label}</div>
+                   <div class="col-lg-6">
+                       <textarea class="form-control" v-model="form.sessions[sessionIdx].texts[index]"></textarea>
+                   </div>
+            </div>
+           
+       </div>
+      </div>
+
+      <div class="alert alert-secondary mt-3" role="alert">
+       <i class="fa-solid fa-z"></i>  Row Label
+      </div>
+      <div>
+       <div class="mt-1 mb-1">
+           <button type="button" class="btn btn-outline-primary" v-on:click="addRowLabel">
+            <i class="fas fa-plus" ></i>
+            Add Row Label</button>
+       </div>
+       <div class="alert alert-danger mt-3 mb-2" role="alert" v-if="errors?.rowLabels?.[0] || errors?.rowLabels?.['*']?.[0]">
+        Row labels cannot be empty and should contain atleast 1 item
+      </div>
+       <div class="d-flex align-items-center gap-2"  v-for="(label,index) in form.rowLabels">
+           <div style="flex-basis: 90%;">
+               <label>Label</label>
+              <textarea v-model="form.rowLabels[index]" class="form-control"></textarea>
+           </div>
+           <button type="button" class="btn btn-danger"  v-on:click="removeRowLabel(index)"><i class="fas fa-times"></i></button>
+           <button data-toggle="tooltip" data-placement="right" title="Add row on top" type="button" class="btn btn-outline-primary" v-on:click="addRowLabelBefore(index)"><i class="fa-solid fa-arrow-up"></i></button>
+           <button data-toggle="tooltip" data-placement="right" title="Add row below" type="button" class="btn btn-outline-primary" v-on:click="addRowLabelAfter(index)">
+               <i class="fa-solid fa-arrow-down"></i>
+           </button>
+          
+       </div>
+      </div>
+      <button type="submit" class="btn btn-primary mt-2">
+        <i class="fas fa-save"></i>
+        Save
+      </button>
+    </form>
+   </div>
+   

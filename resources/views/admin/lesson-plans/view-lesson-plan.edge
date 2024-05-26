@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  @include('partials/head')
+  <body>
+    <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar" id="viewLessonPlan">
+        @include('partials/admin/header')
+        <div class="app-main" >
+          @include('partials/admin/sidebar')
+          <div class="app-main__outer" >
+            <div class="app-main__inner">
+              <div class="app-page-title app-page-title-simple">
+                <div class="page-title-wrapper">
+                  <div class="page-title-heading">
+                    <div>
+                      <div class="page-title-head center-elem">
+                        <span class="d-inline-block pe-2">
+                          <i class="lnr-apartment opacity-6"></i>
+                        </span>
+                        <span class="d-inline-block">Lesson Plan</span>
+                      </div>
+                      <div class="page-title-subheading opacity-10">
+                        <nav class="" aria-label="breadcrumb">
+                          <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                              <a>
+                                <i aria-hidden="true" class="fa fa-home"></i>
+                              </a>
+                            </li>
+                            <li class="breadcrumb-item">
+                              <a>Dashboard</a>
+                            </li>
+                            <li class="active breadcrumb-item" aria-current="page">
+                              Lesson Plan
+                            </li>
+                          </ol>
+                        </nav>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+            <button class="btn btn-primary mb-2 mt-2" v-on:click="openCommentModal">Comments</button>
+              <div class="main-card mb-3 card p-5" v-cloak>
+              
+                    <table class="table table-bordered" style="margin-bottom: 0px;">
+                        <tr>
+                            <th rowspan="4">
+                                <h5>Valenzuela<br>National <br>High School</h5>
+                            </th>
+                            <th colspan="4">${form.name}</th>
+                        </tr>
+                        <tr>
+                            <th>School</th>
+                            <td>Valenzuela National High School</td>
+                            <th>Grade Level</th>
+                            <td>${form.grade}</td>
+                        </tr>
+                        <tr>
+                            <th>Teacher</th>
+                            <td>${form.faculty}</td>
+                            <th>Learning Area</th>
+                            <td>${form.learningAreas}</td>
+                        </tr>
+                      
+                        <tr>
+                            <th>Teaching Dates and Time</th>
+                            <td >${toReadableDate(form.startDate)} - ${toReadableDate(form.endDate)}</td>
+                            <th>Quarter</th>
+                            <td >${form.quarter} - ${'Week ' + form.weekNumber}</td>
+                
+                        </tr>
+                        <tr>
+                            <th class="header">OBJECTIVE/S</th>
+                            <td colspan="4" >${form.objective}</td>
+                           
+                        </tr>
+                        <tr>
+                            <th>Content Standards</th>
+                            <td colspan="4">${form.contentStandard}</td>
+                           
+                        </tr>
+                        <tr>
+                            <th>Performance Standard</th>
+                            <td colspan="4" >${form.performanceStandard}</td>
+                          
+                        </tr>
+                        
+                    </table>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th></th>
+                        <th v-for="(s, index) in form.sessions">
+                            Session ${index + 1}
+                        </th>
+                        </tr>
+                        <tr v-for="(label, labelIdx) in form.rowLabels">
+                            <th>${label}</th>
+                    
+                            <td  v-for="(session, index) in form.sessions">
+                                ${session?.texts?.[labelIdx]}
+                            </td>
+                        </tr>
+                    </table>
+                    
+               </div>
+            </div>
+            @include('partials/faculty/footer')
+       
+          </div>
+         
+        </div>
+       
+        @!component('components/lesson_plans/comment-modal')
+    </div>
+  <script>
+    window.viewData = {
+        lessonPlanId: "{{lessonPlanId}}"
+    }
+  </script>
+    @include('partials/scripts')
+    @vite(['resources/ts/lesson-plans/view_lesson_plan.ts'])
+  </body>
+</html>

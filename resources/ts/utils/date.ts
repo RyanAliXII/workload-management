@@ -10,6 +10,14 @@ export const toReadableDatetime = (date: Date) => {
   })
 }
 
+export const toReadableDate = (date: Date) => {
+  return date.toLocaleString(undefined, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
+}
+
 export const toISO8601DateString = (date: Date) => {
   if (!isValidDatetime(date)) return ''
   try {

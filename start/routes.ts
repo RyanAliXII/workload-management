@@ -13,6 +13,8 @@ const EventsController = () => import('#controllers/admin/events_controller')
 const FacultyEventsController = () => import('#controllers/faculty/events_controller')
 const AdminTaskController = () => import('#controllers/admin/tasks_controller')
 const FacultyTasksController = () => import('#controllers/faculty/tasks_controller')
+const FacultyLessonPlansController = () => import('#controllers/faculty/lesson_plans_controller')
+const AdminLessonPlansController = () => import('#controllers/admin/lesson_plans_controller')
 import { HttpContext } from '@adonisjs/core/http'
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
@@ -67,6 +69,13 @@ router
         router.put('/tasks/:id', [AdminTaskController, 'edit'])
         router.delete('/tasks/:id', [AdminTaskController, 'delete'])
         router.get('/tasks/:id/attachments', [AdminTaskController, 'getAttachmentByTaskId'])
+        router.get('/lesson-plans', [AdminLessonPlansController, 'index'])
+        router.get('/lesson-plans/view/:id', [AdminLessonPlansController, 'viewPage'])
+        router.get('/lesson-plans/one/:id', [AdminLessonPlansController, 'getOne'])
+        router.post('/lesson-plans/:lessonPlanId/comments', [
+          AdminLessonPlansController,
+          'createComment',
+        ])
       })
       .use(middleware.auth({ guards: ['admin'], redirectTo: '/admin/login' }))
   })
@@ -86,6 +95,14 @@ router
         router.get('/tasks/:id/attachments', [FacultyTasksController, 'getAttachmentByTaskId'])
         router.post('/tasks/attachments', [FacultyTasksController, 'uploadTaskAttachments'])
         router.patch('/tasks/:id/completion', [FacultyTasksController, 'updateCompletion'])
+        router.get('/lesson-plans/', [FacultyLessonPlansController, 'index'])
+        router.get('/lesson-plans/one/:id', [FacultyLessonPlansController, 'getOne'])
+        router.get('/lesson-plans/create', [FacultyLessonPlansController, 'createPage'])
+        router.post('/lesson-plans', [FacultyLessonPlansController, 'create'])
+        router.get('/lesson-plans/view/:id', [FacultyLessonPlansController, 'viewPage'])
+        router.get('/lesson-plans/edit/:id', [FacultyLessonPlansController, 'editPage'])
+        router.put('/lesson-plans/:id', [FacultyLessonPlansController, 'edit'])
+        router.delete('/lesson-plans/:id', [FacultyLessonPlansController, 'delete'])
       })
       .use(middleware.auth({ guards: ['faculty'], redirectTo: '/faculties/login' }))
   })

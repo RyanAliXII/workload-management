@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  @include('partials/head')
+  <body>
+    <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar">
+        @include('partials/faculty/header')
+        <div class="app-main">
+          @include('partials/faculty/sidebar')
+          <div class="app-main__outer" id="createLessonPlan">
+            <div class="app-main__inner">
+              <div class="app-page-title app-page-title-simple">
+                <div class="page-title-wrapper">
+                  <div class="page-title-heading">
+                    <div>
+                      <div class="page-title-head center-elem">
+                        <span class="d-inline-block pe-2">
+                          <i class="lnr-apartment opacity-6"></i>
+                        </span>
+                        <span class="d-inline-block">Edit Lesson Plan</span>
+                      </div>
+                      <div class="page-title-subheading opacity-10">
+                        <nav class="" aria-label="breadcrumb">
+                          <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                              <a>
+                                <i aria-hidden="true" class="fa fa-home"></i>
+                              </a>
+                            </li>
+                            <li class="breadcrumb-item">
+                              <a>Dashboard</a>
+                            </li>
+                            <li class="active breadcrumb-item" aria-current="page">
+                              Edit Lesson Plan
+                            </li>
+                          </ol>
+                        </nav>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+            
+              <div class="main-card mb-3 card p-5" v-cloak>
+
+                <ul class="nav nav-tabs" >
+                    <li class="nav-item">
+                      <button ref="formTabTriggerEl" class="nav-link active"  data-bs-toggle="tab" data-bs-target="#form-tab" aria-current="page" href="#">Form</button>
+                    </li>
+                    <li class="nav-item">
+                      <button ref="tableViewTabTriggerEl" class="nav-link"  data-bs-toggle="tab" data-bs-target="#table-view-tab" href="#">Table View</button>
+                    </li>
+                  
+                  </ul>
+               
+
+               <div class="tab-content">
+                @!component('components/faculty/lesson-plans/form-tab')
+                @!component('components/faculty/lesson-plans/table-view-tab')
+                </div>
+               </div>
+            </div>
+            @include('partials/faculty/footer')
+          </div>
+        </div>
+        
+        
+    </div>
+   
+    @include('partials/scripts')
+    <script>
+        window.viewData = {
+            lessonPlanId: "{{lessonPlanId}}"
+        }
+    </script>
+    @vite(['resources/ts/faculty/lesson-plans/edit_lesson_plan.ts'])
+  </body>
+</html>
