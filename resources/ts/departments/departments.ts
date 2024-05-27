@@ -7,6 +7,7 @@ import toastr from 'toastr'
 import Department from '#models/department'
 import { toReadableDatetime } from '../utils/date.js'
 import Swal from 'sweetalert2'
+import 'primevue/resources/themes/md-light-indigo/theme.css'
 createApp({
   compilerOptions: {
     delimiters: ['${', '}'],
