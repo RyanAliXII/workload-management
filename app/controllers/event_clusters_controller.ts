@@ -1,3 +1,4 @@
+import { DepartmentRepository } from '#repositories/department_repository'
 import EventRepository from '#repositories/event_repository'
 import { FacultyRepository } from '#repositories/faculty_repository'
 import {
@@ -12,14 +13,16 @@ import { Logger } from '@adonisjs/core/logger'
 import { errors } from '@vinejs/vine'
 import { StatusCodes } from 'http-status-codes'
 @inject()
-export default class EventsController {
+export default class EventClustersController {
   constructor(
     protected logger: Logger,
     protected facultyRepo: FacultyRepository,
+    protected departmentRepo: DepartmentRepository,
     protected eventRepo: EventRepository
   ) {}
   async index({ view, request, response }: HttpContext) {
     const activeFaculty = await this.facultyRepo.getActive()
+    const departments = await this.departmentRepo.getAll()
     const contentType = request.header('content-type')
     if (contentType === 'application/json') {
       try {
@@ -48,8 +51,9 @@ export default class EventsController {
         })
       }
     }
-    return view.render('admin/events/index', {
+    return view.render('admin/event-clustering/index', {
       activeFaculty,
+      departments,
     })
   }
   async create({ request, response }: HttpContext) {

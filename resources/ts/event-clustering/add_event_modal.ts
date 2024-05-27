@@ -8,6 +8,7 @@ import { computed, createApp, onMounted, ref } from 'vue'
 import { toISO8601DateString } from '../utils/date.js'
 import { Modal } from 'bootstrap'
 import toastr from 'toastr'
+import { Department } from '#types/department'
 type AddEventFormType = {
   name: string
   from: Date
@@ -15,6 +16,7 @@ type AddEventFormType = {
   location: string
   description: string
   status: 'approved' | 'unapproved'
+  departmentId: number
   facilitators: number[]
 }
 const INITIAL_FORM = {
@@ -24,6 +26,7 @@ const INITIAL_FORM = {
   facilitators: [],
   description: '',
   location: '',
+  departmentId: 0,
   status: 'approved',
 }
 createApp({
@@ -48,10 +51,12 @@ createApp({
         meta: f,
       }))
     )
+    const departments = ref<Department[]>([])
     const addModalRef = ref<HTMLDivElement | null>(null)
     const addModal = ref<InstanceType<typeof Modal> | null>(null)
     onMounted(() => {
       activeFaculty.value = window.viewData?.activeFaculty ?? []
+      departments.value = window.viewData?.departments ?? []
       addModalRef.value = document.querySelector('#addEventModal')
 
       if (!addModalRef.value) return
@@ -119,6 +124,7 @@ createApp({
       toISO8601DateString,
       handleDateInput,
       addModalRef,
+      departments,
     }
   },
 })

@@ -8,6 +8,7 @@ import { computed, createApp, onMounted, ref } from 'vue'
 import { toISO8601DateString } from '../utils/date.js'
 import { Modal } from 'bootstrap'
 import toastr from 'toastr'
+import { Department } from '#types/department'
 type AddEventFormType = {
   name: string
   from: Date

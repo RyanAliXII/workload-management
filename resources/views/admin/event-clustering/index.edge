@@ -60,7 +60,8 @@
     @include('partials/scripts')
     <script>
       window.viewData = {
-        activeFaculty: JSON.parse(`{{{JSON.stringify(activeFaculty)}}}`)
+        activeFaculty: JSON.parse(`{{{JSON.stringify(activeFaculty)}}}`),
+        departments: JSON.parse(`{{{JSON.stringify(departments)}}}`)
 
       }
     </script>

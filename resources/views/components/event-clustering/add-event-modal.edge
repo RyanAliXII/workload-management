@@ -25,6 +25,14 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="invalid-feedback" :class="{'d-block':errors?.to?.[0]}">${errors?.to?.[0]}</div>
             </div>
             <div class="form-group mb-2">
+              <label for="facilitator">Departments</label>
+              <select class="form-control" v-model="form.departmentId" :class="{'is-invalid':errors?.departmentId?.[0]}">
+                <option value="0" disabled>Select department</option>
+                <option v-for="d in departments" :value="d.id">${d.name}</option>
+              </select>
+              <div class="invalid-feedback" :class="{'d-block':errors?.departmentId?.[0]}">${errors?.departmentId?.[0]}</div>
+          </div>
+            <div class="form-group mb-2">
                 <label for="facilitator">Facilitators</label>
                 <multi-select filter v-model="form.facilitators" option-label="label" display="chip" option-value="value" :options="facilitators"  placeholder="Select Facilitators" class="w-100 p-2" append-to="body">
                     <template #option="slotProps">
