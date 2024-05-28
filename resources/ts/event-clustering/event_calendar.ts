@@ -1,11 +1,10 @@
-import { EventJSON } from '#types/event'
+import { EventClusterJSON } from '#types/event_cluster'
 import { CalendarOptions, EventInput, EventSourceFunc } from '@fullcalendar/core'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import FullCalendar from '@fullcalendar/vue3'
 import { createApp, onMounted, ref } from 'vue'
 import { toISO8601DateString } from '../utils/date.js'
-import { EventClusterJSON } from '#types/event_cluster'
 
 createApp({
   components: {

@@ -1,16 +1,15 @@
-import { Event as EventType } from '#types/event'
+import { Department } from '#types/department'
+import { EventCluster } from '#types/event_cluster'
 import { Faculty } from '#types/faculty'
 import { OptionWithMeta } from '#types/option'
+import { Modal } from 'bootstrap'
 import { StatusCodes } from 'http-status-codes'
 import PrimeVue from 'primevue/config'
 import MultiSelect from 'primevue/multiselect'
 import 'primevue/resources/themes/md-light-indigo/theme.css'
+import toastr from 'toastr'
 import { computed, createApp, onMounted, ref } from 'vue'
 import { toISO8601DateString } from '../utils/date.js'
-import { Modal } from 'bootstrap'
-import toastr from 'toastr'
-import { EventCluster } from '#types/event_cluster'
-import { Department } from '#types/department'
 type EditEventFormType = {
   id: number
   name: string
