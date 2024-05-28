@@ -24,7 +24,7 @@ export default class extends BaseSchema {
         .unsigned()
         .index()
         .references('id')
-        .inTable(this.tableName)
+        .inTable('department')
       table.timestamp('deleted_at').nullable()
       table.timestamp('created_at')
       table.timestamp('updated_at')
