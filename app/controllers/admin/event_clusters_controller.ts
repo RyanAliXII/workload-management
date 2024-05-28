@@ -93,11 +93,11 @@ export default class EventClustersController {
           errors: error.messages,
         })
       }
-      console.log(error)
+
       this.logger.error(error)
       return response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
         status: StatusCodes.INTERNAL_SERVER_ERROR,
-        message: 'Unknown error occured',
+        message: error,
       })
     }
   }
