@@ -25,8 +25,8 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="invalid-feedback" :class="{'d-block':errors?.to?.[0]}">${errors?.to?.[0]}</div>
             </div>
             <div class="form-group mb-2">
-              <label for="facilitator">Departments</label>
-              <select class="form-control" v-model="form.departmentId" :class="{'is-invalid':errors?.departmentId?.[0]}">
+              <label for="departments">Departments</label>
+              <select class="form-control" v-model="form.departmentId" :class="{'is-invalid':errors?.departmentId?.[0]}" v-on:change="onDepartmentSelect">
                 <option value="0" disabled>Select department</option>
                 <option v-for="d in departments" :value="d.id">${d.name}</option>
               </select>
@@ -55,15 +55,7 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
               <textarea name="description" v-model="form.description"  class="form-control" :class="{'is-invalid':errors?.description?.[0]}"></textarea>
               <div class="invalid-feedback" :class="{'d-block':errors?.description?.[0]}">${errors?.description?.[0]}</div>
            </div>  
-           <div class="form-group mb-2">
-            <label for="status">Status</label>
-           <select class="form-control"  name="status" v-model="form.status">
-            <option value="" disabled selected>Select Status</option>
-            <option value="unapproved">Unapproved</option>
-            <option value="approved">Approved</option>
-           </select>
-            <div class="invalid-feedback" :class="{'d-block':errors?.status?.[0]}">${errors?.status?.[0]}</div>
-         </div>   
+         
         </div>
         
         <div class="modal-footer">

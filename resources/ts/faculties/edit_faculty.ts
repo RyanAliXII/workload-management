@@ -25,6 +25,7 @@ createApp({
       image: '',
       mobileNumber: '',
       password: '',
+      departmentId: 0,
     }
     const form = ref<EditFaculty>({ ...INITIAL_FORM })
     const isSubmitting = ref(false)
@@ -48,6 +49,7 @@ createApp({
         image: `${assetBaseUrl}${data.image}`,
         tin: data.tin,
         password: '',
+        departmentId: data.departmentId,
       }
     })
     const errors = ref({})

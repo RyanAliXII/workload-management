@@ -1,12 +1,9 @@
 import { DepartmentRepository } from '#repositories/department_repository'
-import EventRepository from '#repositories/event_repository'
+import { EventClusterRepository } from '#repositories/event_cluster_repository'
 import { FacultyRepository } from '#repositories/faculty_repository'
-import {
-  createEventValidator,
-  deleteEventValidator,
-  editEventValidator,
-  eventByRangeValidator,
-} from '#validators/event'
+import { eventByRangeValidator } from '#validators/event'
+import { createEventClusterValidator, editEventClusterValidator } from '#validators/event_cluster'
+import { genericIdValidator } from '#validators/generic'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 import { Logger } from '@adonisjs/core/logger'
@@ -18,7 +15,7 @@ export default class EventClustersController {
     protected logger: Logger,
     protected facultyRepo: FacultyRepository,
     protected departmentRepo: DepartmentRepository,
-    protected eventRepo: EventRepository
+    protected eventClusterRepo: EventClusterRepository
   ) {}
   async index({ view, request, response }: HttpContext) {
     const activeFaculty = await this.facultyRepo.getActive()
@@ -30,7 +27,7 @@ export default class EventClustersController {
           from: request.input('from'),
           to: request.input('to'),
         })
-        const events = await this.eventRepo.getWithinRange(query.from, query.to)
+        const events = await this.eventClusterRepo.getWithinRange(query.from, query.to)
         return response.json({
           status: StatusCodes.OK,
           message: 'events fetched',
@@ -56,10 +53,34 @@ export default class EventClustersController {
       departments,
     })
   }
+  async getFacultyByDepartment({ request, response }: HttpContext) {
+    try {
+      const id = await request.param('departmentId')
+      const data = await genericIdValidator.validate({ id: id })
+      const faculty = await this.facultyRepo.findByDepartmentAndActive(data.id)
+      return response.json({
+        status: StatusCodes.OK,
+        faculty,
+      })
+    } catch (error) {
+      if (error instanceof errors.E_VALIDATION_ERROR) {
+        return response.status(StatusCodes.BAD_REQUEST).send({
+          status: StatusCodes.BAD_REQUEST,
+          message: 'Validation error',
+          errors: error.messages,
+        })
+      }
+      this.logger.error(error)
+      return response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
+        message: 'Unknown error occured',
+      })
+    }
+  }
   async create({ request, response }: HttpContext) {
     try {
-      const data = await createEventValidator.validate(request.body())
-      await this.eventRepo.create(data)
+      const data = await createEventClusterValidator.validate(request.body())
+      await this.eventClusterRepo.create(data)
       return response.json({
         status: StatusCodes.OK,
         message: 'Event created.',
@@ -83,8 +104,8 @@ export default class EventClustersController {
     try {
       const body = request.body()
       body.id = request.param('id')
-      const data = await editEventValidator.validate(body)
-      await this.eventRepo.update(data)
+      const data = await editEventClusterValidator.validate(body)
+      await this.eventClusterRepo.update(data)
       return response.json({ status: StatusCodes.OK, message: 'Event updated.' })
     } catch (error) {
       if (error instanceof errors.E_VALIDATION_ERROR) {
@@ -103,8 +124,8 @@ export default class EventClustersController {
   }
   async delete({ request, response }: HttpContext) {
     try {
-      const data = await deleteEventValidator.validate({ id: request.param('id', 0) })
-      await this.eventRepo.delete(data.id)
+      const data = await genericIdValidator.validate({ id: request.param('id', 0) })
+      await this.eventClusterRepo.delete(data.id)
       return response.json({ status: StatusCodes.OK, message: 'Event deleted.' })
     } catch (error) {
       if (error instanceof errors.E_VALIDATION_ERROR) {

@@ -5,6 +5,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import FullCalendar from '@fullcalendar/vue3'
 import { createApp, onMounted, ref } from 'vue'
 import { toISO8601DateString } from '../utils/date.js'
+import { EventClusterJSON } from '#types/event_cluster'
 
 createApp({
   components: {
@@ -12,7 +13,7 @@ createApp({
   },
   setup() {
     const fullCalendar = ref<InstanceType<typeof FullCalendar> | null>(null)
-    const eventUrl = new URL(window.location.origin + '/admin/events')
+    const eventUrl = new URL(window.location.origin + '/admin/event-clusters')
     const fetchEvents: EventSourceFunc = async (info, success) => {
       const start = toISO8601DateString(info.start)
       const end = toISO8601DateString(info.end)
@@ -24,13 +25,11 @@ createApp({
       const data = await response.json()
 
       const events: EventInput[] = []
-      data?.events?.forEach((event: EventJSON) => {
+      data?.events?.forEach((event: EventClusterJSON) => {
         events.push({
           start: event.from,
-          title: `${event.name} - ${event.status}`,
+          title: `${event.name} - ${event.department.name}`,
           end: event.to + ' 23:59:00',
-          className:
-            event.status === 'approved' ? 'calendar-event' : 'event-bg-unapproved calendar-event',
           extendedProps: {
             event: { ...event, from: new Date(event.from), to: new Date(event.to) },
           },

@@ -19,6 +19,7 @@ export type FacultyJSON = {
   }
   image?: string
   mobileNumber: string
+  departmentId: number
 }
 
 export type Faculty = {
@@ -51,6 +52,7 @@ export type FacultyMutation = {
   dateOfBirth: Date
   tin?: string
   positionId: number
+  departmentId: number
   employmentStatus: string
   fundSourceId: number
   educations: Education[]

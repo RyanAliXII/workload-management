@@ -9,6 +9,8 @@ import { computed, createApp, onMounted, ref } from 'vue'
 import { toISO8601DateString } from '../utils/date.js'
 import { Modal } from 'bootstrap'
 import toastr from 'toastr'
+import { EventCluster } from '#types/event_cluster'
+import { Department } from '#types/department'
 type EditEventFormType = {
   id: number
   name: string
@@ -16,7 +18,7 @@ type EditEventFormType = {
   to: Date
   location: string
   description: string
-  status: 'approved' | 'unapproved'
+  departmentId: number
   facilitators: number[]
 }
 const INITIAL_FORM = {
@@ -27,7 +29,7 @@ const INITIAL_FORM = {
   facilitators: [],
   description: '',
   location: '',
-  status: 'approved',
+  departmentId: 0,
 }
 createApp({
   components: {
@@ -40,7 +42,6 @@ createApp({
   setup() {
     const form = ref<EditEventFormType>({
       ...INITIAL_FORM,
-      status: 'approved',
     })
 
     const activeFaculty = ref<Faculty[]>([])
@@ -53,8 +54,10 @@ createApp({
     )
     const editModalRef = ref<HTMLDivElement | null>(null)
     const editModal = ref<InstanceType<typeof Modal> | null>(null)
+    const departments = ref<Department[]>([])
     onMounted(() => {
       activeFaculty.value = window.viewData?.activeFaculty ?? []
+      departments.value = window.viewData?.departments ?? []
       editModalRef.value = document.querySelector('#editEventModal')
       if (!editModalRef.value) return
       editModal.value = new Modal(editModalRef.value)
@@ -64,7 +67,7 @@ createApp({
       })
 
       window.addEventListener('event:edit', (event: Event) => {
-        const customEvent = event as CustomEvent<EventType>
+        const customEvent = event as CustomEvent<EventCluster>
         const e = customEvent.detail
         form.value.id = e.id
         form.value.name = e.name
@@ -72,12 +75,22 @@ createApp({
         form.value.from = e.from
         form.value.to = e.to
         form.value.location = e.location
-        form.value.status = e.status
+        form.value.departmentId = e.departmentId
         form.value.facilitators = e.facilitators?.map((f) => f.id)
         editModal.value?.show()
       })
     })
-
+    const fetchFacultyByDepartment = async (id: number) => {
+      const response = await fetch(`/admin/event-clusters/departments/${id}/faculty`)
+      const responseBody = await response.json()
+      activeFaculty.value = responseBody?.faculty ?? []
+    }
+    const onDepartmentSelect = (event: Event) => {
+      const target = event.target as HTMLSelectElement
+      const value = Number.parseInt(target.value)
+      form.value.facilitators = []
+      fetchFacultyByDepartment(value)
+    }
     const handleDateInput = (event: Event) => {
       const target = event.target as HTMLInputElement
       const value = target.value
@@ -89,7 +102,7 @@ createApp({
       errors.value = {}
     }
     const resetForm = () => {
-      form.value = { ...INITIAL_FORM, status: 'approved' }
+      form.value = { ...INITIAL_FORM }
     }
 
     const onSubmitCreate = async () => {
@@ -103,9 +116,9 @@ createApp({
         facilitatorIds: form.value.facilitators,
         description: form.value.description,
         location: form.value.location,
-        status: form.value.status,
+        departmentId: form.value.departmentId,
       }
-      const response = await fetch(`/admin/events/${form.value.id}`, {
+      const response = await fetch(`/admin/event-clusters/${form.value.id}`, {
         method: 'PUT',
         headers: new Headers({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(body),
@@ -127,7 +140,16 @@ createApp({
       }
     }
 
-    return { form, onSubmitCreate, errors, facilitators, toISO8601DateString, handleDateInput }
+    return {
+      form,
+      onSubmitCreate,
+      errors,
+      facilitators,
+      toISO8601DateString,
+      handleDateInput,
+      departments,
+      onDepartmentSelect,
+    }
   },
 })
   .use(PrimeVue as any)

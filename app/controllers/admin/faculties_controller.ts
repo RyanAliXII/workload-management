@@ -16,6 +16,7 @@ import {
 } from '#validators/faculty'
 import { FacultyRepository } from '#repositories/faculty_repository'
 import hash from '@adonisjs/core/services/hash'
+import { DepartmentRepository } from '#repositories/department_repository'
 
 @inject()
 export default class FacultiesController {
@@ -25,10 +26,12 @@ export default class FacultiesController {
     protected educationalAttainmentRepo: EducationalAttainmentRepository,
     protected cloudinaryService: CloudinaryService,
     protected logger: Logger,
-    protected facultyRepo: FacultyRepository
+    protected facultyRepo: FacultyRepository,
+    protected departmentRepo: DepartmentRepository
   ) {}
   async index({ view, request, response }: HttpContext) {
     const faculty = await this.facultyRepo.getAll()
+
     const contentType = request.header('content-type')
     if (contentType === 'application/json') {
       return response.json({
@@ -45,10 +48,12 @@ export default class FacultiesController {
     const positions = await this.positionRepo.getAll()
     const fundSources = await this.fundSourceRepo.getAll()
     const educationalAttainments = await this.educationalAttainmentRepo.getAll()
+    const departments = await this.departmentRepo.getAll()
     return view.render('admin/faculties/add-faculty', {
       positions,
       fundSources,
       educationalAttainments,
+      departments,
     })
   }
   async uploadFacultyImage({ request, response }: HttpContext) {
@@ -134,11 +139,13 @@ export default class FacultiesController {
       const positions = await this.positionRepo.getAll()
       const fundSources = await this.fundSourceRepo.getAll()
       const educationalAttainments = await this.educationalAttainmentRepo.getAll()
+      const departments = await this.departmentRepo.getAll()
       return view.render('admin/faculties/edit-faculty', {
         faculty,
         positions,
         fundSources,
         educationalAttainments,
+        departments,
         assetBaseUrl: BASE_URL,
       })
     } catch (error) {

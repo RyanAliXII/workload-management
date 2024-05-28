@@ -15,7 +15,7 @@ type AddEventFormType = {
   to: Date
   location: string
   description: string
-  status: 'approved' | 'unapproved'
+
   departmentId: number
   facilitators: number[]
 }
@@ -40,7 +40,6 @@ createApp({
   setup() {
     const form = ref<AddEventFormType>({
       ...INITIAL_FORM,
-      status: 'approved',
     })
 
     const activeFaculty = ref<Faculty[]>([])
@@ -55,7 +54,6 @@ createApp({
     const addModalRef = ref<HTMLDivElement | null>(null)
     const addModal = ref<InstanceType<typeof Modal> | null>(null)
     onMounted(() => {
-      activeFaculty.value = window.viewData?.activeFaculty ?? []
       departments.value = window.viewData?.departments ?? []
       addModalRef.value = document.querySelector('#addEventModal')
 
@@ -75,12 +73,23 @@ createApp({
       const name = target.name as 'from' | 'to'
       form.value[name] = new Date(value)
     }
+    const fetchFacultyByDepartment = async (id: number) => {
+      const response = await fetch(`/admin/event-clusters/departments/${id}/faculty`)
+      const responseBody = await response.json()
+      activeFaculty.value = responseBody?.faculty ?? []
+    }
+    const onDepartmentSelect = (event: Event) => {
+      const target = event.target as HTMLSelectElement
+      const value = Number.parseInt(target.value)
+      form.value.facilitators = []
+      fetchFacultyByDepartment(value)
+    }
     const errors = ref({})
     const clearErrors = () => {
       errors.value = {}
     }
     const resetForm = () => {
-      form.value = { ...INITIAL_FORM, status: 'approved' }
+      form.value = { ...INITIAL_FORM }
     }
 
     const onSubmitCreate = async () => {
@@ -93,9 +102,9 @@ createApp({
         facilitatorIds: form.value.facilitators,
         description: form.value.description,
         location: form.value.location,
-        status: form.value.status,
+        departmentId: form.value.departmentId,
       }
-      const response = await fetch('/admin/events', {
+      const response = await fetch('/admin/event-clusters', {
         method: 'POST',
         headers: new Headers({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(body),
@@ -125,6 +134,7 @@ createApp({
       handleDateInput,
       addModalRef,
       departments,
+      onDepartmentSelect,
     }
   },
 })

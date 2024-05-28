@@ -1,13 +1,14 @@
-import { Event as EventType } from '#types/event'
+import { Department } from '#types/department'
+import { EventCluster } from '#types/event_cluster'
 import { Faculty } from '#types/faculty'
+import { Modal } from 'bootstrap'
 import { StatusCodes } from 'http-status-codes'
 import PrimeVue from 'primevue/config'
 import 'primevue/resources/themes/md-light-indigo/theme.css'
+import Swal from 'sweetalert2'
+import toastr from 'toastr'
 import { createApp, onMounted, ref } from 'vue'
 import { toISO8601DateString } from '../utils/date.js'
-import Swal from 'sweetalert2'
-import { Modal } from 'bootstrap'
-import toastr from 'toastr'
 type ViewEventFormType = {
   id: number
   name: string
@@ -15,7 +16,8 @@ type ViewEventFormType = {
   to: Date
   location: string
   description: string
-  status: 'approved' | 'unapproved'
+  departmentId: number
+  department: Department
   facilitators: Faculty[]
 }
 const INITIAL_FORM = {
@@ -27,6 +29,7 @@ const INITIAL_FORM = {
   description: '',
   location: '',
   status: 'approved',
+  departmentId: 0,
 }
 createApp({
   compilerOptions: {
@@ -36,14 +39,19 @@ createApp({
   setup() {
     const form = ref<ViewEventFormType>({
       ...INITIAL_FORM,
-      status: 'approved',
+
+      department: {
+        id: 0,
+        name: '',
+        createdAt: new Date(),
+      },
     })
-    const currentEvent = ref<EventType | null>(null)
+    const currentEvent = ref<EventCluster | null>(null)
     const viewModalRef = ref<HTMLDivElement | null>(null)
     const viewModal = ref<InstanceType<typeof Modal> | null>(null)
     onMounted(() => {
       window.addEventListener('event:view', (event: Event) => {
-        const customEvent = event as CustomEvent<EventType>
+        const customEvent = event as CustomEvent<EventCluster>
         const e = customEvent.detail
         form.value.id = e.id
         form.value.name = e.name
@@ -52,7 +60,7 @@ createApp({
         form.value.to = e.to
         form.value.facilitators = e.facilitators
         form.value.location = e.location
-        form.value.status = e.status
+
         currentEvent.value = e
         viewModalRef.value = document.querySelector('#viewEventModal')
         if (!viewModalRef.value) return
@@ -86,7 +94,7 @@ createApp({
       deleteEvent()
     }
     const deleteEvent = async () => {
-      const response = await fetch(`/admin  /events/${form.value.id}`, { method: 'DELETE' })
+      const response = await fetch(`/admin/event-clusters/${form.value.id}`, { method: 'DELETE' })
       if (response.status === StatusCodes.OK) {
         viewModal.value?.hide()
         const customEvent = new CustomEvent('calendar:refetch')

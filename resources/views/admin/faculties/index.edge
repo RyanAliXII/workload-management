@@ -100,7 +100,7 @@
     @include('partials/scripts')
     <script>
       window.viewData = {
-        faculty: JSON.parse(`{{{JSON.stringify(faculty)}}}`)
+        faculty: JSON.parse(`{{{JSON.stringify(faculty)}}}`),
       }
     </script>
     @vite('resources/ts/faculties/faculties.ts')

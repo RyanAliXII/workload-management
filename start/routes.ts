@@ -87,6 +87,13 @@ router
         router.put('/announcements/:id', [AnnouncementsController, 'edit'])
         router.delete('/announcements/:id', [AnnouncementsController, 'delete'])
         router.get('/event-clusters', [EventClustersController, 'index'])
+        router.get('/event-clusters/departments/:departmentId/faculty', [
+          EventClustersController,
+          'getFacultyByDepartment',
+        ])
+        router.post('/event-clusters', [EventClustersController, 'create'])
+        router.put('/event-clusters/:id', [EventClustersController, 'edit'])
+        router.delete('/event-clusters/:id', [EventClustersController, 'delete'])
       })
       .use(middleware.auth({ guards: ['admin'], redirectTo: '/admin/login' }))
   })

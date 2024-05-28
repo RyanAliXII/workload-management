@@ -1,12 +1,13 @@
 import { compose } from '@adonisjs/core/helpers'
-import { BaseModel, column, hasMany, hasOne } from '@adonisjs/lucid/orm'
-import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
+import { BaseModel, belongsTo, column, hasMany, hasOne } from '@adonisjs/lucid/orm'
+import type { BelongsTo, HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 import { SoftDeletes } from 'adonis-lucid-soft-deletes'
 import { DateTime } from 'luxon'
 import Education from './education.js'
 import FundSource from './fund_source.js'
 import LoginCredential from './login_credential.js'
 import Position from './position.js'
+import Department from './department.js'
 
 export default class Faculty extends compose(BaseModel, SoftDeletes) {
   static table = 'faculty'
@@ -36,6 +37,11 @@ export default class Faculty extends compose(BaseModel, SoftDeletes) {
   declare loginCredentialId: number
   @column({ columnName: 'mobile_number' })
   declare mobileNumber: string
+  @column({ columnName: 'department_id' })
+  declare departmentId: number
+
+  @belongsTo(() => Department, { foreignKey: 'departmentId', localKey: 'id' })
+  declare department: BelongsTo<typeof Department>
 
   @hasOne(() => Position, { foreignKey: 'id', localKey: 'positionId' })
   declare position: HasOne<typeof Position>

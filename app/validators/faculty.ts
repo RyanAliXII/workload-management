@@ -23,6 +23,8 @@ const facultyMessageProvider = new SimpleMessagesProvider({
   'email.required': 'Email is required',
   'mobileNumber.required': 'Mobile numer is required.',
   'password.required': 'Password is required',
+  'departmentId.required': 'Department is required',
+  'departmentId.min': 'Department is required',
   'mobileNumber.uniqueField': 'Mobile number is already used',
 })
 export const createFacultyValidator = vine.compile(
@@ -38,7 +40,7 @@ export const createFacultyValidator = vine.compile(
     employmentStatus: vine.enum(['regular', 'part-time', 'resigned', 'terminated']),
     fundSourceId: vine.number().min(1),
     email: vine.string().email().use(uniqueFacultyEmailRule()).trim(),
-
+    departmentId: vine.number().min(1),
     mobileNumber: vine
       .string()
       .mobile({ locale: ['en-PH'] })
@@ -84,6 +86,7 @@ export const editFacultyValidator = vine.compile(
     positionId: vine.number().min(1),
     employmentStatus: vine.enum(['regular', 'part-time', 'resigned', 'terminated']),
     fundSourceId: vine.number().min(1),
+    departmentId: vine.number().min(1),
     email: vine
       .string()
       .email()

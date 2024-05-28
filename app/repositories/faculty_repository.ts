@@ -12,6 +12,7 @@ export class FacultyRepository {
       .preload('position')
       .preload('loginCredential')
       .preload('fundSource')
+      .preload('department')
   }
   async getActive() {
     return Faculty.query()
@@ -20,6 +21,7 @@ export class FacultyRepository {
       .preload('loginCredential')
       .preload('fundSource')
       .whereIn('employment_status', ['regular', 'part-time'])
+      .preload('department')
   }
   async create(f: AddFacultyType) {
     const trx = await db.transaction()
@@ -43,6 +45,7 @@ export class FacultyRepository {
       faculty.fundSourceId = f.fundSourceId
       faculty.mobileNumber = f.mobileNumber
       faculty.loginCredentialId = loginCredential.id
+      faculty.departmentId = f.departmentId
       const savedFaculty = await faculty.save()
       await faculty
         .related('educations')
@@ -61,11 +64,24 @@ export class FacultyRepository {
       .preload('fundSource')
       .preload('position')
       .preload('loginCredential')
+      .preload('department')
       .select('*')
       .where('id', id)
       .limit(1)
       .first()
     return faculty
+  }
+  async findByDepartmentAndActive(departmentId: number) {
+    return Faculty.query()
+      .preload('educations')
+      .preload('fundSource')
+      .preload('position')
+      .preload('loginCredential')
+      .preload('department')
+      .andWhere((b) => {
+        b.where('department_id', departmentId)
+        b.whereIn('employment_status', ['regular', 'part-time'])
+      })
   }
   async updateFacultyImage(id: number, image: string) {
     const faculty = await Faculty.findBy('id', id)
@@ -100,6 +116,7 @@ export class FacultyRepository {
       faculty.employmentStatus = f.employmentStatus
       faculty.fundSourceId = f.fundSourceId
       faculty.mobileNumber = f.mobileNumber
+      faculty.departmentId = f.departmentId
       await faculty.save()
       if (!f.password) {
         await faculty

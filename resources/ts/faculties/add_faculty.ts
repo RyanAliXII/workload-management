@@ -24,6 +24,7 @@ createApp({
       image: '',
       mobileNumber: '',
       password: '',
+      departmentId: 0,
     }
     const form = ref<AddFacultyType>({ ...INITIAL_FORM })
     const isSubmitting = ref(false)

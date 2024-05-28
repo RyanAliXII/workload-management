@@ -86,7 +86,7 @@ createApp({
       deleteEvent()
     }
     const deleteEvent = async () => {
-      const response = await fetch(`/admin  /events/${form.value.id}`, { method: 'DELETE' })
+      const response = await fetch(`/admin/events/${form.value.id}`, { method: 'DELETE' })
       if (response.status === StatusCodes.OK) {
         viewModal.value?.hide()
         const customEvent = new CustomEvent('calendar:refetch')
