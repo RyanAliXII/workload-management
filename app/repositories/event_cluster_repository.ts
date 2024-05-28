@@ -43,6 +43,17 @@ export class EventClusterRepository {
       .preload('department')
       .whereBetween('from', [from, to])
   }
+  async getWithinRangeAndDepartment(from: Date, to: Date, departmentId: number) {
+    return EventCluster.query()
+      .preload('facilitators', (builder) => {
+        builder.preload('loginCredential')
+      })
+      .preload('department')
+      .andWhere((b) => {
+        b.whereBetween('from', [from, to])
+        b.where('department_id', departmentId)
+      })
+  }
   async update(event: EditEventCluster) {
     const trx = await db.transaction()
     try {

@@ -16,7 +16,8 @@ const FacultyTasksController = () => import('#controllers/faculty/tasks_controll
 const FacultyLessonPlansController = () => import('#controllers/faculty/lesson_plans_controller')
 const AdminLessonPlansController = () => import('#controllers/admin/lesson_plans_controller')
 const AnnouncementsController = () => import('#controllers/admin/announcements_controller')
-const EventClustersController = () => import('#controllers/event_clusters_controller')
+const EventClustersController = () => import('#controllers/admin/event_clusters_controller')
+const FacultyClustersController = () => import('#controllers/faculty/event_clusters_controller')
 import { HttpContext } from '@adonisjs/core/http'
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
@@ -121,6 +122,7 @@ router
         router.get('/lesson-plans/edit/:id', [FacultyLessonPlansController, 'editPage'])
         router.put('/lesson-plans/:id', [FacultyLessonPlansController, 'edit'])
         router.delete('/lesson-plans/:id', [FacultyLessonPlansController, 'delete'])
+        router.get('/event-clusters', [FacultyClustersController, 'index'])
       })
       .use(middleware.auth({ guards: ['faculty'], redirectTo: '/faculties/login' }))
   })

@@ -1,0 +1,78 @@
+<div
+  class="modal fade"
+  id="viewEventModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Event</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form>
+        <div class="modal-body" id="#editEventModalBody">
+          <div class="form-group mb-2">
+            <label for="name">Name</label>
+            <input name="name" v-model="form.name" class="form-control" disabled />
+          </div>
+          <div class="form-group mb-2">
+            <label for="from">From</label>
+            <input
+              type="date"
+              :value="toISO8601DateString(form.from)"
+              name="from"
+              class="form-control"
+              disabled
+            />
+          </div>
+          <div class="form-group mb-2">
+            <label for="to">To</label>
+            <input
+              type="date"
+              :value="toISO8601DateString(form.to)"
+              name="to"
+              class="form-control"
+              disabled
+            />
+          </div>
+          <div class="form-group">
+            <div class="form-group mb-2">
+              <label for="facilitator">Facilitators</label>
+        
+                <ul>
+                  <li v-for="f in form.facilitators" class="p-1">${f.givenName} ${f.middleName} ${f.surname} - ${f.loginCredential.email}</li>
+                </ul>
+              
+            </div>
+          </div>
+          <div class="form-group mb-2">
+            <label for="location">Location</label>
+            <textarea
+              name="location"
+              v-model="form.location"
+              class="form-control"
+              disabled
+            ></textarea>
+          </div>
+          <div class="form-group mb-2">
+            <label for="description">Description</label>
+            <textarea
+              name="description"
+              v-model="form.description"
+              class="form-control"
+              disabled
+            ></textarea>
+          </div>
+        
+        </div>
+
+        <div class="modal-footer">
+        
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -65,6 +65,8 @@ export default defineConfig({
         'resources/css/homepage.css',
         'resources/vendors/jquery/dist/jquery.min.js',
         'resources/vendors/bootstrap/dist/js/bootstrap.bundle.min.js',
+        'resources/ts/faculty/event-clustering/view_event_modal.ts',
+        'resources/ts/faculty/event-clustering/event_calendar.ts',
         // 'resources/vendors/moment/moment.js',
         // 'resources/vendors/metismenu/dist/metisMenu.js',
         // 'resources/vendors/bootstrap4-toggle/js/bootstrap4-toggle.min.js',
