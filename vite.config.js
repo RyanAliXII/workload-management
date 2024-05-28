@@ -55,6 +55,7 @@ export default defineConfig({
         'resources/vendors/bootstrap/dist/css/bootstrap.min.css',
         'resources/vendors/@fortawesome/fontawesome-free/css/all.min.css',
         'resources/vendors/ionicons-npm/css/ionicons.css',
+        'resources/ts/events/event_calendar.ts',
         'resources/vendors/linearicons-master/dist/web-font/style.css',
         'resources/vendors/pixeden-stroke-7-icon-master/pe-icon-7-stroke/dist/pe-icon-7-stroke.css',
         'resources/ts/event-clustering/add_event_modal.ts',
