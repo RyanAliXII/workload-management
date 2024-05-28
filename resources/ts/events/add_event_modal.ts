@@ -1,19 +1,19 @@
 import { Faculty } from '#types/faculty'
 import { OptionWithMeta } from '#types/option'
+import { Modal } from 'bootstrap'
 import { StatusCodes } from 'http-status-codes'
 import PrimeVue from 'primevue/config'
 import MultiSelect from 'primevue/multiselect'
 import 'primevue/resources/themes/md-light-indigo/theme.css'
+import toastr from 'toastr'
 import { computed, createApp, onMounted, ref } from 'vue'
 import { toISO8601DateString } from '../utils/date.js'
-import { Modal } from 'bootstrap'
-import toastr from 'toastr'
-import { Department } from '#types/department'
 type AddEventFormType = {
   name: string
   from: Date
   to: Date
   location: string
+  isPublic: boolean
   description: string
   status: 'approved' | 'unapproved'
   facilitators: number[]
@@ -25,6 +25,7 @@ const INITIAL_FORM = {
   facilitators: [],
   description: '',
   location: '',
+  isPublic: false,
   status: 'approved',
 }
 createApp({
@@ -90,6 +91,7 @@ createApp({
         description: form.value.description,
         location: form.value.location,
         status: form.value.status,
+        isPublic: form.value.isPublic,
       }
       const response = await fetch('/admin/events', {
         method: 'POST',

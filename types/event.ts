@@ -8,6 +8,7 @@ export type AddEvent = {
   location: string
   description?: string
   status: 'approved' | 'unapproved'
+  isPublic: boolean
   createdById?: number | null
 }
 export type EditEvent = {
@@ -17,6 +18,7 @@ export type EditEvent = {
   to: Date
   facilitatorIds: number[]
   location: string
+  isPublic: boolean
   description?: string
   status: 'approved' | 'unapproved'
 }
@@ -28,11 +30,10 @@ export type Event = {
   to: Date
   facilitators: Faculty[]
   location: string
+  isPublic: boolean
   description?: string
-
   createdById?: number | null
   createdBy?: Faculty | null
-
   status: 'approved' | 'unapproved'
 }
 

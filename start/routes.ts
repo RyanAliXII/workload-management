@@ -18,6 +18,7 @@ const AdminLessonPlansController = () => import('#controllers/admin/lesson_plans
 const AnnouncementsController = () => import('#controllers/admin/announcements_controller')
 const EventClustersController = () => import('#controllers/admin/event_clusters_controller')
 const FacultyClustersController = () => import('#controllers/faculty/event_clusters_controller')
+const PublicEventsController = () => import('#controllers/public_events_controller')
 import { HttpContext } from '@adonisjs/core/http'
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
@@ -29,6 +30,8 @@ router.get('/announcements', (ctx: HttpContext) => {
   return ctx.view.render('announcements')
 })
 router.get('/announcements/all', [AnnouncementsController, 'getAll'])
+router.get('/events', [PublicEventsController, 'index'])
+router.get('/events/public', [PublicEventsController, 'publicEvents'])
 /*Start of admin routes*/
 router
   .group(() => {

@@ -1,13 +1,14 @@
-import { createApp, onMounted, ref } from 'vue'
-import DataTable from 'primevue/datatable'
-import Column from 'primevue/column'
-import { StatusCodes } from 'http-status-codes'
-import { toStructuredErrors } from '../utils/form.js'
-import toastr from 'toastr'
 import Department from '#models/department'
-import { toReadableDatetime } from '../utils/date.js'
-import Swal from 'sweetalert2'
+import { Modal } from 'bootstrap'
+import { StatusCodes } from 'http-status-codes'
+import Column from 'primevue/column'
+import DataTable from 'primevue/datatable'
 import 'primevue/resources/themes/md-light-indigo/theme.css'
+import Swal from 'sweetalert2'
+import toastr from 'toastr'
+import { createApp, onMounted, ref } from 'vue'
+import { toReadableDatetime } from '../utils/date.js'
+import { toStructuredErrors } from '../utils/form.js'
 createApp({
   compilerOptions: {
     delimiters: ['${', '}'],
@@ -49,17 +50,27 @@ createApp({
         updatedAt: new Date(d.updatedAt),
       }))
     }
+    const addModalEl = ref<HTMLDivElement | null>(null)
+    const editModalEl = ref<HTMLDivElement | null>(null)
+    const addModal = ref<InstanceType<typeof Modal> | null>(null)
+    const editModal = ref<InstanceType<typeof Modal> | null>(null)
     onMounted(() => {
       fetchDepartments()
-      $('#newDepartmentModal').on('hidden.bs.modal', () => {
+      if (!addModalEl.value || !editModalEl.value) return
+      addModal.value = new Modal(addModalEl.value)
+      editModal.value = new Modal(editModalEl.value)
+      addModalEl.value.addEventListener('hidden.bs.modal', () => {
         resetForm()
         removeErrors()
       })
-      $('#editDepartmentModal').on('hidden.bs.modal', () => {
+      editModalEl.value.addEventListener('hidden.bs.modal', () => {
         resetForm()
         removeErrors()
       })
     })
+    const openAddModal = () => {
+      addModal.value?.show()
+    }
     const onSubmitCreate = async () => {
       removeErrors()
       const response = await fetch('/admin/departments', {
@@ -71,7 +82,7 @@ createApp({
       if (response.status === StatusCodes.OK) {
         toastr.success('New department created.')
         resetForm()
-        $('#newDepartmentModal').modal('hide')
+        addModal.value?.hide()
         fetchDepartments()
       }
       if (response.status === StatusCodes.BAD_REQUEST) {
@@ -91,7 +102,7 @@ createApp({
       if (response.status === StatusCodes.OK) {
         toastr.success('Department updated.')
         resetForm()
-        $('#editDepartmentModal').modal('hide')
+        editModal.value?.hide()
         fetchDepartments()
       }
       if (response.status === StatusCodes.BAD_REQUEST) {
@@ -105,7 +116,7 @@ createApp({
         id: department.id,
         name: department.name,
       }
-      $('#editDepartmentModal').modal('show')
+      editModal.value?.show()
     }
     const initDelete = async (department: Department) => {
       form.value = {
@@ -142,6 +153,9 @@ createApp({
       onSubmitUpdate,
       departments,
       initDelete,
+      addModalEl,
+      editModalEl,
+      openAddModal,
     }
   },
 }).mount('#departmentsPage')

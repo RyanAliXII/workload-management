@@ -16,7 +16,7 @@ type EditEventFormType = {
   to: Date
   location: string
   description: string
-
+  isPublic: boolean
   facilitators: number[]
 }
 const INITIAL_FORM = {
@@ -27,6 +27,7 @@ const INITIAL_FORM = {
   facilitators: [],
   description: '',
   location: '',
+  isPublic: false,
 }
 createApp({
   components: {
@@ -69,9 +70,8 @@ createApp({
         form.value.from = e.from
         form.value.to = e.to
         form.value.location = e.location
-
+        form.value.isPublic = e.isPublic
         form.value.facilitators = e.facilitators?.map((f) => f.id)
-
         editModal.value?.show()
       })
     })
@@ -101,6 +101,7 @@ createApp({
         facilitatorIds: form.value.facilitators,
         description: form.value.description,
         location: form.value.location,
+        isPublic: form.value.isPublic,
       }
       const response = await fetch(`/faculties/events/${form.value.id}`, {
         method: 'PUT',

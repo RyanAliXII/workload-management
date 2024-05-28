@@ -40,7 +40,7 @@
                   
                 </div>
               </div>
-              <button type="button" class="btn btn-primary mb-3  " data-bs-toggle="modal" data-bs-target="#newDepartmentModal">
+              <button type="button" class="btn btn-primary mb-3"  v-on:click="openAddModal">
                 <i class="fas fa-add"></i> <span>New Department</span>
                 
               </button>
@@ -70,7 +70,7 @@
             @include('partials/admin/footer')
           </div>
         </div>
-        <div class="modal fade" id="newDepartmentModal"  tabindex="-1" role="dialog"
+        <div class="modal fade" id="newDepartmentModal" ref="addModalEl"  tabindex="-1" role="dialog"
         aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -96,7 +96,7 @@
         </div>
      </div>
 
-     <div class="modal fade" id="editDepartmentModal"  tabindex="-1" role="dialog"
+     <div class="modal fade" id="editDepartmentModal" ref="editModalEl"  tabindex="-1" role="dialog"
         aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">

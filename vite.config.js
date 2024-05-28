@@ -61,6 +61,7 @@ export default defineConfig({
         'resources/ts/event-clustering/edit_event_modal.ts',
         'resources/ts/event-clustering/view_event_modal.ts',
         'resources/ts/event-clustering/event_calendar.ts',
+        'resources/ts/public_events/public_events.ts',
         'resources/css/base.css',
         'resources/css/homepage.css',
         'resources/vendors/jquery/dist/jquery.min.js',

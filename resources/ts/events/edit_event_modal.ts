@@ -18,6 +18,7 @@ type EditEventFormType = {
   description: string
   status: 'approved' | 'unapproved'
   facilitators: number[]
+  isPublic: boolean
 }
 const INITIAL_FORM = {
   id: 0,
@@ -28,6 +29,7 @@ const INITIAL_FORM = {
   description: '',
   location: '',
   status: 'approved',
+  isPublic: false,
 }
 createApp({
   components: {
@@ -73,6 +75,7 @@ createApp({
         form.value.to = e.to
         form.value.location = e.location
         form.value.status = e.status
+        form.value.isPublic = e.isPublic
         form.value.facilitators = e.facilitators?.map((f) => f.id)
         editModal.value?.show()
       })
@@ -104,6 +107,7 @@ createApp({
         description: form.value.description,
         location: form.value.location,
         status: form.value.status,
+        isPublic: form.value.isPublic,
       }
       const response = await fetch(`/admin/events/${form.value.id}`, {
         method: 'PUT',

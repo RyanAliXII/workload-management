@@ -11,6 +11,7 @@ export const createEventValidator = vine.compile(
     description: vine.string().optional(),
     createdById: vine.number().optional(),
     status: vine.enum(['approved', 'unapproved']),
+    isPublic: vine.boolean(),
   })
 )
 createEventValidator.errorReporter = () => new JSONAPIErrorReporter()
@@ -33,6 +34,7 @@ export const editEventValidator = vine.compile(
     location: vine.string(),
     description: vine.string().optional(),
     status: vine.enum(['approved', 'unapproved']),
+    isPublic: vine.boolean(),
   })
 )
 editEventValidator.errorReporter = () => new JSONAPIErrorReporter()
@@ -52,6 +54,7 @@ export const createEventFacultyValidator = vine.compile(
     facilitatorIds: vine.array(vine.number().min(1)),
     location: vine.string(),
     description: vine.string().optional(),
+    isPublic: vine.boolean(),
   })
 )
 createEventFacultyValidator.errorReporter = () => new JSONAPIErrorReporter()
@@ -65,6 +68,7 @@ export const editEventFacultyValidator = vine.compile(
     facilitatorIds: vine.array(vine.number().min(1)),
     location: vine.string(),
     description: vine.string().optional(),
+    isPublic: vine.boolean(),
   })
 )
 editEventFacultyValidator.errorReporter = () => new JSONAPIErrorReporter()

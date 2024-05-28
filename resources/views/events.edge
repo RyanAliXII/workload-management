@@ -15,7 +15,22 @@
     />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="{{ asset('resources/css/homepage.css') }}" rel="stylesheet" />
-  </head>
+    <style>
+        
+.event-bg-unapproved {
+    background: #f7b924 !important;
+  }
+  .calendar-event {
+    cursor: pointer;
+    background-color: #006faf;
+    color: white;
+  }
+  .fc-h-event {
+    border: 0px;
+    padding: 5px;
+  }
+    </style>
+</head>
   <body>
     <!-- Responsive navbar-->
     <nav class="navbar navbar-expand-lg">
@@ -35,13 +50,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/">Home</a>
+              <a class="nav-link" aria-current="page" href="/">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/announcements#announcements">Announcements</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/events#events">Events</a>
+              <a class="nav-link active" href="/events#events">Events</a>
             </li>
           </ul>
         </div>
@@ -60,62 +75,25 @@
                 Valenzuela National High School offers true to life education forged by the true to
                 life experience. Learn life at ValNat, your gateway to QUALITY LIFE
               </p>
-              <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
-                <a class="btn btn-primary btn-lg px-4 me-sm-3" href="/announcements#announcements"
+              <!-- <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                <a class="btn btn-primary btn-lg px-4 me-sm-3" href="/announcements"
                   >Announcements</a
                 >
-                <a class="btn btn-outline-light btn-lg px-4" href="/events#events">Events</a>
-              </div>
+                <a class="btn btn-outline-light btn-lg px-4" href="/">Learn More</a>
+              </div> -->
             </div>
           </div>
         </div>
       </div>
     </header>
     <!-- Features section-->
-    <section class="py-5 border-bottom">
-      <div class="container px-5 my-5">
-        <div class="row gx-5">
-          <div class="col-lg-4 mb-5 mb-lg-0">
-            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3">
-              <i class="bi bi-collection"></i>
-            </div>
-            <h2 class="h4 fw-bolder">Vision</h2>
-            <p>
-              We dream of Filipinos who passionately love their country and whose values and
-              competencies enable them to realize their full potential and contribute meaningfully
-              to building the nation. As a learner-centered public institution, the Department of
-              Education continuously improves itself to better serve its stakeholders
-            </p>
-          </div>
-          <div class="col-lg-4 mb-5 mb-lg-0">
-            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3">
-              <i class="bi bi-building"></i>
-            </div>
-            <h2 class="h4 fw-bolder">Mission</h2>
-            <p>
-              To protect and promote the right of every Filipino to quality, equitable,
-              culture-based, and complete basic education where: Students learn in a child-friendly,
-              gender-sensitive, safe, and motivating environment. Teachers facilitate learning and
-              constantly nurture every learner. Administrators and staff, as stewards of the
-              institution, ensure an enabling and supportive environment for effective learning to
-              happen. Family, community, and other stakeholders are actively engaged and share
-              responsibility for developing life-long learners.
-            </p>
-          </div>
-          <div class="col-lg-4">
-            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3">
-              <i class="bi bi-toggles2"></i>
-            </div>
-            <h2 class="h4 fw-bolder">Core Values</h2>
-            <p>
-              Paragraph of text beneath the heading to explain the heading. We'll add onto it with
-              another sentence and probably just keep going until we run out of words.
-            </p>
-          </div>
-        </div>
+    <section class="py-5 border-bottom" id="eventPage">
+      <h1 class="text-center">Events</h1>
+      <div class="container">
+        <full-calendar :options="calendarOptions" ref="fullCalendar"></full-calendar>
+
       </div>
     </section>
-
     <!-- Pricing section-->
 
     <footer class="py-5 bg-primary">
@@ -134,5 +112,6 @@
     <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
     <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
     <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+    @vite(['resources/ts/public_events/public_events.ts'])
   </body>
 </html>

@@ -14,7 +14,7 @@ type AddEventFormType = {
   to: Date
   location: string
   description: string
-
+  isPublic: boolean
   facilitators: number[]
 }
 const INITIAL_FORM = {
@@ -24,6 +24,7 @@ const INITIAL_FORM = {
   facilitators: [],
   description: '',
   location: '',
+  isPublic: false,
 }
 createApp({
   components: {
@@ -85,6 +86,7 @@ createApp({
         facilitatorIds: form.value.facilitators,
         description: form.value.description,
         location: form.value.location,
+        isPublic: form.value.isPublic,
       }
       const response = await fetch('/faculties/events', {
         method: 'POST',

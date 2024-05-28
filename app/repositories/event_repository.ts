@@ -19,6 +19,7 @@ export default class EventRepository {
       eventModel.description = event.description ?? ''
       eventModel.status = event.status
       eventModel.createdById = event.createdById ?? null
+      eventModel.isPublic = event.isPublic
       await eventModel.save()
       const facilitator = new EventFacilitator()
       facilitator.useTransaction(trx)
@@ -41,6 +42,10 @@ export default class EventRepository {
       .preload('createdBy')
       .whereBetween('from', [from, to])
   }
+  async getPublic() {
+    return Event.query().where('is_public', 1)
+  }
+
   async update(event: EditEvent) {
     const trx = await db.transaction()
     try {
@@ -54,6 +59,7 @@ export default class EventRepository {
       dbEvent.location = event.location
       dbEvent.description = event.description ?? ''
       dbEvent.status = event.status
+      dbEvent.isPublic = event.isPublic
       dbEvent.save()
       await EventFacilitator.query({ client: trx }).where('event_id', dbEvent.id).delete()
       await EventFacilitator.createMany(

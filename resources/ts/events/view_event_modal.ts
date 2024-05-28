@@ -17,6 +17,7 @@ type ViewEventFormType = {
   description: string
   status: 'approved' | 'unapproved'
   facilitators: Faculty[]
+  isPublic: boolean
 }
 const INITIAL_FORM = {
   id: 0,
@@ -27,6 +28,7 @@ const INITIAL_FORM = {
   description: '',
   location: '',
   status: 'approved',
+  isPublic: false,
 }
 createApp({
   compilerOptions: {
@@ -53,6 +55,7 @@ createApp({
         form.value.facilitators = e.facilitators
         form.value.location = e.location
         form.value.status = e.status
+        form.value.isPublic = e.isPublic
         currentEvent.value = e
         viewModalRef.value = document.querySelector('#viewEventModal')
         if (!viewModalRef.value) return

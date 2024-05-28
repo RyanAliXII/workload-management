@@ -24,6 +24,8 @@ export default class Event extends compose(BaseModel, SoftDeletes) {
   declare status: 'approved' | 'unapproved'
   @column({ columnName: 'created_by_id' })
   declare createdById: number | null
+  @column({ columnName: 'is_public', serialize: Boolean })
+  declare isPublic: boolean
   @belongsTo(() => Faculty, { foreignKey: 'createdById', localKey: 'id' })
   declare createdBy: BelongsTo<typeof Faculty>
   @manyToMany(() => Faculty, {
