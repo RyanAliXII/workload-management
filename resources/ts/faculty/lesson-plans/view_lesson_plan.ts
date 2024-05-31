@@ -2,6 +2,9 @@ import { LessonPlan, LessonPlanComment } from '#types/lesson_plan'
 import { createApp, onMounted, ref } from 'vue'
 import { toISO8601DateString, toReadableDate } from '../../utils/date.js'
 import { Modal } from 'bootstrap'
+import html2canvas from 'html2canvas'
+import { jsPDF } from 'jspdf'
+const htmlcanvas = html2canvas as any
 const INITIAL_VALUES = {
   name: '',
   grade: '',
@@ -55,6 +58,7 @@ createApp({
   setup() {
     const commentModalEl = ref<HTMLDivElement | null>(null)
     const commentModal = ref<InstanceType<typeof Modal> | null>(null)
+    const lessonPlanElement = ref<HTMLDivElement | null>(null)
     onMounted(() => {
       fetchLessonPlan()
       if (!commentModalEl.value) return
@@ -89,12 +93,20 @@ createApp({
     const openCommentModal = () => {
       commentModal.value?.show()
     }
+    const download = async () => {
+      if (!lessonPlanElement.value) return
+      const canvas = await htmlcanvas(lessonPlanElement.value, { scale: 2, quality: 1 })
+      const document = new jsPDF({ format: 'a4', unit: 'in' })
+      document.addImage(canvas, 0.1, 0.1, 7.1, 8.6)
+      document.save('lesson_plan.pdf')
+    }
     return {
       form,
       toReadableDate,
       toISO8601DateString,
       commentModalEl,
       openCommentModal,
+      download,
     }
   },
 }).mount('#viewLessonPlan')

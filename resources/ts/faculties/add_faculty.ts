@@ -29,7 +29,9 @@ createApp({
     const form = ref<AddFacultyType>({ ...INITIAL_FORM })
     const isSubmitting = ref(false)
     const facultyImage = ref<File | null>(null)
-
+    const yearNow = new Date().getFullYear()
+    const maxDate = new Date()
+    maxDate.setFullYear(yearNow + 1, 0, 0)
     const errors = ref({})
     const addEducation = () => {
       form.value.educations.push({
@@ -110,6 +112,7 @@ createApp({
       handleDateOfBirth,
       toISO8601DateString,
       handleImageSelection,
+      maxDate,
       submit,
       isSubmitting,
     }

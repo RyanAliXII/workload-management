@@ -30,6 +30,9 @@ createApp({
     const form = ref<EditFaculty>({ ...INITIAL_FORM })
     const isSubmitting = ref(false)
     const facultyImage = ref<File | null>(null)
+    const yearNow = new Date().getFullYear()
+    const maxDate = new Date()
+    maxDate.setFullYear(yearNow + 1, 0, 0)
     onMounted(() => {
       const data = window.viewData.faculty as FacultyJSON
       const assetBaseUrl = window.viewData.assetBaseUrl
@@ -128,6 +131,7 @@ createApp({
       toISO8601DateString,
       handleImageSelection,
       submit,
+      maxDate,
       isSubmitting,
     }
   },

@@ -40,8 +40,14 @@
                   
                 </div>
               </div>
-              <button class="btn btn-primary mb-2 mt-2" v-on:click="openCommentModal">Comments</button>
-              <div class="main-card mb-3 card p-5" v-cloak>
+              <div class="d-flex gap-2">
+                <button class="btn btn-primary mb-2 mt-2" v-on:click="openCommentModal">Comments</button>
+                <button class="btn btn-outline-primary mb-2 mt-2" v-on:click="download">
+                  <i class="fas fa-download"></i>
+                  Download</button>
+              </div>
+              
+              <div class="main-card mb-3 card p-5" v-cloak style="min-width: 878px; min-height: 1500; overflow: scroll;"  >
               
                     <table class="table table-bordered" style="margin-bottom: 0px;">
                         <tr>

@@ -88,7 +88,7 @@
                </div>
                <div class="col-lg-6 mb-2">
                 <label name="dateOfBirth">Date of birth*</label>
-                <input name="dateOfBirth" v-on:change="handleDateOfBirth" :value="toISO8601DateString(form.dateOfBirth)" type="date" class="form-control" :class="{'is-invalid':errors?.dateOfBirth?.[0]}">
+                <input name="dateOfBirth" :max="toISO8601DateString(maxDate)" v-on:change="handleDateOfBirth" :value="toISO8601DateString(form.dateOfBirth)" type="date" class="form-control" :class="{'is-invalid':errors?.dateOfBirth?.[0]}">
                 <div class="invalid-feedback" :class="{'d-block':errors?.dateOfBirth?.[0]}">${errors?.dateOfBirth?.[0]}</div>
                </div>
                </div>
