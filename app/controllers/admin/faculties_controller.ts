@@ -87,6 +87,8 @@ export default class FacultiesController {
       const publicId = await this.cloudinaryService.upload({
         filePath: file.tmpPath,
         folder: 'faculty-images',
+        fileExtension: file.extname,
+        resourceType: 'image',
       })
       const faculty = await this.facultyRepo.updateFacultyImage(data.facultyId, publicId)
       return response.json({

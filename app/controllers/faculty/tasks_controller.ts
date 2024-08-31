@@ -48,11 +48,11 @@ export default class TasksController {
       const attachments: string[] = []
       const facultyAttachments: string[] = []
       task.fileAttachments.forEach((fa) => {
-        const url = this.cloudinaryService.generatePublicUrlAsAttachment(fa.objectName)
+        const url = this.cloudinaryService.generatePublicUrlAsAttachment(fa.objectName, 'raw')
         attachments.push(url)
       })
       task.facultyAttachments.forEach((fa) => {
-        const url = this.cloudinaryService.generatePublicUrlAsAttachment(fa.objectName)
+        const url = this.cloudinaryService.generatePublicUrlAsAttachment(fa.objectName, 'raw')
         facultyAttachments.push(url)
       })
 

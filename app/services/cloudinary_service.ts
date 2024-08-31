@@ -8,26 +8,33 @@ cloudinaryV2.config({
   api_secret: env.get('CLOUDINARY_API_SECRET'),
   cloud_name: CLOUD_NAME,
 })
-type UploadOptions = { filePath: string; folder?: string; fileExtension?: string }
+type ResourceType = 'auto' | 'image' | 'raw' | 'video'
+
+type UploadOptions = {
+  filePath: string
+  folder?: string
+  fileExtension?: string
+  resourceType?: ResourceType
+}
 @inject()
 export class CloudinaryService {
-  async upload({ filePath, folder = '', fileExtension }: UploadOptions) {
+  async upload({ filePath, folder = '', resourceType = 'auto', fileExtension }: UploadOptions) {
     console.log(filePath)
     const result = await cloudinaryV2.uploader.upload(filePath, {
       unique_filename: true,
       format: fileExtension,
       folder: folder,
-      resource_type: 'raw',
+      resource_type: resourceType,
     })
     return result.public_id
   }
   generatePublicUrl(publicId: string) {
     return cloudinaryV2.url(publicId)
   }
-  generatePublicUrlAsAttachment(publicId: string) {
+  generatePublicUrlAsAttachment(publicId: string, resourceType: ResourceType = 'auto') {
     return cloudinaryV2.url(publicId, {
       flags: 'attachment',
-      resource_type: 'raw',
+      resource_type: resourceType,
     })
   }
 }
