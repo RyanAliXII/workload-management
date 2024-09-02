@@ -47,15 +47,14 @@ export default class TasksController {
       }
       const attachments: string[] = []
       const facultyAttachments: string[] = []
-      task.fileAttachments.forEach((fa) => {
-        const url = this.cloudinaryService.generatePublicUrlAsAttachment(fa.objectName, 'raw')
+      for (const attachment of task.fileAttachments) {
+        const url = this.cloudinaryService.generatePublicUrlAsAttachment(attachment.objectName)
         attachments.push(url)
-      })
-      task.facultyAttachments.forEach((fa) => {
-        const url = this.cloudinaryService.generatePublicUrlAsAttachment(fa.objectName, 'raw')
+      }
+      for (const attachment of task.facultyAttachments) {
+        const url = this.cloudinaryService.generatePublicUrlAsAttachment(attachment.objectName)
         facultyAttachments.push(url)
-      })
-
+      }
       return response.json({
         status: StatusCodes.OK,
         message: 'Task attachments fetched.',
@@ -116,6 +115,7 @@ export default class TasksController {
           filePath: f.tmpPath,
           folder: 'task-attachments',
           fileExtension: f.extname,
+          resourceType: 'auto',
         })
 
         attachments.push({
