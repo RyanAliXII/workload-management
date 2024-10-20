@@ -10,16 +10,6 @@
            <label>Grade/Level</label>
            <select class="form-control" v-model="form.grade" :class="{'is-invalid':errors?.grade?.[0]}">
                <option value="" disabled >Select Grade/Level</option>
-               <option value="grade-1">Grade 1</option>
-               <option value="grade-2">Grade 2</option>
-               <option value="grade-3">Grade 3</option>
-               <option value="grade-4">Grade 4</option>
-               <option value="grade-5">Grade 5</option>
-               <option value="grade-6">Grade 6</option>
-               <option value="grade-7">Grade 7</option>
-               <option value="grade-8">Grade 8</option>
-               <option value="grade-9">Grade 9</option>
-               <option value="grade-10">Grade 10</option>
                <option value="grade-11">Grade 11</option>
                <option value="grade-12">Grade 12</option>
            </select>
@@ -100,13 +90,13 @@
       </div>
 
       <div class="alert alert-secondary mt-3" role="alert">
-       <i class="fa-solid fa-z"></i>  Row Label
+       <i class="fa-solid fa-z"></i>  
       </div>
       <div>
        <div class="mt-1 mb-1">
            <button type="button" class="btn btn-outline-primary" v-on:click="addRowLabel">
             <i class="fas fa-plus" ></i>
-            Add Row Label</button>
+            Add Row</button>
        </div>
        <div class="alert alert-danger mt-3 mb-2" role="alert" v-if="errors?.rowLabels?.[0] || errors?.rowLabels?.['*']?.[0]">
         Row labels cannot be empty and should contain atleast 1 item

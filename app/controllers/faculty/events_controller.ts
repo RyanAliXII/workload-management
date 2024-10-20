@@ -60,6 +60,7 @@ export default class EventsController {
       const event: AddEvent = {
         ...data,
         status: 'unapproved',
+        isPublic: true,
         createdById: auth.user?.id,
       }
       await this.eventRepo.create(event)

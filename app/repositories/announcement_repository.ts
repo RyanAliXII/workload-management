@@ -3,14 +3,16 @@ import { inject } from '@adonisjs/core'
 
 @inject()
 export class AnnouncementRepository {
-  async create(announcement: { title: string; content: string }) {
+  async create(announcement: { title: string; content: string; thumbnail?: string }) {
     return Announcement.create(announcement)
   }
-  async update(announcement: { id: number; title: string; content: string }) {
+  async update(announcement: { id: number; title: string; content: string; thumbnail?: string }) {
     const a = await Announcement.findBy('id', announcement.id)
     if (!a) return null
     a.title = announcement.title
     a.content = announcement.content
+    a.thumbnail = announcement.thumbnail ?? a.thumbnail
+
     return a.save()
   }
   async getAll() {

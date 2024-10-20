@@ -43,7 +43,7 @@ export default class EventRepository {
       .whereBetween('from', [from, to])
   }
   async getPublic() {
-    return Event.query().where('is_public', 1)
+    return Event.query().where('status', 'approved')
   }
 
   async update(event: EditEvent) {

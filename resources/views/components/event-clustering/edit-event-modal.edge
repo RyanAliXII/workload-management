@@ -10,7 +10,7 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
         <form v-on:submit.prevent="onSubmitCreate">
         <div class="modal-body" id="#editEventModalBody">
             <div class="form-group mb-2">
-              <label for="name">Name</label>
+              <label for="name">Title</label>
               <input name="name" v-model="form.name"  class="form-control"   :class="{'is-invalid':errors?.name?.[0]}">
               <div class="invalid-feedback" :class="{'d-block':errors?.name?.[0]}">${errors?.name?.[0]}</div>
             </div>

@@ -1,4 +1,6 @@
+import { LessonPlanCommentRepository } from '#repositories/lesson_plan_comment_repository'
 import { LessonPlanRepository } from '#repositories/lesson_plan_repository'
+import { createFacultyCommentValidator } from '#validators/comment'
 import {
   createLessonPlanValidator,
   editLessonPlanValidator,
@@ -16,7 +18,8 @@ import { StatusCodes } from 'http-status-codes'
 export default class LessonPlansController {
   constructor(
     protected logger: Logger,
-    protected lessonPlanRepo: LessonPlanRepository
+    protected lessonPlanRepo: LessonPlanRepository,
+    protected commentRepo: LessonPlanCommentRepository
   ) {}
   async index({ view, auth, request, response }: HttpContext) {
     const contentType = request.header('content-type')
@@ -180,6 +183,33 @@ export default class LessonPlansController {
       if (error instanceof errors.E_VALIDATION_ERROR) {
         return response.status(StatusCodes.BAD_REQUEST).json({
           status: StatusCodes.BAD_REQUEST,
+          message: 'Validation error',
+          errors: error.messages,
+        })
+      }
+      this.logger.error(error)
+      return response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
+        message: 'Unknown error occured',
+      })
+    }
+  }
+  async createComment({ request, response, auth }: HttpContext) {
+    try {
+      const body = request.body()
+      body.lessonPlanId = request.param('lessonPlanId')
+      body.userId = auth.user?.id
+      const data = await createFacultyCommentValidator.validate(body)
+      const comment = await this.commentRepo.create({ ...data, userId: null })
+
+      return response.json({
+        status: StatusCodes.OK,
+        comment,
+      })
+    } catch (error) {
+      if (error instanceof errors.E_VALIDATION_ERROR) {
+        return response.status(StatusCodes.NOT_FOUND).json({
+          status: StatusCodes.NOT_FOUND,
           message: 'Validation error',
           errors: error.messages,
         })

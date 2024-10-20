@@ -11,6 +11,8 @@ export default class Announcement extends compose(BaseModel, SoftDeletes) {
   declare title: string
   @column({ columnName: 'content' })
   declare content: string
+  @column({ columnName: 'thumbnail' })
+  declare thumbnail: string | null
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
   @column.dateTime({ autoCreate: true, autoUpdate: true })

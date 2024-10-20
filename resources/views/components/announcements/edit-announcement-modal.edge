@@ -7,13 +7,18 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
             </button>
         </div>
-        <form v-on:submit.prevent="onSubmitUpdate">
+        <form ref="editForm" v-on:submit.prevent="onSubmitUpdate">
         <div class="modal-body">
             <div class="form-group mb-2">
               <label for="name">Title</label>
               <textarea name="title" v-model="form.title"  class="form-control"   :class="{'is-invalid':errors?.title?.[0]}"></textarea>
               <div class="invalid-feedback" :class="{'d-block':errors?.name?.[0]}">${errors?.title?.[0]}</div>
             </div>
+            <div class="form-group mb-2">
+                <label for="name">Thumbnail</label>
+                <input name="thumbnail" @change="handleImageAttach" ref="editThumbnailInput" type="file"  class="form-control"   :class="{'is-invalid':errors?.thumbnail?.[0]}">
+                <div class="invalid-feedback" :class="{'d-block':errors?.name?.[0]}">${errors?.title?.[0]}</div>
+              </div>
             <div class="form-group mb-2">
                 <label for="description">Content</label>
                 <ckeditor v-model="form.content" :editor="editor" :config="editorConfig"></ckeditor>

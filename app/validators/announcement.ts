@@ -5,6 +5,7 @@ export const createAnnouncementValidator = vine.compile(
   vine.object({
     title: vine.string().trim(),
     content: vine.string().trim(),
+    thumbnail: vine.string().optional(),
   })
 )
 createAnnouncementValidator.errorReporter = () => new JSONAPIErrorReporter()
@@ -13,6 +14,7 @@ export const editAnnouncementValidator = vine.compile(
     id: vine.number().min(1),
     title: vine.string().trim(),
     content: vine.string().trim(),
+    thumbnail: vine.string().optional(),
   })
 )
 editAnnouncementValidator.errorReporter = () => new JSONAPIErrorReporter()

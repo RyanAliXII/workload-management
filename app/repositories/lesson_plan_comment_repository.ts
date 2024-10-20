@@ -3,7 +3,7 @@ import { inject } from '@adonisjs/core'
 
 @inject()
 export class LessonPlanCommentRepository {
-  async create(comment: { text: string; userId: number; lessonPlanId: number }) {
+  async create(comment: { text: string; userId: number | null; lessonPlanId: number }) {
     return LessonPlanComment.create(comment)
   }
 }

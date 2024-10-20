@@ -12,6 +12,7 @@ createApp({
     const announcementModalEl = ref<HTMLDivElement | null>(null)
     const announcementModal = ref<InstanceType<typeof Modal> | null>()
     const announcement = ref<Announcement | null>(null)
+
     onMounted(() => {
       fetchAnnouncements()
       if (!announcementModalEl.value) return
@@ -23,6 +24,7 @@ createApp({
       announcements.value =
         responseBody?.announcements?.map((a: any) => ({
           ...a,
+          thumbnail: a.thumbnail ? `${responseBody.baseUrl}${a.thumbnail}` : null,
           createdAt: new Date(a.createdAt),
         })) ?? []
     }

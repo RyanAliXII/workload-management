@@ -24,7 +24,7 @@ const INITIAL_FORM = {
   facilitators: [],
   description: '',
   location: '',
-  isPublic: false,
+  isPublic: true,
 }
 createApp({
   components: {

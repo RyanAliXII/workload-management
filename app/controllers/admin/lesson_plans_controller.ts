@@ -1,3 +1,5 @@
+import LessonPlan from '#models/lesson_plan'
+import { DepartmentRepository } from '#repositories/department_repository'
 import { LessonPlanCommentRepository } from '#repositories/lesson_plan_comment_repository'
 import { LessonPlanRepository } from '#repositories/lesson_plan_repository'
 import { createCommentValidator } from '#validators/comment'
@@ -12,16 +14,27 @@ export default class LessonPlansController {
   constructor(
     protected logger: Logger,
     protected lessonPlanRepo: LessonPlanRepository,
+    protected departmentRepo: DepartmentRepository,
     protected commentRepo: LessonPlanCommentRepository
   ) {}
   async index({ view, request, response }: HttpContext) {
     const contentType = request.header('content-type')
     if (contentType === 'application/json') {
-      const lessonPlans = await this.lessonPlanRepo.getAll()
+      const query = request.qs()
+      let lessonPlans = [] as LessonPlan[]
+      const departmentId = Number.parseInt(query?.departmentId)
+
+      if (Number.isNaN(departmentId)) {
+        lessonPlans = await this.lessonPlanRepo.getAll()
+      } else {
+        lessonPlans = await this.lessonPlanRepo.getByDepartmentId(departmentId)
+      }
+      const departments = await this.departmentRepo.getAll()
       return response.json({
         status: StatusCodes.OK,
         message: 'lesson plan fetched.',
         lessonPlans,
+        departments,
       })
     }
     return view.render('admin/lesson-plans/index')

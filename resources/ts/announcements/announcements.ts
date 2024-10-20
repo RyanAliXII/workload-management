@@ -18,12 +18,30 @@ createApp({
     const addModal = ref<InstanceType<typeof Modal> | null>(null)
     const editModal = ref<InstanceType<typeof Modal> | null>(null)
     const editor = ref(ClassicEditor)
+    const thumbnail = ref<File | null>(null)
     const isSubmitting = ref(false)
     const form = ref({
       id: 0,
       title: '',
       content: '',
     })
+    const addForm = ref<HTMLFormElement>()
+    const editForm = ref<HTMLFormElement>()
+    const handleImageAttach = (event: Event) => {
+      const input = event.target as HTMLInputElement
+      if (!input.files || input.files.length === 0) return
+      thumbnail.value = input.files[0]
+    }
+    const uploadImage = async (file: File) => {
+      const formData = new FormData()
+      formData.append('thumbnail', file)
+      const response = await fetch('/admin/announcements/thumbnails', {
+        method: 'POST',
+        body: formData,
+      })
+      const data = await response.json()
+      return data?.key
+    }
     const errors = ref({})
     const announcements = ref([])
     onMounted(() => {
@@ -55,44 +73,71 @@ createApp({
         title: '',
         content: '',
       }
+      addForm.value?.reset()
+      editForm.value?.reset()
+      thumbnail.value = null
     }
     const clearErrors = () => {
       errors.value = {}
     }
+
     const onSubmitCreate = async () => {
-      clearErrors()
-      const response = await fetch('/admin/announcements', {
-        method: 'POST',
-        body: JSON.stringify(form.value),
-        headers: new Headers({ 'Content-Type': 'application/json' }),
-      })
-      const responseBody = await response.json()
-      if (response.status === StatusCodes.OK) {
-        toastr.success('Announcement created')
-        resetForm()
-        addModal.value?.hide()
-        fetchAnnouncements()
-      }
-      if (response.status === StatusCodes.BAD_REQUEST) {
-        errors.value = toStructuredErrors(responseBody?.errors ?? {})
+      try {
+        clearErrors()
+        let thumbnailSrc = ''
+        if (thumbnail.value !== null) {
+          thumbnailSrc = await uploadImage(thumbnail.value)
+        }
+        const response = await fetch('/admin/announcements', {
+          method: 'POST',
+          body: JSON.stringify({
+            ...form.value,
+            thumbnail: thumbnailSrc,
+          }),
+          headers: new Headers({ 'Content-Type': 'application/json' }),
+        })
+        const responseBody = await response.json()
+        if (response.status === StatusCodes.OK) {
+          toastr.success('Announcement created')
+          resetForm()
+          addModal.value?.hide()
+          fetchAnnouncements()
+        }
+        if (response.status === StatusCodes.BAD_REQUEST) {
+          errors.value = toStructuredErrors(responseBody?.errors ?? {})
+        }
+      } catch (error) {
+        console.error(error)
+      } finally {
+        isSubmitting.value = false
       }
     }
     const onSubmitUpdate = async () => {
-      clearErrors()
-      const response = await fetch(`/admin/announcements/${form.value.id}`, {
-        method: 'PUT',
-        body: JSON.stringify(form.value),
-        headers: new Headers({ 'Content-Type': 'application/json' }),
-      })
-      const responseBody = await response.json()
-      if (response.status === StatusCodes.OK) {
-        toastr.success('Announcement updated')
-        resetForm()
-        editModal.value?.hide()
-        fetchAnnouncements()
-      }
-      if (response.status === StatusCodes.BAD_REQUEST) {
-        errors.value = toStructuredErrors(responseBody?.errors ?? {})
+      try {
+        clearErrors()
+        let thumbnailSrc = ''
+        if (thumbnail.value !== null) {
+          thumbnailSrc = await uploadImage(thumbnail.value)
+        }
+        const response = await fetch(`/admin/announcements/${form.value.id}`, {
+          method: 'PUT',
+          body: JSON.stringify({ ...form.value, thumbnail: thumbnailSrc }),
+          headers: new Headers({ 'Content-Type': 'application/json' }),
+        })
+        const responseBody = await response.json()
+        if (response.status === StatusCodes.OK) {
+          toastr.success('Announcement updated')
+          resetForm()
+          editModal.value?.hide()
+          fetchAnnouncements()
+        }
+        if (response.status === StatusCodes.BAD_REQUEST) {
+          errors.value = toStructuredErrors(responseBody?.errors ?? {})
+        }
+      } catch (error) {
+        console.log(error)
+      } finally {
+        isSubmitting.value = false
       }
     }
     const fetchAnnouncements = async () => {
@@ -180,6 +225,9 @@ createApp({
       initEdit,
       onSubmitUpdate,
       initDelete,
+      handleImageAttach,
+      addForm,
+      editForm,
     }
   },
 })

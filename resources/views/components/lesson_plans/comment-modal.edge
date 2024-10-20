@@ -19,9 +19,13 @@
             <div>
               <div style="height: 400px; max-height: 350px; overflow-y: scroll;" class="w-100 mb-2" >
                 <div v-for="comment in form.comments" class="alert alert-secondary w-100" role="alert">
-                  <small class="alert-heading">
+                  <small class="alert-heading" v-if="comment?.user">
                     <i class="fas fa-user"></i>
                     ${comment.user.givenName} ${comment.user.surname}
+                  </small>
+                  <small class="alert-heading" v-else>
+                    <i class="fas fa-user"></i>
+                    ${form.faculty}
                   </small>
                   <hr />
                   <p>

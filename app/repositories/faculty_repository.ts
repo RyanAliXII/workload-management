@@ -13,6 +13,7 @@ export class FacultyRepository {
       .preload('loginCredential')
       .preload('fundSource')
       .preload('department')
+      .orderBy('created_at', 'desc')
   }
   async getActive() {
     return Faculty.query()
@@ -34,7 +35,7 @@ export class FacultyRepository {
       const faculty = new Faculty()
       faculty.useTransaction(trx)
       faculty.givenName = f.givenName
-      faculty.middleName = f.middleName
+      faculty.middleName = f.middleName ?? ''
       faculty.surname = f.surname
       faculty.gender = f.gender
       faculty.dateOfBirth = DateTime.fromJSDate(f.dateOfBirth)
@@ -106,7 +107,7 @@ export class FacultyRepository {
 
       faculty.useTransaction(trx)
       faculty.givenName = f.givenName
-      faculty.middleName = f.middleName
+      faculty.middleName = f.middleName ?? ''
       faculty.surname = f.surname
       faculty.gender = f.gender
       faculty.dateOfBirth = DateTime.fromJSDate(f.dateOfBirth)
