@@ -13,15 +13,18 @@
         <h5 class="modal-title">Comments</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-     
+      <form v-on:submit.prevent="onCreateComment">
         <div class="modal-content">
           <div class="modal-body" style="height: 500px; max-height: 500px">
             <div>
               <div style="height: 400px; max-height: 350px; overflow-y: scroll;" class="w-100 mb-2" >
                 <div v-for="comment in form.comments" class="alert alert-secondary w-100" role="alert">
-                  <small class="alert-heading">
+                  <small class="alert-heading" v-if="comment?.user">
                     <i class="fas fa-user"></i>
                     ${comment.user.givenName} ${comment.user.surname}
+                  </small>
+                  <small v-else>
+                    {{ auth.user.givenName }} {{ auth.user.surname }}
                   </small>
                   <hr />
                   <p>
@@ -34,16 +37,17 @@
                   </p> -->
                 </div>
               </div>
-
+              <textarea v-model="comment" class="form-control" style="resize: none"></textarea>
 
             </div>
           </div>
         </div>
-
+        
         <div class="modal-footer">
-      
+          <button type="submit" class="btn btn-primary">Comment</button>
+         
         </div>
- 
+        </form>
     </div>
   </div>
 </div>

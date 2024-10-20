@@ -77,9 +77,15 @@
       <div class="container">
         <div class="card mt-2" v-for="announcement in announcements" style="cursor: pointer;" v-on:click="viewAnnouncement(announcement)">
           <div class="card-body">
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center gap-3">
+              <img
+              style="max-width: 150px"
+              v-if="announcement.thumbnail"
+              :src="announcement.thumbnail"
+            />
               <img
                 style="max-width: 150px"
+                v-else
                 src="https://t3.ftcdn.net/jpg/03/13/59/86/360_F_313598699_jyO0OFvaccHWe9YsAY1s8Ycpf0qVPIVz.jpg"
               />
               <div>
@@ -106,7 +112,9 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
         <form >
         <div class="modal-body">
             <div class="d-flex justify-content-center">
-          <img src="https://t3.ftcdn.net/jpg/03/13/59/86/360_F_313598699_jyO0OFvaccHWe9YsAY1s8Ycpf0qVPIVz.jpg" alt="..." class=" img-fluid">
+              <img v-if="announcement?.thumbnail" :src="announcement?.thumbnail" alt="thumbnail" class=" img-fluid">
+          <img v-else src="https://t3.ftcdn.net/jpg/03/13/59/86/360_F_313598699_jyO0OFvaccHWe9YsAY1s8Ycpf0qVPIVz.jpg" alt="thumbnail" class=" img-fluid">
+          
         </div>
           <div>
             <h1 class="text-center">${announcement?.title}</h1>

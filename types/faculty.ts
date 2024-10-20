@@ -46,7 +46,7 @@ export type Faculty = {
 export type FacultyMutation = {
   id: number
   givenName: string
-  middleName: string
+  middleName?: string
   surname: string
   gender: string
   dateOfBirth: Date

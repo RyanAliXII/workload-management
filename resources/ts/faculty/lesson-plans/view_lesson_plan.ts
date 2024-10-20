@@ -4,8 +4,10 @@ import { toISO8601DateString, toReadableDate } from '../../utils/date.js'
 import { Modal } from 'bootstrap'
 import html2canvas from 'html2canvas'
 import { jsPDF } from 'jspdf'
+import { StatusCodes } from 'http-status-codes'
 const htmlcanvas = html2canvas as any
 const INITIAL_VALUES = {
+  id: 0,
   name: '',
   grade: '',
   quarter: '',
@@ -65,7 +67,7 @@ createApp({
       commentModal.value = new Modal(commentModalEl.value)
     })
     const form = ref({ ...INITIAL_VALUES })
-
+    const comment = ref<string>('')
     const fetchLessonPlan = async () => {
       const response = await fetch(`/faculties/lesson-plans/one/${window.viewData?.lessonPlanId}`, {
         headers: new Headers({ 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' }),
@@ -73,6 +75,7 @@ createApp({
       const data = await response.json()
       if (data?.lessonPlan) {
         const plan = data?.lessonPlan as LessonPlan
+        form.value.id = plan.id
         form.value.name = plan.name
         form.value.startDate = new Date(plan.startDate)
         form.value.endDate = new Date(plan.endDate)
@@ -93,6 +96,19 @@ createApp({
     const openCommentModal = () => {
       commentModal.value?.show()
     }
+    const onCreateComment = async () => {
+      const response = await fetch(`/faculties/lesson-plans/${form.value.id}/comments`, {
+        method: 'POST',
+        headers: new Headers({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify({
+          text: comment.value,
+        }),
+      })
+      if (response.status === StatusCodes.OK) {
+        comment.value = ''
+        fetchLessonPlan()
+      }
+    }
     const download = async () => {
       if (!lessonPlanElement.value) return
       const canvas = await htmlcanvas(lessonPlanElement.value, { scale: 2, quality: 1 })
@@ -107,6 +123,8 @@ createApp({
       commentModalEl,
       openCommentModal,
       download,
+      onCreateComment,
+      comment,
     }
   },
 }).mount('#viewLessonPlan')

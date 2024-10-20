@@ -10,3 +10,11 @@ export const createCommentValidator = vine.compile(
   })
 )
 createCommentValidator.errorReporter = () => new JSONAPIErrorReporter()
+
+export const createFacultyCommentValidator = vine.compile(
+  vine.object({
+    text: vine.string().trim(),
+    lessonPlanId: vine.number(),
+  })
+)
+createFacultyCommentValidator.errorReporter = () => new JSONAPIErrorReporter()
