@@ -40,6 +40,23 @@ export class LessonPlanRepository {
       })
       .orderBy('created_at', 'desc')
   }
+  async getByDepartmentId(departmentId: number) {
+    return LessonPlan.query()
+      .innerJoin('faculty', 'faculty_id', 'faculty.id')
+      .where('department_id', departmentId)
+      .preload('faculty', (b) => {
+        b.preload('position')
+      })
+      .preload('rowLabels', (b) => {
+        b.orderBy('id', 'asc')
+      })
+      .preload('sessions', (b) => {
+        b.preload('values', (builder) => {
+          builder.orderBy('id', 'asc')
+        })
+      })
+      .orderBy('lesson_plan.created_at', 'desc')
+  }
   async getByIdAndFacultyId(id: number, facultyId: number) {
     return LessonPlan.query()
       .andWhere((b) => {

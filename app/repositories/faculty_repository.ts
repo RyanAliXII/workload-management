@@ -13,6 +13,7 @@ export class FacultyRepository {
       .preload('loginCredential')
       .preload('fundSource')
       .preload('department')
+      .orderBy('created_at', 'desc')
   }
   async getActive() {
     return Faculty.query()

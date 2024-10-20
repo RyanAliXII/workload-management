@@ -39,6 +39,13 @@
             </div>
           
             <div class="main-card mb-3 card p-5">
+              <div class="mb-2">
+              <label>Department</label>
+              <select class="form-control" @change="fetchLessonPlansByDepartmentId">
+                <option value="">All</option>
+                <option v-for="department of departments" :value="department.id" >${department.name}</option>
+              </select>
+            </div>
               <data-table :value="lessonPlans" :paginator="true" :rows="10" table-class="table">
                 <column field="name" header="Name" sortable></column>
                 <column header="Faculty" sortable>
