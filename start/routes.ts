@@ -101,6 +101,7 @@ router
         router.delete('/event-clusters/:id', [EventClustersController, 'delete'])
         router.get('/users', [UsersController, 'index'])
         router.post('/announcements/thumbnails', [AnnouncementsController, 'uploadThumbnail'])
+        router.get('/logout', [AdminLoginController, 'logout'])
       })
       .use(middleware.auth({ guards: ['admin'], redirectTo: '/admin/login' }))
   })
@@ -129,6 +130,7 @@ router
         router.put('/lesson-plans/:id', [FacultyLessonPlansController, 'edit'])
         router.delete('/lesson-plans/:id', [FacultyLessonPlansController, 'delete'])
         router.get('/event-clusters', [FacultyClustersController, 'index'])
+        router.get('/logout', [FacultyLoginController, 'logout'])
         router.post('/lesson-plans/:lessonPlanId/comments', [
           FacultyLessonPlansController,
           'createComment',

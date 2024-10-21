@@ -27,7 +27,7 @@ createApp({
       data?.events?.forEach((event: EventJSON) => {
         events.push({
           start: event.from,
-          title: `${event.name} - ${event.status}`,
+          title: `${event.name}`,
           end: event.to + ' 23:59:00',
           className:
             event.status === 'approved' ? 'calendar-event' : 'event-bg-unapproved calendar-event',

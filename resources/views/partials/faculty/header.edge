@@ -444,7 +444,7 @@
                   aria-expanded="false"
                   class="p-0 btn"
                 >
-                  <img width="42" class="rounded-circle" src="images/avatars/1.jpg" alt="" />
+                  <img width="42" class="rounded-circle" src="https://ui-avatars.com/api/?name={{auth.user.givenName}}+{{auth.user.surname}}" alt="" />
                   <i class="fa fa-angle-down ms-2 opacity-8"></i>
                 </a>
                 <div
@@ -466,7 +466,7 @@
                               <img
                                 width="42"
                                 class="rounded-circle"
-                                src="images/avatars/1.jpg"
+                                src="https://ui-avatars.com/api/?name={{auth.user.givenName}}+{{auth.user.surname}}"
                                 alt=""
                               />
                             </div>
@@ -474,14 +474,14 @@
                             <div class="widget-content-left">
                               <div class="widget-heading">{{auth.user.givenName}} {{auth.user.surname}}</div>
                               <div class="widget-subheading opacity-8">
-                                A short profile description
+                               {{auth.user.email}}
                               </div>
                             </div>
                             @end
                             <div class="widget-content-right me-2">
-                              <button class="btn-pill btn-shadow btn-shine btn btn-focus">
+                              <a href="/faculties/logout" class="btn-pill btn-shadow btn-shine btn btn-focus">
                                 Logout
-                              </button>
+                              </a>
                             </div>
                           </div>
                         </div>
@@ -556,12 +556,12 @@
                 </div>
               </div>
             </div>
-            @if(auth.isAuthenticated)
+            <!-- @if(auth.isAuthenticated)
             <div class="widget-content-left ms-3">
               <div class="widget-heading">{{auth.user.givenName}} {{auth.user.surname}}</div>
              
             </div>
-            @end
+            @end -->
            
           </div>
         </div>

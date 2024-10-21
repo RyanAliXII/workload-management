@@ -125,6 +125,7 @@ createApp({
       download,
       onCreateComment,
       comment,
+      lessonPlanElement,
     }
   },
 }).mount('#viewLessonPlan')

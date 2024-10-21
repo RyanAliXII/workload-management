@@ -48,4 +48,8 @@ export default class LoginController {
       })
     }
   }
+  async logout({ response, auth }: HttpContext) {
+    await auth.use('admin').logout()
+    response.redirect('/admin/login')
+  }
 }
