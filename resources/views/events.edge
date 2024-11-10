@@ -91,7 +91,80 @@
         <full-calendar :options="calendarOptions" ref="fullCalendar"></full-calendar>
 
       </div>
+      <div
+  class="modal fade"
+  id="viewEventModalRef"
+  ref="viewModalRef"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Event</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+   
+      <form>
+        <div class="modal-body">
+          <div class="form-group mb-2">
+            <label for="name">Title</label>
+            <input name="name" :value="currentEvent?.name" class="form-control" disabled />
+          </div>
+          <div class="form-group mb-2">
+            <label for="from">From</label>
+            <input
+              :value="toISO8601DateString(currentEvent?.from)"
+              name="from"
+              class="form-control"
+              disabled
+            />
+          </div>
+          <div class="form-group mb-2">
+            <label for="to">To</label>
+            <input
+              :value="toISO8601DateString(currentEvent?.to)"
+              name="to"
+              class="form-control"
+              disabled
+            />
+          </div>
+        
+          <div class="form-group mb-2">
+            <label for="location">Location</label>
+            <textarea
+              name="location"
+              :value="currentEvent.location"
+              class="form-control"
+              disabled
+            ></textarea>
+          </div>
+          <div class="form-group mb-2">
+            <label for="description">Description</label>
+            <textarea
+              name="description"
+              :value="currentEvent?.description"
+              class="form-control"
+              disabled
+            ></textarea>
+          </div>
+         
+        </div>
+
+        <!-- Modal Footer -->
+       
+      </form>
+    
+
+    </div>
+  </div>
+</div>
+
     </section>
+    
     <!-- Pricing section-->
 
     <footer class="py-5 bg-primary text-white">

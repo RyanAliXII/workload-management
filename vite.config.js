@@ -71,6 +71,8 @@ export default defineConfig({
         'resources/ts/faculty/event-clustering/event_calendar.ts',
         'resources/images/valnat.png',
         'resources/images/school.jpg',
+        'resources/images/logo.png',
+        'resources/css/homepage.css',
         // 'resources/vendors/moment/moment.js',
         // 'resources/vendors/metismenu/dist/metisMenu.js',
         // 'resources/vendors/bootstrap4-toggle/js/bootstrap4-toggle.min.js',

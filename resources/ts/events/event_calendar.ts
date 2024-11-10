@@ -41,6 +41,7 @@ createApp({
     const calendarOptions: CalendarOptions = {
       plugins: [dayGridPlugin, interactionPlugin],
       initialView: 'dayGridMonth',
+      displayEventTime: false,
       events: fetchEvents,
       eventClick: (e) => {
         const customEvent = new CustomEvent('event:view', { detail: e.event.extendedProps?.event })

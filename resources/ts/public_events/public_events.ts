@@ -3,9 +3,10 @@ import { CalendarOptions, EventInput, EventSourceFunc } from '@fullcalendar/core
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import FullCalendar from '@fullcalendar/vue3'
-import { createApp, ref } from 'vue'
+import { createApp, onMounted, ref } from 'vue'
+import { Event as EventType } from '#types/event'
+import { Modal } from 'bootstrap'
 import { toISO8601DateString } from '../utils/date.js'
-
 createApp({
   components: {
     'full-calendar': FullCalendar,
@@ -13,6 +14,23 @@ createApp({
   setup() {
     const fullCalendar = ref<InstanceType<typeof FullCalendar> | null>(null)
     const eventUrl = new URL(window.location.origin + '/events/public')
+
+    type ViewEventType = Omit<EventType, 'facilitators' | 'isPublic' | 'status'>
+    const currentEvent = ref<ViewEventType>({
+      id: 0,
+      from: new Date(),
+      to: new Date(),
+      location: '',
+      name: '',
+      description: '',
+    })
+    const viewModalRef = ref<HTMLDivElement | null>()
+    const viewModal = ref<InstanceType<typeof Modal> | null>(null)
+    onMounted(() => {
+      if (viewModalRef.value) {
+        viewModal.value = new Modal(viewModalRef.value)
+      }
+    })
     const fetchEvents: EventSourceFunc = async (info, success) => {
       const start = toISO8601DateString(info.start)
       const end = toISO8601DateString(info.end)
@@ -41,12 +59,20 @@ createApp({
     const calendarOptions: CalendarOptions = {
       plugins: [dayGridPlugin, interactionPlugin],
       initialView: 'dayGridMonth',
+      displayEventTime: false,
       events: fetchEvents,
+      eventClick: (data) => {
+        currentEvent.value = data.event.extendedProps.event
+        viewModal.value?.show()
+      },
     }
 
     return {
       calendarOptions,
       fullCalendar,
+      viewModalRef,
+      currentEvent,
+      toISO8601DateString,
     }
   },
 }).mount('#eventPage')
